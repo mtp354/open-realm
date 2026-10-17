@@ -359,6 +359,12 @@ typedef struct {
     uint32_t file_key;
     uint32_t sector_count;
     uint32_t *sector_offsets;
+    uint8_t *unit_cache;
+    uint32_t unit_cache_size;
+    uint8_t *sector_cache;
+    uint32_t cached_sector;
+    uint32_t cached_sector_bytes;
+    bool sector_cache_valid;
 } mpqFile_t;
 
 typedef struct {
@@ -1670,6 +1676,8 @@ bool SFileCloseFile(handle_t file)
         if (mpqfile->sector_offsets) {
             free(mpqfile->sector_offsets);
         }
+        free(mpqfile->unit_cache);
+        free(mpqfile->sector_cache);
         free(file);
         if (owner_archive) {
             SFileCloseArchive(owner_archive);
@@ -1730,42 +1738,54 @@ bool SFileReadFile(handle_t file, void *buffer, uint32_t toRead, uint32_t *bytes
     }
 
     if (block->dwFlags & MPQ_FILE_SINGLE_UNIT) {
-        uint8_t *compressed;
-        uint8_t *whole_file;
-        uint32_t bytes_in_file = 0;
-        bool ok;
+        uint8_t *whole_file = mpqfile->unit_cache;
+        uint32_t bytes_in_file = mpqfile->unit_cache_size;
 
-        compressed = (uint8_t *)malloc(block->dwBlockSize ? block->dwBlockSize : 1);
-        whole_file = (uint8_t *)malloc(mpqfile->file_size ? mpqfile->file_size : 1);
-        if (!compressed || !whole_file) {
-            free(compressed);
-            free(whole_file);
-            if (bytesRead) *bytesRead = 0;
-            return false;
-        }
+        /* Inflate once per open handle; small reads (e.g. per-vertex map data) reuse it. */
+        if (!whole_file) {
+            uint8_t *compressed;
+            bool ok;
 
-        MpqSeek(mpq, block->dwBlockOffset);
-        if (MpqRead(mpq, compressed, block->dwBlockSize) != block->dwBlockSize) {
-            free(compressed);
-            free(whole_file);
-            if (bytesRead) *bytesRead = 0;
-            return false;
-        }
+            compressed = (uint8_t *)malloc(block->dwBlockSize ? block->dwBlockSize : 1);
+            whole_file = (uint8_t *)malloc(mpqfile->file_size ? mpqfile->file_size : 1);
+            if (!compressed || !whole_file) {
+                free(compressed);
+                free(whole_file);
+                if (bytesRead) *bytesRead = 0;
+                return false;
+            }
 
-        ok = TryInflateSector(compressed, block->dwBlockSize, mpqfile->file_size, whole_file, &bytes_in_file);
-        if (!ok && (mpqfile->flags & MPQ_FILE_ENCRYPTED)) {
-            DecryptBlock(compressed, block->dwBlockSize, mpqfile->file_key);
+            MpqSeek(mpq, block->dwBlockOffset);
+            if (MpqRead(mpq, compressed, block->dwBlockSize) != block->dwBlockSize) {
+                free(compressed);
+                free(whole_file);
+                if (bytesRead) *bytesRead = 0;
+                return false;
+            }
+
+            bytes_in_file = 0;
             ok = TryInflateSector(compressed, block->dwBlockSize, mpqfile->file_size, whole_file, &bytes_in_file);
-        }
-        if (!ok && block->dwBlockSize >= mpqfile->file_size) {
-            memcpy(whole_file, compressed, mpqfile->file_size);
-            bytes_in_file = mpqfile->file_size;
-            ok = true;
+            if (!ok && (mpqfile->flags & MPQ_FILE_ENCRYPTED)) {
+                DecryptBlock(compressed, block->dwBlockSize, mpqfile->file_key);
+                ok = TryInflateSector(compressed, block->dwBlockSize, mpqfile->file_size, whole_file, &bytes_in_file);
+            }
+            if (!ok && block->dwBlockSize >= mpqfile->file_size) {
+                memcpy(whole_file, compressed, mpqfile->file_size);
+                bytes_in_file = mpqfile->file_size;
+                ok = true;
+            }
+            free(compressed);
+
+            if (!ok) {
+                free(whole_file);
+                if (bytesRead) *bytesRead = 0;
+                return false;
+            }
+            mpqfile->unit_cache = whole_file;
+            mpqfile->unit_cache_size = bytes_in_file;
         }
 
-        if (!ok || file_offset >= bytes_in_file) {
-            free(compressed);
-            free(whole_file);
+        if (file_offset >= bytes_in_file) {
             if (bytesRead) *bytesRead = 0;
             return false;
         }
@@ -1776,9 +1796,6 @@ bool SFileReadFile(handle_t file, void *buffer, uint32_t toRead, uint32_t *bytes
         memcpy(dest, whole_file + file_offset, toRead);
         mpqfile->current_pos += toRead;
         if (bytesRead) *bytesRead = toRead;
-
-        free(compressed);
-        free(whole_file);
         return true;
     }
 
@@ -1814,33 +1831,45 @@ bool SFileReadFile(handle_t file, void *buffer, uint32_t toRead, uint32_t *bytes
             }
         }
 
-        compressed = (uint8_t *)malloc(sector_compressed_size);
-        if (!compressed) {
-            break;
-        }
+        if (!mpqfile->sector_cache_valid || mpqfile->cached_sector != sector_start) {
+            if (!mpqfile->sector_cache) {
+                mpqfile->sector_cache = (uint8_t *)malloc(mpq->sector_size);
+                if (!mpqfile->sector_cache) {
+                    break;
+                }
+            }
+            compressed = (uint8_t *)malloc(sector_compressed_size);
+            if (!compressed) {
+                break;
+            }
 
-        MpqSeek(mpq, block->dwBlockOffset + sector_start_offset);
-        if (MpqRead(mpq, compressed, sector_compressed_size) != sector_compressed_size) {
-            free(compressed);
-            break;
-        }
-
-        if (mpqfile->flags & MPQ_FILE_ENCRYPTED)
-            DecryptBlock(compressed, sector_compressed_size, mpqfile->file_key + sector_start);
-        if (!TryInflateSector(compressed, sector_compressed_size, sector_uncompressed_size, mpq->sector_buffer, &bytes_in_sector)) {
-            mpqDecompress_t dec = { compressed, sector_compressed_size, mpq->sector_buffer,
-                                    sector_uncompressed_size, 0 };
-            if (Mpq_DecompressSector(&dec)) {
-                bytes_in_sector = dec.out_size;
-            } else if (sector_compressed_size >= sector_uncompressed_size) {
-                memcpy(mpq->sector_buffer, compressed, sector_uncompressed_size);
-                bytes_in_sector = sector_uncompressed_size;
-            } else {
+            MpqSeek(mpq, block->dwBlockOffset + sector_start_offset);
+            if (MpqRead(mpq, compressed, sector_compressed_size) != sector_compressed_size) {
                 free(compressed);
                 break;
             }
+
+            if (mpqfile->flags & MPQ_FILE_ENCRYPTED)
+                DecryptBlock(compressed, sector_compressed_size, mpqfile->file_key + sector_start);
+            if (!TryInflateSector(compressed, sector_compressed_size, sector_uncompressed_size, mpqfile->sector_cache, &bytes_in_sector)) {
+                mpqDecompress_t dec = { compressed, sector_compressed_size, mpqfile->sector_cache,
+                                        sector_uncompressed_size, 0 };
+                if (Mpq_DecompressSector(&dec)) {
+                    bytes_in_sector = dec.out_size;
+                } else if (sector_compressed_size >= sector_uncompressed_size) {
+                    memcpy(mpqfile->sector_cache, compressed, sector_uncompressed_size);
+                    bytes_in_sector = sector_uncompressed_size;
+                } else {
+                    free(compressed);
+                    break;
+                }
+            }
+            free(compressed);
+            mpqfile->sector_cache_valid = true;
+            mpqfile->cached_sector = sector_start;
+            mpqfile->cached_sector_bytes = bytes_in_sector;
         }
-        free(compressed);
+        bytes_in_sector = mpqfile->cached_sector_bytes;
 
         if (sector_offset >= bytes_in_sector) {
             break;
@@ -1851,7 +1880,7 @@ bool SFileReadFile(handle_t file, void *buffer, uint32_t toRead, uint32_t *bytes
             to_read_in_block = (toRead - read_so_far);
         }
 
-        memcpy(dest, &mpq->sector_buffer[sector_offset], to_read_in_block);
+        memcpy(dest, &mpqfile->sector_cache[sector_offset], to_read_in_block);
         dest += to_read_in_block;
         read_so_far += to_read_in_block;
         sector_offset = 0;
