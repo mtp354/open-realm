@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenRealm — Browser foundation</title>
+<title>OpenRealm — Apricot and Peach</title>
 <style>
 body { background: #0b1220; color: #e6ecf4; font: 16px system-ui, sans-serif; margin: 0; }
 main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
@@ -27,8 +27,8 @@ canvas { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
 </head>
 <body>
 <main>
-<h1>OpenRealm browser foundation</h1>
-<p id="status" role="status">Checking browser-local Warcraft III data…</p>
+<h1>OpenRealm — Apricot and Peach</h1>
+<p id="status" role="status">Loading bundled Warcraft III data…</p>
 <div id="game-container">
   <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
   <div id="game-controls" aria-label="Game controls">
@@ -42,7 +42,7 @@ canvas { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
 var Module = {
   canvas: document.getElementById('canvas'),
   setStatus: function (message) {
-    document.getElementById('status').textContent = message || 'WebGL 2 probe running';
+    document.getElementById('status').textContent = message || '';
   },
   onAbort: function (reason) {
     document.getElementById('status').textContent = 'WebAssembly aborted: ' + reason;
