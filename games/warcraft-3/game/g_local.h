@@ -39,9 +39,9 @@
 #define MAX_REGION_SIZE 16
 #define MAX_REGIONS 2048 // fixed region data slots; generation tokens let retired slots be reused safely
 #define REGION_TOKEN_SLOT_BITS 13 // 2048 slots plus a two-bit tag; upper uintptr_t bits carry a generation
-#define EVENT_TOKEN_SLOT_BITS 12 // 1024 slots plus a two-bit tag; upper bits carry a generation
+#define EVENT_TOKEN_SLOT_BITS 13 // 2048 slots plus a two-bit tag; upper bits carry a generation
 #define REGION_HANDLE_ID_GENERATION_BITS 17 // keeps region GetHandleId values unique in a positive 28-bit range
-#define EVENT_HANDLE_ID_GENERATION_BITS 18 // keeps region-event GetHandleId values unique in a positive 28-bit range
+#define EVENT_HANDLE_ID_GENERATION_BITS 17 // keeps region-event GetHandleId values unique in a positive 28-bit range
 #define REGION_HANDLE_GENERATION_MAX ((1u << REGION_HANDLE_ID_GENERATION_BITS) - 1)
 #define EVENT_HANDLE_GENERATION_MAX ((1u << EVENT_HANDLE_ID_GENERATION_BITS) - 1)
 #define REGION_HANDLE_ID_BASE 0x10000000u
@@ -602,6 +602,10 @@ struct client_s {
         vec2_t pan_start;
         vec2_t pan_destination;
         vec2_t pan_rate;         /* world units per second: X=strafe, Y=forward */
+        bool rotate_active;     /* SetCameraRotateMode owns an unwrapped sweep around a world pivot */
+        uint32_t rotate_start_time, rotate_end_time;
+        vec2_t rotate_center, rotate_offset;
+        float rotate_yaw, rotate_height, rotate_sweep; /* starting client yaw, fixed target Z, radians */
         /* CameraSet*Noise[Ex] parameters. The game evaluates them every server frame into
          * ps.viewoffset/ps.eyeoffset; the client never sees magnitude, velocity or vertOnly. */
         struct { float magnitude, velocity; bool vert_only; } noise[CAMERA_NOISE_COUNT];
@@ -1054,7 +1058,7 @@ typedef struct {
 #define WC3_LAYER_TIMERDIALOG LAYER_GAME_0
 #define WC3_LAYER_LEADERBOARD LAYER_GAME_1
 #define WC3_LAYER_MULTIBOARD LAYER_GAME_3 // custom multiboard / Team Resources; LAYER_GAME_2 belongs to WC3_LAYER_COMMAND_ERROR
-#define MAX_EVENTS 1024 // handlers; region-event tokens allow safe reuse of retired handler slots
+#define MAX_EVENTS 2048 // handlers; Peach requests 1059 registrations; tokens allow safe reuse of retired region slots
 #define MAX_QUESTS 256 // quests; fixed quest slots preserve stable pointers across removal
 #define MAX_QUESTITEMS 16 // items per quest; matches the practical quest objective display capacity
 #define MAX_WAYPOINTS 256 // entities; fixed g_edicts ring used by point-target movement
@@ -2471,6 +2475,10 @@ bool G_RemovePlayerWithResult(uint32_t player_num, uint32_t game_result);
 bool G_GameResultDebugEnabled(void);
 void G_GameResultDebug(cstring_t format, ...);
 bool G_IsSinglePlayer(void);
+// g_browser_bots.c — opt-in policies for the standalone map pair
+bool G_BrowserBotPlayerEligible(uint32_t player);
+void G_LoadBrowserBots(void);
+void G_StartBrowserBots(void);
 void G_RequestEndGame(bool do_score_screen);
 void G_RequestQuitGame(void);
 void G_RequestChangeLevel(cstring_t map, bool do_score_screen);
@@ -2506,6 +2514,8 @@ void G_SetCameraBounds(float const bounds[8]);
 void G_ClearCameraTarget(gameClient_t *client, cstring_t func);
 void G_ClearCameraPan(gameClient_t *client);
 vec2_t G_CameraPanPositionAtTime(gameClient_t *client, uint32_t now, bool *complete);
+void G_ApplyCameraRotation(gameClient_t *client, uint32_t now, camerasetup_t *state);
+void G_StopCameraRotation(gameClient_t *client);
 void G_SetPlayerText(gameClient_t *, PLAYERTEXT, cstring_t);
 void G_SetAllStockSlots(bool, int32_t);
 void G_SetStockSlots(edict_t *, bool, int32_t);

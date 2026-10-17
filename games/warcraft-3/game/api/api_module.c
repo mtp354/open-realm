@@ -19,7 +19,10 @@
 #include "api_cinefilter.h"
 #include "api_hashtable.h"
 
+uint32_t BrowserBotPlayerEligible(jass_t *j);
+
 jassModule_t jass_funcs[] = {
+    { "BrowserBotPlayerEligible", BrowserBotPlayerEligible },
     { "DisplayText", DisplayText },
     { "DisplayTextI", DisplayTextI },
     { "DisplayTextII", DisplayTextII },
@@ -927,6 +930,8 @@ jassModule_t jass_funcs[] = {
     { "MultiboardSetTitleText", MultiboardSetTitleText },
     { "MultiboardSetRowCount", MultiboardSetRowCount },
     { "MultiboardSetColumnCount", MultiboardSetColumnCount },
+    { "MultiboardGetRowCount", MultiboardGetRowCount },
+    { "MultiboardGetColumnCount", MultiboardGetColumnCount },
     { "MultiboardGetItem", MultiboardGetItem },
     { "MultiboardReleaseItem", MultiboardReleaseItem },
     { "MultiboardSetItemStyle", MultiboardSetItemStyle },
@@ -940,6 +945,7 @@ jassModule_t jass_funcs[] = {
     { "DestroyTextTag", DestroyTextTag },
     { "SetTextTagText", SetTextTagText },
     { "SetTextTagColor", SetTextTagColor },
+    { "SetTextTagPos", SetTextTagPos },
     { "SetTextTagPosUnit", SetTextTagPosUnit },
     { "SetTextTagVelocity", SetTextTagVelocity },
     { "SetTextTagVisibility", SetTextTagVisibility },
@@ -957,6 +963,7 @@ jassModule_t jass_funcs[] = {
     { "PanCameraToTimedWithZ", PanCameraToTimedWithZ },
     { "SetCinematicCamera", SetCinematicCamera },
     { "SetCameraField", SetCameraField },
+    { "SetCameraRotateMode", SetCameraRotateMode },
     { "AdjustCameraField", AdjustCameraField },
     { "SetCameraTargetController", SetCameraTargetController },
     { "SetCameraOrientController", SetCameraOrientController },
@@ -1214,6 +1221,7 @@ jassModule_t jass_funcs[] = {
     { "SetUnitAbilityLevel", SetUnitAbilityLevel },
     { "IncUnitAbilityLevel", IncUnitAbilityLevel },
     { "UnitDamageTarget", UnitDamageTarget },
+    { "UnitDamagePoint", UnitDamagePoint },
     { "GetUnitCurrentOrder", GetUnitCurrentOrder },
     { "GetUnitLevel", GetUnitLevel },
     { "UnitAddType", UnitAddType },

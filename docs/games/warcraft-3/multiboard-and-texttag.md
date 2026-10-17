@@ -17,11 +17,15 @@ Destroying a multiboard sets `item->board = -1` so outstanding item handles no l
 
 ## Implemented DotA Surface
 
-Multiboard (17): create/destroy, display, minimize/`IsMultiboardMinimized`, title, row/column count, get/release item, per-item style/value/color/width/icon, broadcast style/width.
+Multiboard: create/destroy, display, minimize/`IsMultiboardMinimized`, title, set/get row/column count, get/release item, per-item style/value/color/width/icon, broadcast style/width.
 
-TextTag (10): create/destroy, text+height, color, `PosUnit`, velocity, visibility, permanent, lifespan, fadepoint.
+TextTag: create/destroy, text+height, color, `Pos`/`PosUnit`, velocity, visibility, permanent, lifespan, fadepoint.
 
-`IsMultiboardDisplayed` and `MultiboardSuppressDisplay` are registered. Other `common.txt` natives (`MultiboardClear`, `SetTextTagPos`, …) remain outstanding.
+`IsMultiboardDisplayed` and `MultiboardSuppressDisplay` are registered. Other `common.txt` natives, including `MultiboardClear`, remain outstanding.
+
+`MultiboardGetRowCount` / `MultiboardGetColumnCount` return the registry's current dimensions, including a zero dimension after resizing; null or destroyed boards return zero. Retail `Blizzard.j` calls both getters even for a single-cell `MultiboardSetItem*BJ` update. `peach.w3x` (Capture the Flag v1.66b) initializes a 4-column, 13-row board at 0.10 seconds and uses `MultiboardSetItemWidthBJ(board, 1, 0, 10.00)` to update every row of the first column. Missing getters previously aborted those wrapper calls.
+
+`SetTextTagPos` retains explicit X/Y and height offset, clears an earlier unit anchor, marks the position initialized, and publishes through the existing keyed texttag event. `SetTextTagPosUnit` can subsequently attach that same handle again. Null or destroyed tags do not publish updates. The existing world-anchor transport uses the stored height offset as world Z; exact retail terrain-relative height behavior is unverified. `common.txt` and the extracted retail `Blizzard.j` establish these signatures and the scoreboard wrapper's 1-based/broadcast traversal. The supplied `REA/` report contains metadata only, with no native body evidence for these three functions.
 
 ## Presentation Gaps
 
@@ -44,5 +48,6 @@ make test-wc3-engine WC3_PATTERN='wc3_api.leaderboard*'
 ```
 
 Tests live in `games/warcraft-3/game/tests/t_multiboard.c`.
+`multiboard_dimension_queries_allow_stock_broadcast_widths` exercises the stock wrapper in the fixture `Scripts/Blizzard.j`, including the map's 4x13 shape and a selected last cell. `texttag_world_position_replaces_unit_anchor_and_publishes_updates` checks repeated attach/detach, coordinates, keyed update packets, and null/destroyed handles. Both regressions failed before their native registrations/implementations were added and pass in RoC and TFT.
 
 Team Resources is a distinct engine-managed display on `LAYER_GAME_3` (`WC3_LAYER_MULTIBOARD`), separate from the `LAYER_GAME_2` command-error overlay; see [Team Resources and Advanced Shared Control](team-resources.md).

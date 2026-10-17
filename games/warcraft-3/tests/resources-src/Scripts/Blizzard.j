@@ -1,6 +1,7 @@
 // Minimal Blizzard.j for WC3 in-engine test fixtures.
 // Keep helpers only when an engine regression test needs the stock wrapper semantics.
 
+
 globals
     constant integer bj_CAMPAIGN_INDEX_H = 1
     constant integer bj_CAMPAIGN_OFFSET_H = 1
@@ -97,4 +98,47 @@ function WidgetDropItem takes widget inWidget, integer inItemID returns item
     set x = GetRandomReal(widgetX - radius, widgetX + radius)
     set y = GetRandomReal(widgetY - radius, widgetY + radius)
     return CreateItem(inItemID, x, y)
+endfunction
+
+// Stock force wrappers used by Peach's team result callbacks.
+function GetPlayersAllies takes player whichPlayer returns force
+    local force f = CreateForce()
+    call ForceEnumAllies(f, whichPlayer, null)
+    return f
+endfunction
+
+function GetPlayersEnemies takes player whichPlayer returns force
+    local force f = CreateForce()
+    call ForceEnumEnemies(f, whichPlayer, null)
+    return f
+endfunction
+
+// Stock area-damage wrapper used by apricot.w3x; WHOKNOWS has native enum value zero.
+function UnitDamagePointLoc takes unit whichUnit, real delay, real radius, location loc, real amount, attacktype whichAttack, damagetype whichDamage returns boolean
+    return UnitDamagePoint(whichUnit, delay, radius, GetLocationX(loc), GetLocationY(loc), amount, true, false, whichAttack, whichDamage, ConvertWeaponType(0))
+endfunction
+
+// Stock broadcast/1-based cell traversal, used by peach.w3x's 4x13 scoreboard.
+function MultiboardSetItemWidthBJ takes multiboard mb, integer col, integer row, real width returns nothing
+    local integer curRow = 0
+    local integer curCol = 0
+    local integer numRows = MultiboardGetRowCount(mb)
+    local integer numCols = MultiboardGetColumnCount(mb)
+    local multiboarditem mbitem = null
+    loop
+        set curRow = curRow + 1
+        exitwhen curRow > numRows
+        if (row == 0 or row == curRow) then
+            set curCol = 0
+            loop
+                set curCol = curCol + 1
+                exitwhen curCol > numCols
+                if (col == 0 or col == curCol) then
+                    set mbitem = MultiboardGetItem(mb, curRow - 1, curCol - 1)
+                    call MultiboardSetItemWidth(mbitem, width/100.0)
+                    call MultiboardReleaseItem(mbitem)
+                endif
+            endloop
+        endif
+    endloop
 endfunction

@@ -212,13 +212,13 @@ uint32_t IsPlayerAlly(jass_t *j) {
     player_t *whichPlayer = jass_checkhandle(j, 1, "player");
     player_t *otherPlayer = jass_checkhandle(j, 2, "player");
     if (!whichPlayer || !otherPlayer) return jass_pushboolean(j, 0);
-    return jass_pushboolean(j, G_GetPlayerAlliance(whichPlayer, otherPlayer, ALLIANCE_PASSIVE));
+    return jass_pushboolean(j, G_PlayerTreatsPlayerAsAlly(whichPlayer->number, otherPlayer->number));
 }
 uint32_t IsPlayerEnemy(jass_t *j) {
     player_t *whichPlayer = jass_checkhandle(j, 1, "player");
     player_t *otherPlayer = jass_checkhandle(j, 2, "player");
     if (!whichPlayer || !otherPlayer) return jass_pushboolean(j, 0);
-    return jass_pushboolean(j, !G_GetPlayerAlliance(whichPlayer, otherPlayer, ALLIANCE_PASSIVE));
+    return jass_pushboolean(j, !G_PlayerTreatsPlayerAsAlly(whichPlayer->number, otherPlayer->number));
 }
 uint32_t IsPlayerInForce(jass_t *j) {
     player_t *whichPlayer = jass_checkhandle(j, 1, "player");
@@ -644,7 +644,7 @@ uint32_t DisplayTextToPlayer(jass_t *j) {
                 toPlayer ? (int)PLAYER_NUM(toPlayer) : -1, x, y,
                 message ? message : "", G_LevelString(message) ? G_LevelString(message) : "");
     }
-    UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, -1.0f);
+    if (toPlayer) UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, -1.0f);
     return 0;
 }
 uint32_t DisplayTimedTextToPlayer(jass_t *j) {
@@ -663,7 +663,7 @@ uint32_t DisplayTimedTextToPlayer(jass_t *j) {
                 toPlayer ? (int)PLAYER_NUM(toPlayer) : -1, x, y, duration,
                 message ? message : "", G_LevelString(message) ? G_LevelString(message) : "");
     }
-    UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, duration);
+    if (toPlayer) UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, duration);
     return 0;
 }
 uint32_t DisplayTimedTextFromPlayer(jass_t *j) {
@@ -682,7 +682,7 @@ uint32_t DisplayTimedTextFromPlayer(jass_t *j) {
                 toPlayer ? (int)PLAYER_NUM(toPlayer) : -1, x, y, duration,
                 message ? message : "", G_LevelString(message) ? G_LevelString(message) : "");
     }
-    UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, duration);
+    if (toPlayer) UI_ShowText(PLAYER_ENT(toPlayer), &MAKE(vec2_t, x, y), message, duration);
     return 0;
 }
 uint32_t ClearTextMessages(jass_t *j) {

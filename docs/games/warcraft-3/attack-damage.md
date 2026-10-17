@@ -104,6 +104,57 @@ direct/scripted damage. Artillery splash already resolves each victim through `a
 `wc3_spell.ethereal_secondary_targets_reject_physical_attacks` covers all three secondary paths, status removal restoring physical
 damage, and a magic primary weapon accepting Ethereal victims. It runs with both Classic and TFT fixtures.
 
+## JASS point damage
+
+`UnitDamagePoint` is registered in `api_unit.h` with the eleven-argument
+signature from retail `Scripts\common.j` / `game/common.txt`. Apricot's
+`Trig_Death_and_Decay_Actions` calls Blizzard.j's `UnitDamagePointLoc` with
+delay 0, radius 900, amount 80, Normal attack type and Disease damage type.
+That wrapper forwards the location's XY plus `attack=true`, `ranged=false`
+and `WEAPON_TYPE_WHOKNOWS` to the native.
+
+The supported immediate path scans live units, destructables and items in
+the area. Its distance test uses the same collision-footprint rule as artillery
+splash (`max(0, center distance - collision radius) <= radius`). It does not
+apply an enemy-only spell target mask; friendly widgets can also be affected.
+Each victim goes through `T_Damage` once, retaining its invulnerability,
+Mana Shield, Spirit Link, damage-event/source and death contracts. No physical
+armor/type scaling or primary-attack listener is applied again. Like the
+existing `UnitDamageTarget`, this remains **untyped scripted damage**:
+attack/ranged/type/weapon arguments are consumed but do not yet select retail
+mitigation or attack listeners. This limitation includes the Normal/Disease
+combination authored by Apricot.
+
+Null or removed sources, negative/non-finite radius, non-finite point/amount,
+and nonpositive or overflowing integer damage return false. A valid immediate
+request returns true even if no widget is in the area. Positive delay is
+explicitly logged as unsupported and returns false without damaging anything;
+it must not be silently converted into an immediate hit. No persistent state,
+save layout or network contract is added by this immediate implementation.
+
+Retail evidence separates these limits from the shipped contract. The supplied
+`lime.dll` SHA-256 is
+`4ce19aa6b9045c786a80465ef8a035bc2f2925643ab86e4e53b2e413d7f67610`.
+Its registration bytes at `0x6f3d7522` reference the `UnitDamagePoint` name
+at `0x6f959d98` and native code at `0x6f3c92b0`; the name is also observed by
+REA Evidence `ev_51c4cbcd5a78b1281808e0bc0dde86d479ed95837ab0fb1d5ad68e4e0b6e4ee9`.
+Ghidra did not establish a procedure boundary at that native entry, so no
+native pseudocode is claimed. Manual disassembly follows its nonzero-delay
+branch through `0x6f1d4f50` to `0x6f2c5890`. REA pseudocode for that helper
+shows distinct immediate and scheduled paths (Evidence
+`ev_0b245922cbcd1fb41bdc1675ad4ecf90a8c30fda27d26324c1d4dd753e2b17de`);
+the immediate helper at `0x6f2c3cf0` builds widget damage records and invokes
+the per-victim damage callback (Evidence
+`ev_f46885b7d62698970e211e24f50469cd3c7808f36b0f813c82653d265e1cbf5f`).
+These static observations establish that retail supports more than the
+implemented immediate raw-damage subset; exact retail filter/type behavior
+remains unresolved.
+
+Regression coverage in `t_api.c` drives the actual Blizzard wrapper, verifies
+damage/source events, range and collision boundaries, invulnerability,
+friendly targets, valid/invalid sources, return values, the existing untyped
+flags contract and explicit rejection of delayed requests.
+
 ## Gameplay Constants
 
 `InitConstants()` loads combat values from the active Misc data cache. `war3mapMisc.txt` is loaded after stock Misc files and can override them.

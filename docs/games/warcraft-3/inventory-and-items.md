@@ -449,9 +449,39 @@ The existing JASS natives route through this lifecycle:
 - `UnitRemoveItem`
 - `UnitRemoveItemFromSlot`
 - `RemoveItem`
-- `SetItemPosition` for items already in world state
+- `SetItemPosition` for world items and carried items
 - `GetItemCharges`
 - `SetItemCharges`
+
+`SetItemPosition` releases a carried item through `G_DropItemAtScripted`
+before placing it at the requested point. This clears the carrier's inventory
+slot, removes passive bonuses, refreshes its inventory UI, and unhides/relinks
+the same item edict. Charges and identity survive; normal droppable permissions
+do not block this script operation, while existing ability-specific binding
+rules still apply. Carried placement uses the shared deterministic unstuck
+search; the existing world-item repositioning path remains unchanged.
+
+This matters for Peach's `Trig_reset_all_Actions`, which calls
+`SetItemPositionLoc` to return both flag items to storage between rounds.
+Ignoring carried items retained the previous round's flag in its runner's
+inventory. `wc3_items.set_item_position_clears_carried_round_objective` exercises
+two pickups/resets through JASS, including slot release, charge preservation,
+visibility and passive-bonus removal. A second regression retains world-item
+and null-handle behavior.
+
+Static retail evidence from supplied `lime.dll` (SHA-256
+`4ce19aa6b9045c786a80465ef8a035bc2f2925643ab86e4e53b2e413d7f67610`):
+the native registration binds `SetItemPosition` to `0x6f3c57c0`. Its carried
+branch calls `0x6f283960`, the same removal helper called by `UnitRemoveItem`
+at `0x6f3c81a0`, then calls position helper `0x6f2b7600`. This establishes
+removal before placement; it does not establish complete retail placement,
+bound-item or event/sound parity. Bounded independent disassembly is retained
+in workspace `../REA/evidence/set-item-position-native.txt`:
+
+```sh
+objdump -d -Mintel --start-address=0x6f3c57c0 --stop-address=0x6f3c583b ../lime.dll
+objdump -d -Mintel --start-address=0x6f3c81a0 --stop-address=0x6f3c81d2 ../lime.dll
+```
 
 `SetItemDropID` is a metadata-only native. It stores the unit rawcode used by
 later item-drop logic on the item instance; it does not move the item, change

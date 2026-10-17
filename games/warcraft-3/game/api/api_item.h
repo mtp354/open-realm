@@ -81,7 +81,13 @@ uint32_t SetItemPosition(jass_t *j) {
     edict_t *item = jass_checkhandle(j, 1, "item");
     float x = jass_checknumber(j, 2);
     float y = jass_checknumber(j, 3);
-    if (item && item->item->in_world) {
+    if (!G_IsItem(item)) return 0;
+    if (!item->item->in_world) {
+        /* Retail removes a carried item before placing it. Reuse the scripted
+         * inverse pickup transition so slots, passive effects and UI agree. */
+        vec2_t position = { x, y };
+        G_DropItemAtScripted(item->item->carrier, (uint32_t)item->item->inventory_slot, &position);
+    } else {
         item->s.origin.x = x;
         item->s.origin.y = y;
         item->s.origin.z = CM_GetHeightAtPoint(x, y);

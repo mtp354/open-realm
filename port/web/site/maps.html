@@ -8,10 +8,18 @@
 <body>
 <main>
 <h1>Choose a map</h1>
-<ul>
-<li><a href="index.html?map=apricot">Apricot</a></li>
-<li><a href="index.html?map=peach">Peach</a></li>
-</ul>
+<p>Basic terrain and models. Simple bots fill the other player slots.</p>
+<form action="index.html" method="get">
+<label>Other players
+<select name="bots">
+<option value="1">Simple bots</option>
+<option value="0">Leave empty</option>
+</select>
+</label>
+<p><button type="submit" name="map" value="apricot">Apricot — Troopers vs Zombies</button></p>
+<p><button type="submit" name="map" value="peach">Peach — Capture the Flag</button></p>
+</form>
+<p>Apricot's zombie heroes arrive after 90 seconds. Peach begins with a tutorial.</p>
 </main>
 </body>
 </html>

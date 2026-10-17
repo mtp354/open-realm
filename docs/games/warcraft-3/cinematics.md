@@ -270,6 +270,41 @@ override the setup Z offset with their explicit argument.
 target position while still applying camera fields, matching Warsmash's
 separation between setup fields and destination panning.
 
+`SetCameraRotateMode(x, y, radiansToSweep, duration)` captures the current camera
+relative to the requested world pivot and owns a signed, unwrapped sweep in
+`gameClient_t.camera`. `G_RunClients()` applies that sweep to target XY and yaw
+each frame while preserving the captured target height and lens. A positive
+sweep rotates XY counterclockwise and decreases client Euler yaw. Full 360/720
+degree sweeps must not use the shortest-arc field interpolator. Non-positive
+duration applies the final angle immediately. New camera position/pan/field,
+setup/controller, reset, stop, or accepted local camera input freezes the
+current sampled orbit before taking ownership. The value fields persist in
+the raw version-90 client record; no network fields change.
+
+Retail evidence: supplied `lime.dll` SHA-256
+`4ce19aa6b9045c786a80465ef8a035bc2f2925643ab86e4e53b2e413d7f67610`.
+REA evidence `ev_f925708d1e5b4294b0749d59f3b3a988c5c91dc97f9cccfe6f2be91509ebbee1`
+decompiles wrapper `0x6f3b5390`, forwarding `(x,y,0)`, sweep and duration into
+`0x6f308190`; evidence
+`ev_e977c3a297388a0fed21553c9f3b15854d5f2e6cc4809b88996ef47f671658a4`
+shows pivot/relative vectors, an independent scalar sweep track, and mode 2.
+Bounded `objdump -d -Mintel` inspection at `0x6f305654` shows the mode-2 Z-axis
+rotation of that relative vector followed by pivot addition; `0x6f303070`
+adds the sweep to captured authored rotation. Ghidra did not define procedures
+at those two update addresses, so their assembly remains independent evidence.
+The retained local bundle is `REA/evidence/camera-rotate-native.json` beside the
+repository. Static analysis establishes structure, not a retail execution trace.
+**BZ_COMPAT_GUESS:** overlapping scalar transitions freeze at the rotate-mode
+boundary; exact retail easing and overlapping camera-command behavior remain
+unverified. Tests in `games/warcraft-3/game/tests/t_camera_rotate.c` exercise real JASS calls and
+`G_RunFrame`, replacement, stop, immediate/negative sweeps, local input, and
+active-sweep save/load.
+
+```sh
+make test-wc3-engine WC3_PATTERN='wc3_api.camera_rotate*'
+make test-wc3-engine WC3_PATTERN='wc3_save.camera_rotate*'
+```
+
 `CameraSetTargetNoise`, `CameraSetSourceNoise`, and their `...NoiseEx` variants
 are game logic, not client logic. The natives store magnitude, velocity, and
 `vertOnly` in `gameClient_t.camera.noise[]` (saved with the client record).

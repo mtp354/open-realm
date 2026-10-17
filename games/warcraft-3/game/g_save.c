@@ -117,7 +117,9 @@ static uint32_t const save_commit = MAKEFOURCC('W', '3', 'O', 'K');
 /* Version 87 persists creep guard return recovery state. */
 /* Version 88 stores a single creep guard lifecycle phase. */
 /* Version 89 retains entity identity for ability-owned point-spell approaches. */
-static uint32_t const save_version = 89;
+/* Version 90 expands event registrations to 2048 with matching region-event token/generation bits
+ * and persists the client-owned rotation pivot, sweep and deadlines. */
+static uint32_t const save_version = 90;
 #define SAVE_STREAM_BUFFER (1u << 20) // bytes; save files are several MB of field writes, so a large stdio buffer avoids per-4 KB syscalls
 #define MAX_SAVE_STRING (1u << 20) // bytes; bounds quest-string allocations from corrupt saves
 #define MAX_SAVE_GROUP_HANDLES 65536u // corrupt-save bound only; runtime group registry itself grows dynamically
@@ -817,6 +819,8 @@ static field_t const client_menu_fields[] = {
 };
 
 static field_t const client_camera_fields[] = {
+    /* Rotation pivot, unwrapped sweep, target height and deadlines are values
+     * in the raw version-90 client record; no runtime pointer fixups apply. */
     TF(clientCamera_s, target_controller, F_IGNORE, 0, FIELD_RUNTIME),
     { NULL, 0, 0, 0, 0, 0 }
 };

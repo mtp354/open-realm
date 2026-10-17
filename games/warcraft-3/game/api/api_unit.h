@@ -612,6 +612,31 @@ uint32_t UnitDamageTarget(jass_t *j) {
     T_Damage(target, whichUnit, (int)amount);
     return jass_pushboolean(j, 1);
 }
+uint32_t UnitDamagePoint(jass_t *j) {
+    edict_t *source = jass_checkhandle(j, 1, "unit");
+    float delay = jass_checknumber(j, 2), radius = jass_checknumber(j, 3);
+    vec2_t point = { jass_checknumber(j, 4), jass_checknumber(j, 5) };
+    float amount = jass_checknumber(j, 6);
+    /* TODO: Typed scripted damage has the same unmodeled flags as UnitDamageTarget. */
+    (void)jass_checkboolean(j, 7); (void)jass_checkboolean(j, 8);
+    (void)jass_checkhandle(j, 9, "attacktype");
+    (void)jass_checkhandle(j, 10, "damagetype");
+    (void)jass_checkhandle(j, 11, "weapontype");
+    if (!source || !source->inuse || G_IsDeferredFree(source) || !isfinite(delay) || !isfinite(radius) || radius < 0.0f ||
+        !isfinite(point.x) || !isfinite(point.y) || !isfinite(amount) || amount <= 0.0f || amount >= (float)INT_MAX)
+        return jass_pushboolean(j, false);
+    if (delay > 0.0f) {
+        fprintf(stderr, "WC3 UnitDamagePoint: delayed damage is unsupported (%g seconds)\n", (double)delay);
+        return jass_pushboolean(j, false);
+    }
+    FILTER_EDICTS(target, target->inuse && !G_IsDeferredFree(target) && !M_IsDead(target) &&
+                  ((target->svflags & SVF_MONSTER) || G_IsDestructable(target) || G_IsItem(target))) {
+        /* Match artillery's distance to the victim footprint, rather than only its center. */
+        if (MAX(0.0f, Vector2_distance(&target->s.origin2, &point) - MAX(0.0f, target->collision)) <= radius)
+            T_Damage(target, source, (int)amount);
+    }
+    return jass_pushboolean(j, true);
+}
 uint32_t UnitAddType(jass_t *j) {
     edict_t *whichUnit = jass_checkhandle(j, 1, "unit");
     uint32_t *whichUnitType = jass_checkhandle(j, 2, "unittype");
@@ -954,9 +979,11 @@ uint32_t IsUnitEnemy(jass_t *j) {
         !G_PlayerTreatsPlayerAsAlly(PLAYER_NUM(whichPlayer), whichUnit->s.player));
 }
 uint32_t IsUnitVisible(jass_t *j) {
-    //edict_t *whichUnit = jass_checkhandle(j, 1, "unit");
-    //handle_t whichPlayer = jass_checkhandle(j, 2, "player");
-    return jass_pushboolean(j, 0);
+    edict_t *whichUnit = jass_checkhandle(j, 1, "unit");
+    player_t *whichPlayer = jass_checkhandle(j, 2, "player");
+    return jass_pushboolean(j, whichUnit && whichPlayer && whichUnit->inuse &&
+        !(whichUnit->s.renderfx & RF_HIDDEN) &&
+        G_FowPlayerCanHoverEntity(PLAYER_NUM(whichPlayer), whichUnit));
 }
 uint32_t IsUnitDetected(jass_t *j) {
     edict_t *whichUnit = jass_checkhandle(j, 1, "unit");

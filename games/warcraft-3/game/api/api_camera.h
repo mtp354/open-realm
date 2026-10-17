@@ -56,6 +56,7 @@ static camerasetup_t G_CameraStateAtTime(gameClient_t *gc, uint32_t now) {
     }
     if (gc->camera.pan_active)
         current.position = G_CameraPanPositionAtTime(gc, now, NULL);
+    G_ApplyCameraRotation(gc, now, &current);
     return current;
 }
 
@@ -160,6 +161,7 @@ static void G_SetCameraFieldForCurrentPlayer(CAMERAFIELD field, float value, flo
     if (!G_SetCameraStateField(&target, field, value)) {
         return;
     }
+    G_StopCameraRotation(gc);
     gc->camera.old_state = current;
     gc->camera.state = target;
     gc->camera.start_time = now;
@@ -202,6 +204,7 @@ static void G_StartCameraPan(gameClient_t *gc, vec2_t destination, vec2_t rate) 
     if (!gc) return;
     now = G_Time();
     current = G_CameraStateAtTime(gc, now);
+    G_StopCameraRotation(gc);
     destination = G_ClampCameraPosition(gc, &destination);
     G_ClearCameraTarget(gc, "G_StartCameraPan");
     gc->camera.pan_start = current.position;
@@ -326,6 +329,7 @@ static void G_SetCameraPositionForCurrentPlayer(cstring_t func, float x, float y
         duration = 0;
     }
     position = G_ClampCameraPosition(gc, &position);
+    G_StopCameraRotation(gc);
     G_ClearCameraTarget(gc, func);
     G_ClearCameraPan(gc);
     gc->camera.old_state = gc->camera.state;
@@ -347,6 +351,7 @@ uint32_t SetCameraTargetController(jass_t *j) {
     if (!gc) {
         return 0;
     }
+    G_StopCameraRotation(gc);
     G_ClearCameraPan(gc);
     gc->camera.target_controller = whichUnit;
     gc->camera.target_offset = (vec2_t){ xoffset, yoffset };
@@ -389,6 +394,7 @@ uint32_t SetCameraOrientController(jass_t *j) {
      * ownership does not snap to an old transition endpoint. */
     now = G_Time();
     current = G_CameraStateAtTime(gc, now);
+    G_StopCameraRotation(gc);
     G_ClearCameraPan(gc);
     target = G_MakeServerOrigin(current.position.x, current.position.y, current.z_offset);
     gc->camera.old_state = gc->camera.state = current;
@@ -427,6 +433,32 @@ uint32_t SetCameraBounds(jass_t *j) {
     G_SetCameraBounds(bounds);
     return 0;
 }
+uint32_t SetCameraRotateMode(jass_t *j) {
+    vec2_t center = { jass_checknumber(j, 1), jass_checknumber(j, 2) };
+    float sweep = jass_checknumber(j, 3), duration = jass_checknumber(j, 4);
+    gameClient_t *gc = G_CurrentCameraClient("SetCameraRotateMode");
+    camerasetup_t current;
+    uint32_t now;
+
+    if (!gc) return 0;
+    now = G_Time();
+    current = G_CameraStateAtTime(gc, now);
+    G_ClearCameraTarget(gc, "SetCameraRotateMode");
+    G_ClearCameraPan(gc);
+    gc->camera.old_state = gc->camera.state = current;
+    gc->camera.start_time = gc->camera.end_time = now;
+    gc->camera.rotate_active = true;
+    gc->camera.rotate_start_time = now;
+    gc->camera.rotate_end_time = now + (G_SkipCutscene() ? 0 : (uint32_t)(MAX(0.0f, duration) * 1000.0f));
+    gc->camera.rotate_center = center;
+    gc->camera.rotate_offset = Vector2_sub(&current.position, &center);
+    gc->camera.rotate_yaw = current.viewangles.z;
+    gc->camera.rotate_height = G_MakeServerOrigin(current.position.x, current.position.y, current.z_offset).z;
+    gc->camera.rotate_sweep = sweep;
+    if (gc->camera.rotate_end_time == now) G_StopCameraRotation(gc);
+    return 0;
+}
+
 /* Freeze the current timed camera transition at its sampled state. */
 uint32_t StopCamera(jass_t *j) {
     gameClient_t *gc = G_CurrentCameraClient("StopCamera");
@@ -437,6 +469,7 @@ uint32_t StopCamera(jass_t *j) {
         return 0;
     }
     now = G_Time();
+    G_StopCameraRotation(gc);
     gc->camera.state = G_CameraStateAtTime(gc, now);
     gc->camera.old_state = gc->camera.state;
     gc->camera.start_time = gc->camera.end_time = now;
@@ -452,6 +485,7 @@ uint32_t ResetToGameCamera(jass_t *j) {
     if (G_SkipCutscene()) {
         duration = 0;
     }
+    G_StopCameraRotation(gc);
     G_ClearCameraTarget(gc, "ResetToGameCamera");
     G_ClearCameraPan(gc);
     /* Retail reset returns to ordinary gameplay camera control, including stopping
@@ -629,6 +663,7 @@ static void G_ApplyCameraSetup(camerasetup_t *setup, bool apply_position,
         duration_ms = 0;
     }
     current = G_CameraStateAtTime(gc, G_Time());
+    G_StopCameraRotation(gc);
     G_ClearCameraTarget(gc, "CameraSetupApply");
     if (apply_position) G_ClearCameraPan(gc);
     gc->camera.old_state = current;

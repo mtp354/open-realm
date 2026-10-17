@@ -452,6 +452,7 @@ static bool G_LoadMap(cstring_t mapFilename) {
     G_SpawnEntities();
     gi.LoadingFrame();
     strlcpy(level.map_path, mapFilename, sizeof(level.map_path));
+    G_LoadBrowserBots();
     G_StartScripts();
     gi.LoadingFrame();
     level.started = true;
@@ -808,6 +809,7 @@ static void G_ReclampClientCamera(gameClient_t *client) {
     vec2_t position;
 
     if (!client) return;
+    G_StopCameraRotation(client);
     position = (vec2_t){ client->ps.vieworigin.x, client->ps.vieworigin.y };
     position = G_ClampCameraPosition(client, &position);
     client->ps.vieworigin = G_MakeCameraOrigin(client, position.x, position.y, client->camera.state.z_offset);
@@ -847,6 +849,35 @@ void G_ClearCameraPan(gameClient_t *client) {
     client->camera.pan_start = (vec2_t){ 0, 0 };
     client->camera.pan_destination = (vec2_t){ 0, 0 };
     client->camera.pan_rate = (vec2_t){ 0, 0 };
+}
+
+/* Retail rotation mode stores the camera relative to its pivot and advances an
+ * unwrapped angle, independently of shortest-arc camera field interpolation. */
+void G_ApplyCameraRotation(gameClient_t *client, uint32_t now, camerasetup_t *state) {
+    float k, angle, c, s;
+    uint32_t start, end;
+    vec2_t offset;
+
+    if (!client || !state || !client->camera.rotate_active) return;
+    start = client->camera.rotate_start_time;
+    end = client->camera.rotate_end_time;
+    k = end <= start || now >= end ? 1.0f : now <= start ? 0.0f : (now - start) / (float)(end - start);
+    angle = client->camera.rotate_sweep * k;
+    c = cosf(angle); s = sinf(angle);
+    offset = client->camera.rotate_offset;
+    state->position = G_ClampCameraPosition(client, &(vec2_t){
+        client->camera.rotate_center.x + offset.x * c - offset.y * s,
+        client->camera.rotate_center.y + offset.x * s + offset.y * c });
+    state->viewangles.z = client->camera.rotate_yaw - RAD2DEG(angle);
+    state->z_offset = client->camera.rotate_height - CM_GetHeightAtPoint(state->position.x, state->position.y) - CM_GetCameraHeightOffset();
+}
+
+void G_StopCameraRotation(gameClient_t *client) {
+    if (!client || !client->camera.rotate_active) return;
+    G_ApplyCameraRotation(client, G_Time(), &client->camera.state);
+    client->camera.old_state = client->camera.state;
+    client->camera.start_time = client->camera.end_time = G_Time();
+    client->camera.rotate_active = false;
 }
 
 static float G_CameraPanAxisAtTime(float start, float destination, float rate, float elapsed) {
@@ -991,6 +1022,7 @@ static void G_ClientInput(edict_t *ent, inputCmd_t const *cmd) {
     gameClient_t *client = ent->client;
     if (client->no_control) return;
     if (cmd->action == BZ_INPUT_MOVE && (!cmd->move.buttons || !cmd->move.msec)) return;
+    G_StopCameraRotation(client);
     if (cmd->action == BZ_INPUT_VIEW) {
         client->camera.state.viewangles = cmd->view.angles;
         client->camera.state.target_distance = cmd->view.distance;
@@ -1047,6 +1079,8 @@ static void G_RunClients(void) {
         bool pan_complete = false;
         vec2_t pan_position = { 0, 0 };
         G_UpdateCameraTarget(client);
+        if (client->camera.rotate_active && G_Time() >= client->camera.rotate_end_time)
+            G_StopCameraRotation(client);
         if (client->camera.pan_active)
             pan_position = G_CameraPanPositionAtTime(client, G_Time(), &pan_complete);
         duration = client->camera.end_time - client->camera.start_time;
@@ -1077,6 +1111,12 @@ static void G_RunClients(void) {
                 .fov = client->camera.state.fov,
                 .znear = client->camera.state.near_z,
                 .zfar = client->camera.state.far_z });
+        }
+        if (client->camera.rotate_active) {
+            camerasetup_t rotated = client->camera.state;
+            G_ApplyCameraRotation(client, G_Time(), &rotated);
+            client->ps.vieworigin = G_MakeCameraOrigin(client, rotated.position.x, rotated.position.y, rotated.z_offset);
+            client->ps.viewangles.z = rotated.viewangles.z;
         }
         client->ps.viewoffset = G_CameraNoiseOffset(client, CAMERA_NOISE_TARGET, 0.0);
         client->ps.eyeoffset = G_CameraNoiseOffset(client, CAMERA_NOISE_SOURCE, CAMERA_NOISE_SOURCE_PHASE);
@@ -1183,6 +1223,7 @@ static void G_StartScripts(void) {
     jass_runevents(level.vm);
 
     G_SetDestructableScriptBinding(false);
+    G_StartBrowserBots();
 }
 
 bool G_IsSinglePlayer(void) {

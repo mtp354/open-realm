@@ -1,5 +1,14 @@
 # Viewport scroll cursors
 
+The shared client starts `mouse.origin` outside the window (`-1,-1`) until SDL
+delivers a pointer sample. `SDL_WINDOWEVENT_LEAVE` and focus loss invalidate the
+last sample too. Previously the zero-initialized position scrolled a newly loaded
+browser map toward its upper-left corner before any interaction, into black
+unrevealed terrain. A pointer leaving the canvas could continue scrolling at its
+last edge coordinate. `client_input.window_leave_clears_stale_edge_scroll` drives
+the real SDL event queue and checks leave/re-entry; normal edge motion remains
+covered by `client_input.edge_scroll_cursor_lifecycle`.
+
 For the deeper cursor lifecycle, animation/tint state, virtual-call xrefs and
 shared model-to-D3D path, see [retail cursor rendering](cursor-rendering.md).
 

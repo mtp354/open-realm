@@ -194,6 +194,50 @@ The bridge also provides:
 Authored boolexpr filters run with the event-specific filter unit before trigger
 conditions/actions are scheduled.
 
+## Registration capacity and failure
+
+`level.events.handlers` contains `MAX_EVENTS` (2,048) registration slots;
+this is separate from the 1,024-entry pending-event queue. `G_MakeEvent`
+logs the event slot limit and returns null when every slot
+is live or permanently retired. Registration natives must return a null
+JASS event handle before accessing that pointer. `TriggerRegisterTimerEvent`
+also checks both registries before allocating/starting its hidden timer, so
+failed event registration does not consume a timer slot. Existing registrations
+remain intact. No successful registration is synthesized on failure.
+
+Peach's map script exceeded the former 1,024-registration bound: its `InitTrig_*`
+functions contain 61 `TriggerRegisterAnyUnitEventBJ` calls. The staged retail
+`Scripts\Blizzard.j` implements each call as 16
+`TriggerRegisterPlayerUnitEvent` registrations (`bj_MAX_PLAYER_SLOTS = 16`),
+consuming 976 slots. Its other initialization calls request 24 timer, 24 player,
+17 dialog, 12 region, four unit and two range registrations, totaling 1,059
+supported registration requests (subject handles must also be valid).
+A dedicated initialization run reached the former bound and
+crashed because `TriggerRegisterPlayerUnitEvent` dereferenced the null
+allocation. The 2,048-slot bound accommodates those requests. Null checks also
+make exhaustion safe for larger scripts; a null return is not proof that the
+map's gameplay is complete.
+
+Do not raise `MAX_EVENTS` alone: region-event handles use
+`EVENT_TOKEN_SLOT_BITS = 13` for 2,048 slots plus a two-bit tag, with the
+remaining generation budget also used by `GetHandleId`. Changing the capacity
+requires reviewing that encoding and the serialized registry/save version
+together. The generation budget is 17 bits, preserving unique positive handle
+IDs. Save format 90 contains the enlarged registry and rejects older versions;
+network structures and the pending-event queue are unchanged.
+
+`wc3_api.event_registrations_fail_safely_at_capacity` fills the registry through
+the JASS player-unit registration native, then checks rejected player-unit,
+player, unit/death/range, game-state, variable, timer and region registrations,
+preservation of the previous registrations, and no leaked hidden timer. Before
+the fix it reproduced the dedicated run's slot-limit log and segmentation
+fault; afterward it completes normally.
+`wc3_api.peach_sized_registry_preserves_high_slot_region_event_identity`
+registers 1,059 events through JASS and checks a reused slot above 1,023 against
+low-slot and retired identities, including hashtable keys. The
+`wc3_save.round_trip_region_event_filter_function` regression saves and reloads
+that high-slot generation, filter function and JASS handle identity.
+
 ## Diagnostics
 
 `wc3_event_debug` is opt-in and must not affect gameplay:

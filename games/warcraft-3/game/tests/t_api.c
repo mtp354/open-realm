@@ -868,6 +868,86 @@ TEST(wc3_api, removed_region_events_release_handler_capacity) {
     }
 }
 
+TEST(wc3_api, event_registrations_fail_safely_at_capacity) {
+    T_ASSERT(run_test_jass(
+        "globals\n"
+        "  integer counter = 0\n"
+        "endglobals\n"
+        "function main takes nothing returns nothing\n"
+        "  local trigger t = CreateTrigger()\n"
+        "  local timer clock = CreateTimer()\n"
+        "  local unit u = CreateUnit(Player(0), 'hfoo', 0.0, 0.0, 0.0)\n"
+        "  local region r = CreateRegion()\n"
+        "  local integer i = 0\n"
+        "  loop\n"
+        "    exitwhen i >= " BZ_STRINGIFY(MAX_EVENTS) "\n"
+        "    call BJassAssert(TriggerRegisterPlayerUnitEvent(t, Player(0), EVENT_PLAYER_UNIT_DEATH, null) != null, \"event registry filled prematurely\")\n"
+        "    set i = i + 1\n"
+        "  endloop\n"
+        "  call BJassAssert(TriggerRegisterPlayerUnitEvent(t, Player(0), EVENT_PLAYER_UNIT_DEATH, null) == null, \"full registry accepted player-unit event\")\n"
+        "  call BJassAssert(TriggerRegisterPlayerEvent(t, Player(0), EVENT_PLAYER_LEAVE) == null, \"full registry accepted player event\")\n"
+        "  call BJassAssert(TriggerRegisterUnitEvent(t, u, EVENT_UNIT_DEATH) == null, \"full registry accepted unit event\")\n"
+        "  call BJassAssert(TriggerRegisterDeathEvent(t, u) == null, \"full registry accepted death event\")\n"
+        "  call BJassAssert(TriggerRegisterUnitInRange(t, u, 100.0, null) == null, \"full registry accepted range event\")\n"
+        "  call BJassAssert(TriggerRegisterGameStateEvent(t, GAME_STATE_TIME_OF_DAY, EQUAL, 12.0) == null, \"full registry accepted game-state event\")\n"
+        "  call BJassAssert(TriggerRegisterVariableEvent(t, \"counter\", EQUAL, 1.0) == null, \"full registry accepted variable event\")\n"
+        "  call BJassAssert(TriggerRegisterTimerEvent(t, 1.0, true) == null, \"full registry accepted timer event\")\n"
+        "  call BJassAssert(TriggerRegisterTimerExpireEvent(t, clock) == null, \"full registry accepted timer expiry event\")\n"
+        "  call BJassAssert(TriggerRegisterEnterRegion(t, r, null) == null, \"full registry accepted enter event\")\n"
+        "  call BJassAssert(TriggerRegisterLeaveRegion(t, r, null) == null, \"full registry accepted leave event\")\n"
+        "endfunction\n"));
+    T_EQ(level.num_timers, 1);
+    T_ASSERT(!level.timers[0].running);
+    FOR_LOOP(i, MAX_EVENTS) {
+        T_EQ(level.events.handlers[i].type, EVENT_PLAYER_UNIT_DEATH);
+        T_EQ(level.events.handlers[i].trigger, &level.triggers[0]);
+    }
+}
+
+TEST(wc3_api, peach_sized_registry_preserves_high_slot_region_event_identity) {
+    event_t *registration = NULL;
+    uint32_t slot = 0, generation = 0;
+    T_ASSERT(run_test_jass(
+        "function main takes nothing returns nothing\n"
+        "  local trigger t = CreateTrigger()\n"
+        "  local hashtable ht = InitHashtable()\n"
+        "  local region lowRegion = CreateRegion()\n"
+        "  local region highRegion = CreateRegion()\n"
+        "  local event lowEvent = TriggerRegisterEnterRegion(t, lowRegion, null)\n"
+        "  local event oldEvent = null\n"
+        "  local event newEvent = null\n"
+        "  local integer i = 0\n"
+        "  local integer oldId = 0\n"
+        "  loop\n"
+        /* Peach's initialization requests 1,059 registrations including its BJ wrappers. */
+        "    exitwhen i >= 1057\n"
+        "    call BJassAssert(TriggerRegisterPlayerUnitEvent(t, Player(0), EVENT_PLAYER_UNIT_DEATH, null) != null, \"Peach-sized event registry exhausted\")\n"
+        "    set i = i + 1\n"
+        "  endloop\n"
+        "  set oldEvent = TriggerRegisterEnterRegion(t, highRegion, null)\n"
+        "  call BJassAssert(oldEvent != null, \"high-slot region event was rejected\")\n"
+        "  set oldId = GetHandleId(oldEvent)\n"
+        "  call BJassAssert(oldId != GetHandleId(lowEvent), \"high-slot event aliased low-slot identity\")\n"
+        "  call SaveInteger(ht, GetHandleId(lowEvent), 0, 11)\n"
+        "  call SaveInteger(ht, oldId, 0, 22)\n"
+        "  call RemoveRegion(highRegion)\n"
+        "  set highRegion = CreateRegion()\n"
+        "  set newEvent = TriggerRegisterLeaveRegion(t, highRegion, null)\n"
+        "  call BJassAssert(newEvent != null and newEvent != oldEvent, \"high-slot reuse aliased retired event\")\n"
+        "  call BJassAssert(GetHandleId(oldEvent) == oldId, \"retired high-slot event ID changed\")\n"
+        "  call BJassAssert(GetHandleId(newEvent) != oldId, \"high-slot event reused old generation ID\")\n"
+        "  call BJassAssert(LoadInteger(ht, GetHandleId(lowEvent), 0) == 11, \"high-slot event changed low-slot data\")\n"
+        "  call BJassAssert(LoadInteger(ht, GetHandleId(newEvent), 0) == 0, \"high-slot event inherited retired data\")\n"
+        "endfunction\n"));
+    FOR_EACH_EVENT(event) if (event->type == EVENT_GAME_LEAVE_REGION) registration = event;
+    T_NOT_NULL(registration);
+    if (!registration) return;
+    T_ASSERT(G_EventHandleParts(G_EventHandle(registration), &slot, &generation));
+    T_EQ(slot, 1058);
+    T_EQ(generation, 1);
+    T_EQ(G_EventFromHandle(G_EventHandle(registration)), registration);
+}
+
 static uint32_t unit_team_color(edict_t const *unit) {
     uint32_t const encoded = unit
         ? (unit->s.effect_flags & EFX_TEAM_COLOR_MASK) >> EFX_TEAM_COLOR_SHIFT : 0;
@@ -3036,6 +3116,26 @@ TEST(wc3_api, display_text_tracks_lifetime_and_clear) {
     T_STREQ(gc->message.text, "");
     T_EQ(gc->message_log.count, 1);
     T_STREQ(gc->message_log.entries[0], "Timed message");
+}
+
+TEST(wc3_api, display_text_ignores_absent_force_player_inside_group_callback) {
+    setup_test_world();
+    T_ASSERT(run_test_jass(
+        "function groupCallback takes nothing returns nothing\n"
+        "  call BJassAssert(GetEnumPlayer() == null, \"group has no force player\")\n"
+        "  call DisplayTimedTextFromPlayer(GetEnumPlayer(), 0.0, 0.0, 60.0, \"defeated\")\n"
+        "  call DisplayTimedTextToPlayer(null, 0.0, 0.0, 1.0, \"ignored\")\n"
+        "  call DisplayTextToPlayer(null, 0.0, 0.0, \"ignored\")\n"
+        "endfunction\n"
+        "function main takes nothing returns nothing\n"
+        "  local group g = CreateGroup()\n"
+        "  call GroupAddUnit(g, CreateUnit(Player(0), 'hfoo', 100.0, 100.0, 0.0))\n"
+        "  call DisplayTimedTextFromPlayer(Player(0), 0.0, 0.0, 2.0, \"retained\")\n"
+        "  call ForGroup(g, function groupCallback)\n"
+        "  call DestroyGroup(g)\n"
+        "endfunction\n"));
+    FOR_LOOP(i, game.max_clients) T_EQ(game.clients[i].message_log.count, i == 0 ? 1 : 0);
+    T_STREQ(game.clients[0].message.text, "retained");
 }
 
 static edict_t *find_test_unit(uint32_t class_id) {
@@ -8518,6 +8618,85 @@ TEST(wc3_api, dota_hero_attr_ability_level_and_order) {
         "  call SetPlayerAbilityAvailable(Player(0), 'AHhb', false)\n"
         "  call SetPlayerAbilityAvailable(Player(0), 'AHhb', true)\n"
         "endfunction\n"));
+}
+
+TEST(wc3_api, apricot_unit_damage_point_loc_applies_script_damage_in_radius) {
+    edict_t *source = NULL;
+    uint32_t damaged = 0;
+    T_ASSERT(run_test_jass(
+        "globals\n"
+        "  unit source = null\n"
+        "endglobals\n"
+        "function main takes nothing returns nothing\n"
+        "  local unit near = CreateUnit(Player(1), 'hfoo', 256.0, 192.0, 0.0)\n"
+        "  local unit far = CreateUnit(Player(1), 'hfoo', 480.0, 192.0, 0.0)\n"
+        "  local unit protected = CreateUnit(Player(1), 'hfoo', 272.0, 192.0, 0.0)\n"
+        "  local location point = Location(256.0, 192.0)\n"
+        "  local real before = GetWidgetLife(near)\n"
+        "  local real farBefore = GetWidgetLife(far)\n"
+        "  local real protectedBefore = GetWidgetLife(protected)\n"
+        "  set source = CreateUnit(Player(0), 'hfoo', 32.0, 32.0, 0.0)\n"
+        "  call SetUnitInvulnerable(protected, true)\n"
+        /* Apricot's Death and Decay wrapper uses delay zero, attack=true/ranged=false, Normal/Disease. */
+        "  call BJassAssert(UnitDamagePointLoc(source, 0.0, 100.0, point, 80.0, ConvertAttackType(0), ConvertDamageType(12)), \"Apricot area damage rejected\")\n"
+        "  call BJassAssert(GetWidgetLife(near) == before - 80.0, \"area damage did not reach inner target\")\n"
+        "  call BJassAssert(GetWidgetLife(far) == farBefore, \"area damage reached outside radius\")\n"
+        "  call BJassAssert(GetWidgetLife(protected) == protectedBefore, \"area damage bypassed invulnerability\")\n"
+        "  call RemoveLocation(point)\n"
+        "endfunction\n"));
+    FILTER_EDICTS(unit, unit->inuse && unit->class_id == MAKEFOURCC('h','f','o','o') && unit->s.player == 0) source = unit;
+    T_NOT_NULL(source);
+    for (uint32_t i = level.events.read; i < level.events.write; i++) {
+        gameEvent_t const *event = &level.events.queue[i % MAX_EVENT_QUEUE];
+        if (event->type != EVENT_UNIT_DAMAGED) continue;
+        damaged++;
+        T_EQ(event->source, source);
+        T_EQ(event->value, 80);
+    }
+    T_EQ(damaged, 1);
+}
+
+TEST(wc3_api, unit_damage_point_checks_footprints_sources_and_script_damage_flags) {
+    T_ASSERT(run_test_jass(
+        "globals\n"
+        "  unit source = null\n"
+        "  unit edge = null\n"
+        "  unit outside = null\n"
+        "  unit ally = null\n"
+        "  real edgeBefore = 0.0\n"
+        "  real outsideBefore = 0.0\n"
+        "  real allyBefore = 0.0\n"
+        "endglobals\n"
+        "function main takes nothing returns nothing\n"
+        "  set source = CreateUnit(Player(0), 'hfoo', 32.0, 32.0, 0.0)\n"
+        "  set edge = CreateUnit(Player(1), 'hfoo', 366.0, 192.0, 0.0)\n"
+        "  set outside = CreateUnit(Player(1), 'hfoo', 367.0, 192.0, 0.0)\n"
+        "  set ally = CreateUnit(Player(0), 'hfoo', 256.0, 192.0, 0.0)\n"
+        "  set edgeBefore = GetWidgetLife(edge)\n"
+        "  set outsideBefore = GetWidgetLife(outside)\n"
+        "  set allyBefore = GetWidgetLife(ally)\n"
+        "endfunction\n"
+        "function damage takes nothing returns nothing\n"
+        "  local unit removed = CreateUnit(Player(0), 'hfoo', 64.0, 32.0, 0.0)\n"
+        "  call RemoveUnit(removed)\n"
+        "  call BJassAssert(not UnitDamagePoint(null, 0.0, 100.0, 256.0, 192.0, 23.0, false, true, null, null, null), \"null source accepted\")\n"
+        "  call BJassAssert(not UnitDamagePoint(removed, 0.0, 100.0, 256.0, 192.0, 23.0, true, false, null, null, null), \"removed source accepted\")\n"
+        "  call BJassAssert(not UnitDamagePoint(source, 0.0, -1.0, 256.0, 192.0, 23.0, true, false, null, null, null), \"negative radius accepted\")\n"
+        "  call BJassAssert(not UnitDamagePoint(source, 0.0, 100.0, 256.0, 192.0, 0.0, true, false, null, null, null), \"zero damage accepted\")\n"
+        "  call BJassAssert(not UnitDamagePoint(source, 0.1, 100.0, 256.0, 192.0, 23.0, true, false, null, null, null), \"unsupported delay accepted\")\n"
+        "  call BJassAssert(GetWidgetLife(edge) == edgeBefore and GetWidgetLife(ally) == allyBefore, \"rejected request dealt damage\")\n"
+        "  call BJassAssert(UnitDamagePoint(source, 0.0, 100.0, 256.0, 192.0, 23.0, false, true, ConvertAttackType(6), ConvertDamageType(4), ConvertWeaponType(1)), \"script damage flags rejected\")\n"
+        "  call BJassAssert(GetWidgetLife(edge) == edgeBefore - 23.0, \"collision-edge target missed or raw damage mitigated twice\")\n"
+        "  call BJassAssert(GetWidgetLife(outside) == outsideBefore, \"outside footprint was damaged\")\n"
+        "  call BJassAssert(GetWidgetLife(ally) == allyBefore - 23.0, \"script damage incorrectly applied enemy-only spell filtering\")\n"
+        "  call BJassAssert(UnitDamagePoint(source, 0.0, 1.0, 10000.0, 10000.0, 17.0, true, true, null, null, null), \"empty area rejected\")\n"
+        "endfunction\n"));
+    FILTER_EDICTS(unit, unit->inuse && unit->class_id == MAKEFOURCC('h','f','o','o')) {
+        unit->collision = 10.0f;
+        unit->armor_value = 500.0f;
+    }
+    jass_callbyname(level.vm, "damage", false);
+    T_ASSERT(!jass_rterror_pending(level.vm));
 }
 
 TEST(wc3_api, dota_unit_damage_target_and_invulnerable) {

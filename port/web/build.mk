@@ -35,3 +35,12 @@ web-warcraft3-engine:
 .PHONY: web-warcraft3-preflight
 web-warcraft3-preflight:
 	python3 port/web/build-engine.py --check --out $(WEB_BUILD_DIR)/engine
+
+.PHONY: test-web web-warcraft3-serve
+test: test-web
+test-web:
+	python3 tests/test_web_engine_build.py
+	python3 tests/test_web_basic_assets.py
+
+web-warcraft3-serve:
+	python3 port/web/serve.py --directory $(WEB_BUILD_DIR)/engine

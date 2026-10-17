@@ -3123,6 +3123,7 @@ void G_ClientSetCameraPosition(edict_t *ent, vec2_t const *position) {
 
     if (ent->client->no_control)
         return;
+    G_StopCameraRotation(ent->client);
     clamped = G_ClampCameraPosition(ent->client, position);
     G_ClearCameraTarget(ent->client, "G_ClientSetCameraPosition");
     G_ClearCameraPan(ent->client);

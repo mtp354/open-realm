@@ -467,6 +467,41 @@ TEST(wc3_api, multiboard_natives_manage_cells_display_and_minimize) {
     currentplayer = saved;
 }
 
+TEST(wc3_api, multiboard_dimension_queries_allow_stock_broadcast_widths) {
+    setup_test_world();
+    T_ASSERT(run_test_jass(
+        "function main takes nothing returns nothing\n"
+        "  local multiboard mb = CreateMultiboard()\n"
+        "  call BJassAssert(MultiboardGetRowCount(null) == 0, \"null rows\")\n"
+        "  call BJassAssert(MultiboardGetColumnCount(null) == 0, \"null columns\")\n"
+        "  call BJassAssert(MultiboardGetRowCount(mb) == 0, \"initial rows\")\n"
+        "  call MultiboardSetRowCount(mb, 13)\n"
+        "  call MultiboardSetColumnCount(mb, 4)\n"
+        "  call BJassAssert(MultiboardGetRowCount(mb) == 13, \"scoreboard rows\")\n"
+        "  call BJassAssert(MultiboardGetColumnCount(mb) == 4, \"scoreboard columns\")\n"
+        "  call MultiboardSetItemWidthBJ(mb, 1, 0, 10.00)\n"
+        "  call MultiboardSetItemWidthBJ(mb, 4, 13, 3.50)\n"
+        "endfunction\n"));
+    FOR_LOOP(row, 13) FOR_LOOP(col, 4) {
+        struct gmultiboardcell_s *cell = G_MultiboardCell(level.multiboards, row, col);
+        T_NOT_NULL(cell);
+        if (cell) T_FEQ(cell->width, col == 0 ? 0.10f : row == 12 && col == 3 ? 0.035f : 0.0f, 0.0001f);
+    }
+    G_FreeMultiboard(level.multiboards);
+    T_ASSERT(run_test_jass(
+        "function main takes nothing returns nothing\n"
+        "  local multiboard mb = CreateMultiboard()\n"
+        "  call MultiboardSetRowCount(mb, 9)\n"
+        "  call MultiboardSetColumnCount(mb, 3)\n"
+        "  call MultiboardSetRowCount(mb, 0)\n"
+        "  call BJassAssert(MultiboardGetRowCount(mb) == 0, \"resized rows\")\n"
+        "  call BJassAssert(MultiboardGetColumnCount(mb) == 3, \"preserved columns\")\n"
+        "  call DestroyMultiboard(mb)\n"
+        "  call BJassAssert(MultiboardGetRowCount(mb) == 0, \"destroyed rows\")\n"
+        "  call BJassAssert(MultiboardGetColumnCount(mb) == 0, \"destroyed columns\")\n"
+        "endfunction\n"));
+}
+
 TEST(wc3_api, multiboard_display_uses_client_slot_for_mapped_player) {
     multiboard_t *board;
     setup_test_world();
@@ -584,6 +619,67 @@ TEST(wc3_api, texttag_natives_store_unit_anchor_and_style) {
         "endfunction\n"));
     T_ASSERT(!level.texttags[1].inuse);
     currentplayer = saved;
+}
+
+TEST(wc3_api, texttag_world_position_replaces_unit_anchor_and_publishes_updates) {
+    void (*saved_write)(pfWriteType_t, void const *) = gi.Write;
+    void (*saved_multicast)(vec3_t const *, multicast_t) = gi.multicast;
+    int (*saved_font)(cstring_t, uint32_t) = gi.FontIndex;
+    texttag_t *tag;
+
+    setup_test_world();
+    T_ASSERT(run_test_jass(
+        "globals\n"
+        "  texttag tt = null\n"
+        "  unit u = null\n"
+        "endglobals\n"
+        "function world takes nothing returns nothing\n"
+        "  call SetTextTagPos(tt, 123.0, -77.0, 19.0)\n"
+        "endfunction\n"
+        "function attached takes nothing returns nothing\n"
+        "  call SetTextTagPosUnit(tt, u, 31.0)\n"
+        "endfunction\n"
+        "function discard takes nothing returns nothing\n"
+        "  call SetTextTagPos(null, 1.0, 2.0, 3.0)\n"
+        "  call DestroyTextTag(tt)\n"
+        "  call SetTextTagPos(tt, 1.0, 2.0, 3.0)\n"
+        "endfunction\n"
+        "function main takes nothing returns nothing\n"
+        "  set u = CreateUnit(Player(0), 'hfoo', 100.0, 200.0, 0.0)\n"
+        "  set tt = CreateTextTag()\n"
+        "  call SetTextTagText(tt, \"world\", 0.024)\n"
+        "endfunction\n"));
+    gi.Write = texttag_capture_write;
+    gi.multicast = texttag_capture_multicast;
+    gi.FontIndex = texttag_capture_font;
+    tag = level.texttags;
+
+    FOR_LOOP(i, 2) {
+        jass_callbyname(level.vm, "attached", false);
+        T_NOT_NULL(tag->unit);
+        memset(&texttag_capture, 0, sizeof(texttag_capture));
+        jass_callbyname(level.vm, "world", false);
+        T_NULL(tag->unit);
+        T_ASSERT(tag->has_position);
+        T_FEQ(tag->x, 123.0f, 0.001f);
+        T_FEQ(tag->y, -77.0f, 0.001f);
+        T_FEQ(tag->height_offset, 19.0f, 0.001f);
+        T_EQ(texttag_capture.count, 17);
+        T_FEQ(texttag_capture.position.x, 123.0f, 0.001f);
+        T_FEQ(texttag_capture.position.y, -77.0f, 0.001f);
+        T_FEQ(texttag_capture.position.z, 19.0f, 0.001f);
+        T_EQ(texttag_capture.integral[7], -1);
+        T_EQ(texttag_capture.multicast_count, 1);
+    }
+    memset(&texttag_capture, 0, sizeof(texttag_capture));
+    jass_callbyname(level.vm, "discard", false);
+    T_ASSERT(!tag->inuse);
+    T_EQ(texttag_capture.count, 5);
+    T_EQ(texttag_capture.integral[4], 0);
+
+    gi.Write = saved_write;
+    gi.multicast = saved_multicast;
+    gi.FontIndex = saved_font;
 }
 
 TEST(wc3_save, texttag_presentation_state_round_trips) {

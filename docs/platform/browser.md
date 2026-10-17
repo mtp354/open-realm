@@ -331,10 +331,27 @@ the engine through `filesystem-bridge.js`, which only accepts map names on its
 Setup:
 
 - Stage the retail archives and the two maps in `port/web/data-input/`
-  (gitignored): `war3.mpq`, `War3x.mpq`, and `Maps/Download/{apricot,peach}.w3x`.
-  The Frozen Throne install is what the data is expected to come from.
+  (gitignored). The current staged files are `war3.mpq` (a copy of
+  `persimmon.mpq`), `War3x.mpq` (a copy of `tangerine.mpq`), `War3Patch.mpq`,
+  `War3xLocal.mpq`, and `Maps/Download/{apricot,peach}.w3x`. SHA-256 checks
+  match all four staged archives to their source files in the workspace.
+  These copies do not establish that the original base archives are present;
+  see the data audit below.
 - The data is preloaded into `/data/warcraft-3` with `--preload-file`. The
-  build output is about 133 MB.
+  data package is about 130 MiB with the basic assets. Emscripten SDK 6.0.9 is
+  installed locally at `~/.local/src/emsdk`; activate `emsdk_env.sh` before building.
+- The build automatically runs `port/web/generate-basic-assets.py`. At the
+  owner's request this supplies 227 original basic assets (terrain, UI, font,
+  icons, primitive models and rectangular pathing masks). It preserves maps,
+  archives, and edited/non-generated loose files. See [basic asset pack](../../port/web/README.md).
+- Serve locally with `python3 port/web/serve.py`, then open
+  `http://127.0.0.1:8000/maps.html`. The server sends required COOP/COEP headers.
+  The launcher disables the desktop automatic-fullscreen default; the page
+  fullscreen button explicitly controls that transition. The Maps link reloads
+  the picker to switch maps or restart without entering the native main menu.
+- The picker fills other slots with simple bots by default; **Leave empty**
+  disables them. See [standalone map bots](browser-bots.md) for policies and
+  the native opt-in setting. The original tutorial and match rules still apply.
 - The launcher passes `-tft`. RoC hides the `War3x*` archives, and the Loading
   and StandardTemplates FDFs live there, so the engine cannot reach the map
   without TFT mode.
@@ -342,19 +359,88 @@ Setup:
 Browser requirement: WebGL 2. The VS Code integrated browser has no WebGL and
 cannot run the engine. Use a current desktop Chrome or Firefox.
 
+Current verification (2026-10-17): both maps render terrain and a basic HUD
+in headless Chrome/WebGL 2, with no JavaScript exceptions or WASM traps in
+startup/selection checks. Apricot vendor selection shows unit details and
+command buttons. Peach reaches its scoreboard and both authored browser result
+actions display the correct Victory/Defeat dialogs. These result-action checks
+bypass objective predicates; native objective checks are described below.
+Peach browser clicks dismiss the round dialog, open the hero skill menu and
+move the selected runner through normal right-click orders.
+The full `make test` suite and native WC3/WoW/SC2 builds pass. The browser link
+retains the expected pthread/memory-growth performance warning.
+
+The previous black-view report combined missing art with a client input bug:
+zero-initialized mouse coordinates continuously scrolled toward the map corner.
+The shared client now waits for a pointer sample and invalidates it on window
+leave/focus loss. Both are covered by input regressions. A temporary native
+renderer diagnostic also proved fog sampling affected the black scene; the old
+`r_fogofwar 0` experiment did not disable an already-uploaded network fog
+texture. Do not treat that earlier experiment as ruling out gameplay fog.
+Apricot deliberately gives its starting buildings small sight patches; much of
+the map remains black until explored. Its zombie hero spawns after 90 seconds.
+
 Known limitations:
 
-- The install used for testing is partial. Several in-game UI FDFs, some SLK
-  tables, some models and textures (including the Lordaeron ground tiles), and
-  all `.wav` audio are missing. The engine logs these and continues. REA has no
-  FrameDef or UI FDF entries, so it does not fill them.
-- The main 3D view is black on both maps even though the renderer submits
-  about 320k triangles per frame (`r_stats 1`). The minimap draws the terrain
-  and the player's unit correctly. Ruled out so far: fog (`r_fog 0`) and the
-  missing-texture placeholder, which is magenta and black. The cause is still
-  open.
-- Apricot has no `war3mapUnits.doo`, so units come from the map script
-  (`scripts\war3map.j`).
+- The original install is partial; generated art makes it inspectable and
+  usable as a basic demo, not a faithful retail presentation. Models are static
+  proxies, some cliffs/water/effects remain absent, and audio is incomplete.
+- Save/load remains unsupported on wasm32. Native save format is now version
+  90, covering event-capacity/token and camera-rotation state changes; older
+  native saves are explicitly rejected. Network formats are unchanged.
+- Native objective checks reached Apricot victory through ordinary commands
+  and a five-round Peach bot match through its original scoring rules. Browser
+  end-to-end objective playthroughs remain unverified. Remaining map-script gaps
+  are recorded in [two-map compatibility](two-map-compatibility.md), including
+  chat-event placeholders and partial scripted damage semantics.
+- Apricot has no `war3mapUnits.doo`; its units come from `scripts/war3map.j`.
+  Peach contains `war3mapUnits.doo` and its root script is `war3map.j`.
+
+### Staged-data audit (2026-10-17)
+
+`FS_AddDataDirectory` (`common/common.c`) recursively mounts every staged MPQ;
+`-tft` makes both `War3x*` archives visible. The extra patch/local archives
+are already staged and cannot be recovered merely by mounting them again.
+Direct `mpqtool cat` probes across all four archives found 7 of the 29 FDF
+dependencies referenced by `games/warcraft-3/game/generated/*.h`. Missing
+dependencies include `ConsoleUI.fdf`, `ResourceBar.fdf`, `UpperButtonBar.fdf`,
+`EscMenuTemplates.fdf`, `EscMenuMainPanel.fdf` and `GameResultDialog.fdf`.
+`GlobalStrings.fdf` and several localized panels are present, but do not
+provide those missing frame definitions.
+
+Reading each map's W3E tile IDs and resolving them through the staged
+`TerrainArt\Terrain.slk` confirms that all nine Apricot ground BLPs
+(`TerrainArt\DalaranRuins\DRuins_*.blp`, tileset J) and all seven Peach
+ground BLPs (six `TerrainArt\LordaeronSummer\Lords_*.blp` plus
+`TerrainArt\Cityscape\City_WhiteMarble.blp`, tileset L) are absent from the
+four staged archives. `TerrainArt\CliffTypes.slk`, `TerrainArt\Water.slk`,
+`PathTextures\xDefault.tga`, and nested `J.mpq`/`L.mpq` are also absent.
+These findings describe the original archives before the owner-approved
+basic pack was generated. Loose generated assets now supply selected missing
+paths; the original archives are unchanged.
+
+Reproduce representative checks from the repository root; each command
+searches each original archive explicitly, excluding the generated loose files:
+
+```sh
+for archive in port/web/data-input/*.mpq; do
+  build/bin/mpqtool -mpq "$archive" cat UI/FrameDef/UI/ConsoleUI.fdf > /dev/null
+  build/bin/mpqtool -mpq "$archive" cat TerrainArt/Water.slk > /dev/null
+done
+```
+
+`../REA/lime-filename-findings.json` and `../REA/REPORT.txt` record retail
+`lime.dll` strings referencing **both** `persimmon.mpq`/`tangerine.mpq` and
+`War3.mpq`/`War3X.mpq` (Evidence
+`ev_f064a80a3cc067fe3c9debae5a77ee9342d2c81a848f854692a7726db4a5bdbd`).
+This supports treating the renamed files as supplemental archives, rather
+than assuming they replace the base data. Static strings do not establish
+retail mount order. No original base `War3.mpq`/`War3X.mpq` exists in the
+workspace or its `Warcraft III/` install folder; the latter's patch/local
+archives match the staged copies. Complete base archives would restore retail presentation. The owner instead
+requested original basic terrain and UI, so the browser generator supplies
+explicit substitute assets. Archive and map-import precedence remain intact;
+the substitutions and gameplay limitations are documented in the basic pack README.
 
 Load-time fix: `common/mpq.c` used to re-inflate an entire compressed sector
 or single-unit file on every small `SFileReadFile` call. Map readers issue many

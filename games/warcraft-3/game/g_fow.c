@@ -769,7 +769,7 @@ static void G_FowRebuildBlockers(void) {
     }
 }
 
-/* Reveal directly into connected viewer grids; source-owner grids are irrelevant when nobody consumes them. */
+/* Reveal into consumed viewer grids, including optional standalone bots. */
 static void G_FowRevealForViewers(edict_t const *ent, float radius, uint32_t viewers) {
     FOR_LOOP(viewer, MAX_PLAYERS)
         if (viewers & (1u << viewer))
@@ -1015,7 +1015,7 @@ void G_FowUpdate(void) {
     }
 
     FOR_LOOP(player, MAX_PLAYERS)
-        if (level.fow.players[player].client_connected)
+        if (level.fow.players[player].client_connected || G_BrowserBotPlayerEligible(player))
             viewers |= 1u << player;
     if (!viewers)
         return;

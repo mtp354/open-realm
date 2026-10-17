@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <strings.h>
 
-mouseEvent_t mouse;
+/* No pointer sample exists at startup; zero would immediately scroll the camera into unrevealed terrain. */
+mouseEvent_t mouse = { .origin = { -1, -1 } };
 static keyCode_t mouse_button_keys[8];
 static struct {
     bool active;
@@ -597,6 +598,11 @@ static bool CL_WindowEvent(SDL_WindowEvent const *event) {
             CL_SendOrderQueueRelease();
             input.focus = false;
             CL_ResetInput();
+            mouse.origin = (vec2_t){ -1, -1 };
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            /* SDL leaves the last edge coordinate cached when the pointer exits the window/canvas. */
+            mouse.origin = (vec2_t){ -1, -1 };
             break;
         case SDL_WINDOWEVENT_MOVED:
         case SDL_WINDOWEVENT_RESIZED:
@@ -1993,6 +1999,44 @@ TEST(client_input, edge_scroll_cursor_lifecycle) {
     cam_west = old_west; camera_drag = old_drag;
     FOR_LOOP(i, MAX_LAYOUT_LAYERS) SCR_SetLayoutLayer(i, cl.layout[i]);
     Cvar_SetValue("cl_camera_edge_scroll", old_edge); Cvar_SetValue("cl_camera_edge_margin", old_margin);
+}
+
+/* Leaving a canvas must retire its last edge position until a new pointer event arrives. */
+TEST(client_input, window_leave_clears_stale_edge_scroll) {
+    struct client_state *saved = MemAlloc(sizeof(cl));
+    uint8_t data[1024];
+    struct client_static old_cls = cls;
+    refExport_t old_re = re;
+    __typeof__(input) old_input = input;
+    mouseEvent_t old_mouse = mouse;
+    __typeof__(camera_drag) old_drag = camera_drag;
+    float old_edge = Cvar_Value("cl_camera_edge_scroll", 0);
+    SDL_Event event = { .window = { .type = SDL_WINDOWEVENT, .event = SDL_WINDOWEVENT_LEAVE } };
+    memcpy(saved, &cl, sizeof(cl));
+    T_EQ(SDL_InitSubSystem(SDL_INIT_EVENTS), 0); SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
+    input = (__typeof__(input)){ .focus = true };
+    camera_drag.active = false;
+    cls.state = ca_active; cls.key_dest = key_game;
+    SZ_Init(&cls.netchan.message, data, sizeof(data));
+    cl.playerstate.client_ui_state = CLIENT_UI_GAME;
+    re.GetWindowSize = CL_TestWindowSize;
+    Cvar_Set("cl_camera_edge_scroll", "1");
+    mouse.origin = (vec2_t){ 0, 0 };
+    T_FEQ(CL_MouseScroll().x, -1, 0.001f);
+    T_FEQ(CL_MouseScroll().y, 1, 0.001f);
+    T_EQ(SDL_PushEvent(&event), 1); CL_Input();
+    T_FEQ(CL_MouseScroll().x, 0, 0.001f);
+    T_FEQ(CL_MouseScroll().y, 0, 0.001f);
+    event.window.event = SDL_WINDOWEVENT_ENTER;
+    T_EQ(SDL_PushEvent(&event), 1); CL_Input();
+    T_FEQ(CL_MouseScroll().x, 0, 0.001f);
+    T_FEQ(CL_MouseScroll().y, 0, 0.001f);
+    mouse.origin = (vec2_t){ 1023, 384 };
+    T_FEQ(CL_MouseScroll().x, 1, 0.001f);
+    SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT); SDL_QuitSubSystem(SDL_INIT_EVENTS);
+    cls = old_cls; re = old_re; input = old_input; mouse = old_mouse; camera_drag = old_drag;
+    cl = *saved; MemFree(saved);
+    Cvar_SetValue("cl_camera_edge_scroll", old_edge);
 }
 
 /* Two fingers pan like +pan and cancel the first finger's synthetic selection;

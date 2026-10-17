@@ -39,9 +39,11 @@ def bundled_data_args():
     # Retail archives and the two bundled maps are preloaded (not embedded) so
     # the JS bundle stays small. The browser launches with +openrealm-data=/data/warcraft-3.
     data = ROOT / "port/web/data-input"
-    if not (data / "war3.mpq").is_file() or not (data / "Maps/Download/apricot.w3x").is_file():
-        raise SystemExit("missing bundled game data under " + str(data) +
-                         "; stage war3.mpq, War3x.mpq and Maps/Download/{apricot,peach}.w3x there")
+    required = ("war3.mpq", "War3x.mpq", "War3Patch.mpq", "War3xLocal.mpq",
+                "Maps/Download/apricot.w3x", "Maps/Download/peach.w3x")
+    missing = [name for name in required if not (data / name).is_file()]
+    if missing:
+        raise SystemExit("missing bundled game data under " + str(data) + ": " + ", ".join(missing))
     return ["--preload-file", str(data) + "@/data/warcraft-3"]
 
 
@@ -60,6 +62,11 @@ def main():
     emcc = shutil.which(args.emcc)
     if emcc is None and not args.check:
         parser.error("emcc not available; activate the Emscripten SDK")
+    data_args = []
+    if not args.check:
+        data_args = bundled_data_args()
+        # Original basic art is generated as loose, inspectable assets for this standalone edition.
+        run([sys.executable, ROOT / "port/web/generate-basic-assets.py"])
 
     wc3 = "games/warcraft-3"
     # Engine defaults are open-source assets, separate from user-imported MPQs.
@@ -156,7 +163,7 @@ def main():
          # Make shipped bindings available before native Com_Init loads config.
          # Emscripten's virtual FS maps this to /share/warcraft-3/.
          "--preload-file", str(wc3_share) + "@/share/warcraft-3",
-         *bundled_data_args(),
+         *data_args,
          "-o", out / "index.html"])
     for name in ("filesystem-bridge.js", "audio-worklet.js", "maps.html"):
         shutil.copy2(ROOT / "port/web/site" / name, out / name)

@@ -58,6 +58,8 @@ This codebase is inspired by **Quake 2** (id Software). The developer is deeply 
 | WC3 Team Resources HUD, multiboard sharing and advanced shared-control permission boundary | [docs/games/warcraft-3/team-resources.md](docs/games/warcraft-3/team-resources.md) |
 | WC3 multiboard/texttag JASS registries, single visible board, suppression, HUD limitations | [docs/games/warcraft-3/multiboard-and-texttag.md](docs/games/warcraft-3/multiboard-and-texttag.md) |
 | WC3 campaign map bulk runtime audit, per-map reports, commands | [docs/games/warcraft-3/map-audit.md](docs/games/warcraft-3/map-audit.md) |
+| Standalone Apricot/Peach map contracts, gameplay/native gaps, bounded result checks | [docs/platform/two-map-compatibility.md](docs/platform/two-map-compatibility.md) |
+| Optional standalone map bots, ownership gates, policies and persistence | [docs/platform/browser-bots.md](docs/platform/browser-bots.md) |
 | WC3 DotA custom-map playability, protected-MPQ load, hashtable demand | [docs/games/warcraft-3/dota-map-playability.md](docs/games/warcraft-3/dota-map-playability.md) |
 | WC3 JASS group handle lifecycle, DestroyGroup slot reuse, save/load identity | [docs/games/warcraft-3/jass-groups.md](docs/games/warcraft-3/jass-groups.md) |
 | WC3 campaign game cache, persisted Hero progression, `StoreUnit`/`RestoreUnit` | [docs/games/warcraft-3/campaign-game-cache.md](docs/games/warcraft-3/campaign-game-cache.md) |

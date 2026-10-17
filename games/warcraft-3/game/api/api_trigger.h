@@ -209,9 +209,12 @@ uint32_t TriggerRegisterTimerEvent(jass_t *j) {
     bool periodic = jass_checkboolean(j, 3);
     gtimer_t *timer;
     event_t *evt;
-    if (!whichTrigger || !(timer = G_AllocJassTimer())) return jass_pushnullhandle(j, "event");
+    if (!whichTrigger || level.num_timers >= MAX_TIMERS) return jass_pushnullhandle(j, "event");
+    evt = G_MakeEvent(EVENT_GAME_TIMER_EXPIRED);
+    if (!evt) return jass_pushnullhandle(j, "event");
+    timer = G_AllocJassTimer();
     G_TimerStart(timer, (uint32_t)(MAX(0.0f, timeout) * 1000.0f), periodic, NULL);
-    evt = G_MakeEvent(EVENT_GAME_TIMER_EXPIRED); evt->trigger = whichTrigger; evt->timer = timer;
+    evt->trigger = whichTrigger; evt->timer = timer;
     QuestPeonStageLogRegistration(whichTrigger, EVENT_GAME_TIMER_EXPIRED, NULL, "timer");
     return jass_pushlighthandle(j, evt, "event");
 }
@@ -220,7 +223,9 @@ uint32_t TriggerRegisterTimerExpireEvent(jass_t *j) {
     gtimer_t *timer = jass_checkhandle(j, 2, "timer");
     event_t *evt;
     if (!whichTrigger || !timer) return jass_pushnullhandle(j, "event");
-    evt = G_MakeEvent(EVENT_GAME_TIMER_EXPIRED); evt->trigger = whichTrigger; evt->timer = timer;
+    evt = G_MakeEvent(EVENT_GAME_TIMER_EXPIRED);
+    if (!evt) return jass_pushnullhandle(j, "event");
+    evt->trigger = whichTrigger; evt->timer = timer;
     QuestPeonStageLogRegistration(whichTrigger, EVENT_GAME_TIMER_EXPIRED, NULL, "timer-expire");
     return jass_pushlighthandle(j, evt, "event");
 }
@@ -230,6 +235,7 @@ uint32_t TriggerRegisterGameStateEvent(jass_t *j) {
     uint32_t *opcode = jass_checkhandle(j, 3, "limitop");
     float limitval = jass_checknumber(j, 4);
     event_t *evt = G_MakeEvent(EVENT_GAME_STATE_LIMIT);
+    if (!evt) return jass_pushnullhandle(j, "event");
     evt->trigger = whichTrigger;
     evt->state = whichState ? *whichState : 0;
     evt->limitop = opcode ? *opcode : 0;
@@ -317,7 +323,9 @@ uint32_t TriggerRegisterPlayerEvent(jass_t *j) {
     trigger_t *whichTrigger = jass_checkhandle(j, 1, "trigger");
     player_t *whichPlayer = jass_checkhandle(j, 2, "player");
     EVENTTYPE *whichPlayerEvent = jass_checkhandle(j, 3, "playerevent");
+    if (!whichTrigger || !whichPlayer || !whichPlayerEvent) return jass_pushnullhandle(j, "event");
     event_t *evt = G_MakeEvent(*whichPlayerEvent);
+    if (!evt) return jass_pushnullhandle(j, "event");
     G_SetPlayerEventSubject(evt, PLAYER_ENT(whichPlayer));
     evt->trigger = whichTrigger;
     QuestPeonStageLogRegistration(whichTrigger, *whichPlayerEvent, evt->subject, "player");
@@ -337,7 +345,9 @@ uint32_t TriggerRegisterPlayerUnitEvent(jass_t *j) {
     player_t *whichPlayer = jass_checkhandle(j, 2, "player");
     EVENTTYPE *whichPlayerUnitEvent = jass_checkhandle(j, 3, "playerunitevent");
     //handle_t filter = jass_checkhandle(j, 4, "boolexpr");
+    if (!whichTrigger || !whichPlayer || !whichPlayerUnitEvent) return jass_pushnullhandle(j, "event");
     event_t *evt = G_MakeEvent(*whichPlayerUnitEvent);
+    if (!evt) return jass_pushnullhandle(j, "event");
     G_SetPlayerEventSubject(evt, PLAYER_ENT(whichPlayer));
     evt->trigger = whichTrigger;
     QuestPeonStageLogRegistration(whichTrigger, *whichPlayerUnitEvent, evt->subject, "player-unit");
@@ -386,6 +396,7 @@ uint32_t TriggerRegisterDeathEvent(jass_t *j) {
     edict_t *whichWidget = jass_checkhandle(j, 2, "widget");
     if (!whichTrigger || !whichWidget) return jass_pushnullhandle(j, "event");
     event_t *evt = G_MakeEvent(EVENT_UNIT_DEATH);
+    if (!evt) return jass_pushnullhandle(j, "event");
     G_SetEventSubject(evt, whichWidget);
     evt->trigger = whichTrigger;
     QuestPeonStageLogRegistration(whichTrigger, EVENT_UNIT_DEATH, evt->subject, "death");
@@ -425,6 +436,7 @@ uint32_t TriggerRegisterUnitEvent(jass_t *j) {
         return jass_pushnullhandle(j, "event");
     }
     event_t *evt = G_MakeEvent(*whichEvent);
+    if (!evt) return jass_pushnullhandle(j, "event");
     G_SetEventSubject(evt, whichUnit);
     evt->trigger = whichTrigger;
     QuestPeonStageLogRegistration(whichTrigger, *whichEvent, evt->subject, "unit");
@@ -456,6 +468,7 @@ uint32_t TriggerRegisterUnitInRange(jass_t *j) {
         return jass_pushnullhandle(j, "event");
     }
     event_t *evt = G_MakeEvent(EVENT_UNIT_IN_RANGE);
+    if (!evt) return jass_pushnullhandle(j, "event");
     G_SetEventSubject(evt, whichUnit);
     evt->trigger = whichTrigger;
     evt->range = range;

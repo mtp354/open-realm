@@ -191,6 +191,10 @@ native Rect                   takes real minx, real miny, real maxx, real maxy r
 native SetRect                takes rect whichRect, real minx, real miny, real maxx, real maxy returns nothing
 native GetRectMinX            takes rect whichRect returns real
 native GetRectMaxY            takes rect whichRect returns real
+native GetRectMinY            takes rect whichRect returns real
+native GetRectMaxX            takes rect whichRect returns real
+native GetRectCenterX         takes rect whichRect returns real
+native GetRectCenterY         takes rect whichRect returns real
 native CreateRegion           takes nothing returns region
 native RegionAddRect          takes region whichRegion, rect r returns nothing
 native TriggerRegisterEnterRegion takes trigger whichTrigger, region whichRegion, boolexpr filter returns event
@@ -210,6 +214,8 @@ native GetSpellTargetUnit     takes nothing returns unit
 native OrderId                takes string orderIdString returns integer
 native OrderId2String         takes integer orderId returns string
 native IssuePointOrderById     takes unit whichUnit, integer order, real x, real y returns boolean
+native IssuePointOrder         takes unit whichUnit, string order, real x, real y returns boolean
+native IssueTargetOrder        takes unit whichUnit, string order, widget targetWidget returns boolean
 native IssuePointOrderByIdLoc  takes unit whichUnit, integer order, location whichLocation returns boolean
 native IssueBuildOrderById     takes unit whichPeon, integer unitId, real x, real y returns boolean
 native GetLocationY           takes location whichLocation returns real
@@ -229,6 +235,8 @@ native GetEnumPlayer          takes nothing returns player
 native Condition              takes code func returns conditionfunc
 native Filter                 takes code func returns filterfunc
 native IsPlayerInForce        takes player whichPlayer, force whichForce returns boolean
+native IsPlayerAlly           takes player whichPlayer, player otherPlayer returns boolean
+native IsPlayerEnemy          takes player whichPlayer, player otherPlayer returns boolean
 native GetPlayerId            takes player whichPlayer returns integer
 constant native GetPlayerStructureCount takes player whichPlayer, boolean includeIncomplete returns integer
 
@@ -307,6 +315,12 @@ native GetPlayerNeutralPassive  takes nothing returns integer
 constant native GetUnitX       takes unit whichUnit returns real
 constant native GetUnitY       takes unit whichUnit returns real
 constant native GetUnitTypeId  takes unit whichUnit returns integer
+constant native GetOwningPlayer takes unit whichUnit returns player
+constant native IsUnitInGroup  takes unit whichUnit, group whichGroup returns boolean
+constant native IsUnitHidden   takes unit whichUnit returns boolean
+native IsUnitPaused            takes unit whichUnit returns boolean
+native UnitItemInSlot          takes unit whichUnit, integer itemSlot returns item
+native GetItemTypeId           takes item i returns integer
 constant native GetWidgetX     takes widget whichWidget returns real
 constant native GetWidgetY     takes widget whichWidget returns real
 native GetRandomReal            takes real lowBound, real highBound returns real
@@ -348,6 +362,7 @@ native UnitInventorySize             takes unit whichUnit returns integer
 native UnitAddType                   takes unit whichUnit, unittype whichUnitType returns boolean
 native UnitRemoveType                takes unit whichUnit, unittype whichUnitType returns boolean
 native UnitDamageTarget              takes unit whichUnit, widget target, real amount, boolean attack, boolean ranged, attacktype attackType, damagetype damageType, weapontype weaponType returns boolean
+native UnitDamagePoint               takes unit whichUnit, real delay, real radius, real x, real y, real amount, boolean attack, boolean ranged, attacktype attackType, damagetype damageType, weapontype weaponType returns boolean
 native GetUnitCurrentOrder           takes unit whichUnit returns integer
 native AddUnitToStock                takes unit whichUnit, integer unitId, integer currentStock, integer stockMax returns nothing
 native RemoveUnitFromStock           takes unit whichUnit, integer unitId returns nothing

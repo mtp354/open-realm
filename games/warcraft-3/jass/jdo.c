@@ -1469,7 +1469,12 @@ void jass_setnull(jassVar_t *var) {
         return;
     }
     uintptr_t typeaddr = (uintptr_t)var->type;
-    if ((typeaddr & (sizeof(void *) - 1)) || typeaddr < 4096 || typeaddr >= 0x0000800000000000ULL) {
+    /* The native address ceiling cannot be reached by wasm32 pointers. */
+    if ((typeaddr & (sizeof(void *) - 1)) || typeaddr < 4096
+#if UINTPTR_MAX > UINT32_MAX
+        || typeaddr >= UINT64_C(0x0000800000000000)
+#endif
+    ) {
         memset(var, 0, sizeof(*var));
         return;
     }

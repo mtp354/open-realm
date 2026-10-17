@@ -93,6 +93,16 @@ uint32_t MultiboardSetColumnCount(jass_t *j) {
     return 0;
 }
 
+uint32_t MultiboardGetRowCount(jass_t *j) {
+    multiboard_t *board = jass_checkhandle(j, 1, "multiboard");
+    return jass_pushinteger(j, board && board->inuse ? (int32_t)board->rows : 0);
+}
+
+uint32_t MultiboardGetColumnCount(jass_t *j) {
+    multiboard_t *board = jass_checkhandle(j, 1, "multiboard");
+    return jass_pushinteger(j, board && board->inuse ? (int32_t)board->cols : 0);
+}
+
 uint32_t MultiboardGetItem(jass_t *j) {
     multiboard_t *board = jass_checkhandle(j, 1, "multiboard");
     int32_t row = jass_checkinteger(j, 2), col = jass_checkinteger(j, 3);
@@ -222,6 +232,21 @@ uint32_t SetTextTagColor(jass_t *j) {
     int32_t b = jass_checkinteger(j, 4), a = jass_checkinteger(j, 5);
     if (tag && tag->inuse) {
         tag->color = multiboard_color(r, g, b, a);
+        G_TextTagPresentation(tag, false);
+    }
+    return 0;
+}
+
+uint32_t SetTextTagPos(jass_t *j) {
+    texttag_t *tag = jass_checkhandle(j, 1, "texttag");
+    float x = jass_checknumber(j, 2), y = jass_checknumber(j, 3);
+    float height_offset = jass_checknumber(j, 4);
+    if (tag && tag->inuse) {
+        tag->unit = NULL;
+        tag->x = x;
+        tag->y = y;
+        tag->height_offset = height_offset;
+        tag->has_position = true;
         G_TextTagPresentation(tag, false);
     }
     return 0;

@@ -6,10 +6,11 @@ The WC3 game module owns save/load. `GetGameAPI()` exposes `SaveGame` and `LoadG
 
 `WriteGame()` writes the current game state to a versioned binary file. The file contains:
 
-- `W3SV` magic, format version 89, canonical map path, the current `sizeof(edict_t)`, entity count, client count, script identity, and native-handle registry counts;
+- `W3SV` magic, format version 90, canonical map path, the current `sizeof(edict_t)`, entity count, client count, script identity, and native-handle registry counts;
 - level frame/time, authoritative Warcraft time-of-day state, map-global camera bounds, and started/script-started flags;
 - each client `GAMECLIENT` state, including its `PLAYER` state, JASS settings and dynamically sized `SetPlayerAbilityAvailable` rawcode list, runtime removed/result-presentation state, researched tech, text storage, camera values, messages, and HUD caches;
 - each camera target as an entity index;
+- active camera rotation pivot, relative target, captured yaw/height, unwrapped radians and simulation-time deadlines (raw version-90 client values); restoring mid-sweep continues through the ordinary frame scheduler;
 - the quest and quest-item graph's strings and status flags;
 - the fixed point-order waypoint edict ring and its circular allocation cursor;
 - one used flag per entity slot and a raw `edict_t` block for used slots;
@@ -26,6 +27,15 @@ The versioned layout retains the authoritative `level.timeofday` record and game
 ### Save compatibility policy
 
 Save compatibility is deliberately unsupported. Load only the current format version and serialized layout, and reject older or otherwise mismatched saves with a diagnostic. Bump the format version when the serialized layout, callback identity, or meaning changes, including changes that leave `sizeof(edict_t)` unchanged. Do not retain legacy layouts, migration defaults, compatibility aliases, or optional extension records.
+
+Version 90 expands the event registration table from 1,024 to 2,048 slots for
+custom maps such as Peach, whose initialization requests 1,059 supported event
+registrations. Region-event token packing uses 13 slot/tag bits and 17 generation
+bits, preserving the positive `GetHandleId` range. The enlarged serialized
+registry requires rejecting version 89 and older saves even though the network
+protocol is unchanged. `wc3_save.round_trip_region_event_filter_function`
+covers a reused event slot above 1,023 with its filter and JASS handle identity;
+`wc3_save.rejects_prior_save_versions` includes version 89 rejection.
 
 Version 89 retains the selected entity and its `spawn_time` for ability-owned
 entity cursors that execute as point spells. A pending Kaboom approach saves

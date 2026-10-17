@@ -5652,6 +5652,13 @@ TEST(wc3_save, round_trip_region_event_filter_function) {
         "endfunction\n"
         "function main takes nothing returns nothing\n"
         "  local trigger t = CreateTrigger()\n"
+        "  local integer i = 0\n"
+        /* Exercise reused tokens above the old 1,024-slot registry boundary. */
+        "  loop\n"
+        "    exitwhen i >= 1058\n"
+        "    call BJassAssert(TriggerRegisterPlayerUnitEvent(t, Player(0), EVENT_PLAYER_UNIT_DEATH, null) != null, \"high-slot save registration rejected\")\n"
+        "    set i = i + 1\n"
+        "  endloop\n"
         "  set staleRegion = CreateRegion()\n"
         "  call RegionAddRect(staleRegion, Rect(100.0, 200.0, 300.0, 400.0))\n"
         "  set staleEvent = TriggerRegisterEnterRegion(t, staleRegion, null)\n"
@@ -5672,6 +5679,10 @@ TEST(wc3_save, round_trip_region_event_filter_function) {
         "endfunction\n"));
     FOR_EACH_EVENT(evt) if (evt->type == EVENT_GAME_LEAVE_REGION) { registration = evt; break; }
     T_NOT_NULL(registration);
+    if (registration) {
+        T_EQ(registration - level.events.handlers, 1058);
+        T_EQ(registration->handle_generation, 1);
+    }
     expected_region = registration ? registration->region : NULL;
     T_NOT_NULL(expected_region);
     T_ASSERT(G_SaveJassHandle("region", expected_region, &expected_region_id));

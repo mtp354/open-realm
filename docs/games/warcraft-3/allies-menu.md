@@ -22,6 +22,27 @@ changes feed the existing fog and command-authority paths. Gold/lumber transfer
 fields remain presentation-only until there is an authoritative resource-transfer
 operation with map-flag and balance validation.
 
+### JASS relationships and team forces
+
+`IsPlayerAlly`, `IsPlayerEnemy`, `ForceEnumAllies` and `ForceEnumEnemies`
+use `G_PlayerTreatsPlayerAsAlly(source, other)`: a player is always allied to
+itself; other relations read the directional `ALLIANCE_PASSIVE` matrix bit.
+The low-level `GetPlayerAlliance` query still reports the stored bit. Do not
+require a diagonal passive-alliance bit or make one-way alliances mutual.
+
+Retail Blizzard.j's `GetPlayersAllies` / `GetPlayersEnemies` create a force and
+invoke those enumeration natives. Peach's `Trig_game_win_one_Actions` awards
+victory to the first force and defeat to the second. Reading the raw matrix
+for self put local player 0 into its own enemy force, awarding defeat when its
+team won. The relationship helper fixes both native predicates and force
+construction without changing result or network state.
+
+`tests/t_alliance_forces.c` covers self with an unset diagonal bit, asymmetric
+alliances (0 -> 2, 1 -> 0), stock force membership, `ForForce` enumeration and
+force-bit edits, then the Peach-shaped result pipeline: players 0/2 receive
+victory and player 1 receives defeat. The original failure reproduces through
+JASS and the ordinary `RemovePlayer` result events.
+
 ## Layout and scrolling
 
 `AllianceBackdrop` is pinned to both corners of `AllianceDialog` because the

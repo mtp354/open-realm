@@ -5,6 +5,14 @@ This document tracks the Warcraft III JASS host callbacks registered by
 signature authority. HiveWorkshop references are useful for observable editor
 and map-script behavior, but do not replace the native declarations.
 
+`UnitDamagePoint` now supports immediate area damage, including Apricot's
+`UnitDamagePointLoc` wrapper. It uses collision-footprint range and the shared
+`T_Damage` path, validates sources/arguments, and returns the declared boolean.
+It is partial: positive delay logs and returns false; attack/ranged/type/weapon
+arguments retain the existing untyped `UnitDamageTarget` limitation. See
+[JASS point damage](../../docs/games/warcraft-3/attack-damage.md#jass-point-damage)
+for the exact supported contract, retail REA evidence and regression coverage.
+
 Cooldown control now registers `UnitResetCooldown`, `BlzStartUnitAbilityCooldown`,
 `BlzEndUnitAbilityCooldown`, and `BlzGetUnitAbilityCooldownRemaining`. They use the
 same normalized per-unit cooldown records as normal casts. `BlzGetAbilityCooldown`,
@@ -24,6 +32,20 @@ advance through preload batches without aborting their JASS trigger. They do
 not load assets; `Preload`, `Preloader`, and preload-file generation remain
 unimplemented. `wc3_api.preload_refresh_boundaries_are_registered` guards the
 map-script call contract.
+
+`MultiboardGetRowCount` and `MultiboardGetColumnCount` query the existing registry dimensions, allowing stock `MultiboardSetItem*BJ` traversal to run; `peach.w3x` uses these wrappers for its 4x13 scoreboard. `SetTextTagPos` now registers and publishes explicit world anchors, replacing a previous unit attachment. Exact retail terrain-relative height behavior remains unverified; the existing transport uses the supplied height offset as world Z. See [Multiboard And TextTag](../../docs/games/warcraft-3/multiboard-and-texttag.md) for contracts, evidence, and regression tests.
+
+`SetCameraRotateMode` owns a per-client pivot and signed, unwrapped angular sweep. The authoritative scheduler rotates the target and camera heading together, handles completion/replacement, and retains active sweeps through save/load. This allows Peach's 360/720-degree calls to advance through the native before its delayed result actions. See [camera lifecycle](../../docs/games/warcraft-3/cinematics.md) and [two-map compatibility](../../docs/platform/two-map-compatibility.md). Simulation behavior is regression-tested; a complete map playthrough remains separate evidence.
+
+The three player text natives ignore a null recipient instead of dereferencing it. Apricot's builder-death callback incorrectly reads `GetEnumPlayer()` from inside `ForGroup`; `CustomDefeatBJ` forwards that null handle to `DisplayTimedTextFromPlayer`. The group-callback regression verifies safety without inventing a recipient or broadcasting the text.
+
+`SetItemPosition` now releases carried items through the existing scripted drop lifecycle, including slot/passive-effect cleanup, world visibility and inventory refresh. Peach uses this native to clear captured flags between rounds. World-item repositioning is retained. See [inventory drop paths and bounded retail evidence](../../docs/games/warcraft-3/inventory-and-items.md#drop-and-script-paths).
+
+`IsUnitVisible(unit, player)` queries current authoritative sight with hidden
+and invisibility checks. Explored buildings alone are not visible targets.
+The custom `BrowserBotPlayerEligible(player)` gate is used only by the opt-in
+[standalone map bots](../../docs/platform/browser-bots.md); their grids consume
+ordinary fog updates without creating network clients.
 
 The AI-only `UnitInvis(unit)` native reports intrinsic active invisibility through `S_UnitHasInvisibilityState()`; it
 does not incorporate owner/shared vision or detector coverage. Stock `common.ai` calls it separately from
@@ -94,7 +116,7 @@ covers Blizzard.j's `UnitAddIndicatorBJ`, whose wrapper calls the generic `AddIn
 
 `SetUnitColor` publishes a per-unit replaceable team-color override without changing unit ownership. The presentation payload is packed into `effect_flags` as `playercolor + 1`, while persistent explicit-unit state carries a separate override flag so `PLAYER_COLOR_RED` remains distinct from the zero/default owner-color state across game-cache restore. `SetPlayerColor` also updates existing units still displaying the player's previous color, and `SetUnitOwner` honors its `changeColor` argument. Initial unit presentation resolves Warcraft's `utco`/`utcc` and `war3mapUnits.doo` custom-color precedence before falling back to the owner's configured player color. Ranged missiles, unit-attached model effects, selected portraits, placement previews, and rally indicators now consume the same resolved/configured color paths rather than falling back to the owner slot number; see [Team Colors](../../docs/games/warcraft-3/team-colors.md).
 
-`SetUnitVertexColor` now retains a persistent clamped RGBA override in WC3 game state and publishes visible overrides through the existing per-frame game datagram rather than widening `entityState_t`. The client keeps an explicit-validity tint cache so alpha `0` is distinct from the renderer's historical "unset tint" sentinel, then the MDX renderer reuses its existing per-instance geoset-colour multiply and translucent-layer path. `SetTextTagPos`, `SetWaterBaseColor`, authored `UnitUI.slk` RGB defaults, and invisibility-alpha parity remain separate gaps; implemented JASS texttag presentation is described in [Multiboard And TextTag](../../docs/games/warcraft-3/multiboard-and-texttag.md). See [Unit Vertex Color](../../docs/games/warcraft-3/unit-vertex-color.md).
+`SetUnitVertexColor` now retains a persistent clamped RGBA override in WC3 game state and publishes visible overrides through the existing per-frame game datagram rather than widening `entityState_t`. The client keeps an explicit-validity tint cache so alpha `0` is distinct from the renderer's historical "unset tint" sentinel, then the MDX renderer reuses its existing per-instance geoset-colour multiply and translucent-layer path. `SetWaterBaseColor`, authored `UnitUI.slk` RGB defaults, and invisibility-alpha parity remain separate gaps; implemented JASS texttag presentation is described in [Multiboard And TextTag](../../docs/games/warcraft-3/multiboard-and-texttag.md). See [Unit Vertex Color](../../docs/games/warcraft-3/unit-vertex-color.md).
 
 `SetTerrainFogEx` and `ResetTerrainFog` now own persistent WC3 environmental distance-fog state and publish it through the generic `CS_SCENE_FOG` presentation contract. `SetTerrainFogEx` retains style/start/end/density/RGB, while `ResetTerrainFog` restores the merged `[DefaultZFog]` RoC/TFT row. The renderer currently uses Warsmash-compatible linear start/end blending for every enabled style; legacy `SetTerrainFog`, true exponential equations, and particle fog remain separate gaps. See [Environmental Terrain Fog](../../docs/games/warcraft-3/environmental-fog.md).
 
