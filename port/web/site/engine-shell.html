@@ -29,16 +29,6 @@ canvas { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
 <main>
 <h1>OpenRealm browser foundation</h1>
 <p id="status" role="status">Checking browser-local Warcraft III data…</p>
-<section aria-labelledby="data-heading">
-<h2 id="data-heading">Local Warcraft III data (experimental)</h2>
-<p>Select MPQ, W3M or W3X files. They are copied into browser-local OPFS; they are not uploaded.</p>
-<input id="game-files" type="file" accept=".mpq,.w3m,.w3x" multiple aria-label="Game data files">
-<button id="install-data" type="button">Import files</button>
-<button id="cancel-install" type="button" disabled>Cancel</button>
-<button id="remove-data" type="button">Remove local data</button>
-<progress id="install-progress" max="1" value="0"></progress>
-<p id="data-status" role="status">Checking local storage…</p>
-</section>
 <div id="game-container">
   <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
   <div id="game-controls" aria-label="Game controls">
@@ -46,7 +36,7 @@ canvas { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
     <button id="game-fullscreen" type="button" aria-label="Enter fullscreen" title="Toggle fullscreen">⛶</button>
   </div>
 </div>
-<p>Experimental OpenRealm browser runtime. Imported archives are read directly from OPFS through WasmFS. Engine compatibility is experimental.</p>
+<p>OpenRealm browser build. Plays apricot and peach from the bundled Warcraft III data. Engine compatibility is experimental.</p>
 </main>
 <script>
 var Module = {
@@ -163,7 +153,6 @@ window.openrealmStartEngine = function (arguments_) {
   document.body.appendChild(script);
 };
 </script>
-<script src="installer.js"></script>
 <script src="filesystem-bridge.js"></script>
 <template id="engine-script">{{{ SCRIPT }}}</template>
 </body>

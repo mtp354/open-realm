@@ -291,9 +291,9 @@ folder under the virtual filesystem path `/share/warcraft-3/`. In particular,
 `/share/warcraft-3/config.cfg` must be present when `Com_Init` reads the
 shipped input bindings (`MOUSE1` selection, `MOUSE2` smart orders, etc.).
 `build-engine.py --check` checks that the source config exists; the normal
-`emcc` link bundles it using `--embed-file`. Rebuild the browser engine after
+`emcc` link bundles it using `--preload-file`. Rebuild the browser engine after
 changing shared defaults. These files are not copied to OPFS or uploaded by
-users: the OPFS importer continues to manage Warcraft III archives separately.
+users.
 
 This built-in configuration is the read-only starting point; user config
 loading and persistence are separate concerns. If HUD clicks work while
@@ -320,3 +320,45 @@ The audio worklet script is copied alongside index.js by the browser build.
 The native SDL backend is unchanged. Verify playback for UI sounds, positional
 unit acknowledgements, dialogue and music; also verify tab suspend/resume,
 loading stalls and output-device sample rates. Audio may underrun during stalls.
+
+## Two-map standalone build (apricot and peach)
+
+`make web-warcraft3-engine` builds a standalone page that plays only
+`apricot.w3x` and `peach.w3x`. The page is `maps.html` (a picker) and launches
+the engine through `filesystem-bridge.js`, which only accepts map names on its
+`BUNDLED_MAPS` allowlist.
+
+Setup:
+
+- Stage the retail archives and the two maps in `port/web/data-input/`
+  (gitignored): `war3.mpq`, `War3x.mpq`, and `Maps/Download/{apricot,peach}.w3x`.
+  The Frozen Throne install is what the data is expected to come from.
+- The data is preloaded into `/data/warcraft-3` with `--preload-file`. The
+  build output is about 133 MB.
+- The launcher passes `-tft`. RoC hides the `War3x*` archives, and the Loading
+  and StandardTemplates FDFs live there, so the engine cannot reach the map
+  without TFT mode.
+
+Browser requirement: WebGL 2. The VS Code integrated browser has no WebGL and
+cannot run the engine. Use a current desktop Chrome or Firefox.
+
+Known limitations:
+
+- The install used for testing is partial. Several in-game UI FDFs, some SLK
+  tables, some models and textures (including the Lordaeron ground tiles), and
+  all `.wav` audio are missing. The engine logs these and continues. REA has no
+  FrameDef or UI FDF entries, so it does not fill them.
+- The main 3D view is black on both maps even though the renderer submits
+  about 320k triangles per frame (`r_stats 1`). The minimap draws the terrain
+  and the player's unit correctly. Ruled out so far: fog (`r_fog 0`) and the
+  missing-texture placeholder, which is magenta and black. The cause is still
+  open.
+- Apricot has no `war3mapUnits.doo`, so units come from the map script
+  (`scripts\war3map.j`).
+
+Load-time fix: `common/mpq.c` used to re-inflate an entire compressed sector
+or single-unit file on every small `SFileReadFile` call. Map readers issue many
+small reads, so a map load took roughly 90 seconds per load, and the
+120-second loading plaque timed out before the first frame. Each file handle
+now caches its last decoded sector (`sector_cache`) and single-unit payload
+(`unit_cache`). Apricot now reaches `G_ClientBegin` normally.

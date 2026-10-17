@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Experimental static Emscripten link using the existing native module boundaries.
 
-This build mounts browser-local archives via WasmFS OPFS; full runtime compatibility is unverified.
+The standalone build preloads the staged apricot/peach data (see data-input/) and runs in TFT mode.
 """
 import argparse
 import pathlib
@@ -33,6 +33,16 @@ def unity(target, files):
 def run(args):
     print("+", " ".join(str(a) for a in args), flush=True)
     subprocess.run(list(map(str, args)), cwd=ROOT, check=True)
+
+
+def bundled_data_args():
+    # Retail archives and the two bundled maps are preloaded (not embedded) so
+    # the JS bundle stays small. The browser launches with +openrealm-data=/data/warcraft-3.
+    data = ROOT / "port/web/data-input"
+    if not (data / "war3.mpq").is_file() or not (data / "Maps/Download/apricot.w3x").is_file():
+        raise SystemExit("missing bundled game data under " + str(data) +
+                         "; stage war3.mpq, War3x.mpq and Maps/Download/{apricot,peach}.w3x there")
+    return ["--preload-file", str(data) + "@/data/warcraft-3"]
 
 
 def main():
@@ -145,12 +155,13 @@ def main():
          "-sINCOMING_MODULE_JS_API=canvas,arguments,setStatus,onAbort",
          # Make shipped bindings available before native Com_Init loads config.
          # Emscripten's virtual FS maps this to /share/warcraft-3/.
-         "--embed-file", str(wc3_share) + "@/share/warcraft-3",
+         "--preload-file", str(wc3_share) + "@/share/warcraft-3",
+         *bundled_data_args(),
          "-o", out / "index.html"])
-    for name in ("installer.js", "install-worker.js", "filesystem-bridge.js", "audio-worklet.js"):
+    for name in ("filesystem-bridge.js", "audio-worklet.js", "maps.html"):
         shutil.copy2(ROOT / "port/web/site" / name, out / name)
     print("Experimental static engine build emitted to", out)
-    print("OPFS archives mounted through WasmFS; native engine link/runtime remains experimental.")
+    print("Bundled apricot/peach data preloaded; engine runtime remains experimental.")
 
 
 if __name__ == "__main__":
