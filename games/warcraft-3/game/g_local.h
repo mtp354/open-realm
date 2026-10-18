@@ -2475,9 +2475,11 @@ bool G_RemovePlayerWithResult(uint32_t player_num, uint32_t game_result);
 bool G_GameResultDebugEnabled(void);
 void G_GameResultDebug(cstring_t format, ...);
 bool G_IsSinglePlayer(void);
-// g_browser_bots.c — opt-in policies for the standalone map pair
+// g_browser_maps.c — standalone presentation, controls and opt-in policies
 bool G_BrowserBotPlayerEligible(uint32_t player);
 void G_LoadBrowserBots(void);
+bool G_BrowserMapUsesSimpleHud(void);
+bool G_BrowserMapAllowsTreeSmartAttack(void);
 void G_StartBrowserBots(void);
 void G_RequestEndGame(bool do_score_screen);
 void G_RequestQuitGame(void);

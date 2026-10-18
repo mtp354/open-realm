@@ -685,7 +685,7 @@ static void WriteSelectedUnitStatusFrames(edict_t *ent, UnitWeapons_t const *wea
         UI_WriteFrameWithChildren(hud.simple.SimpleInfoPanelIconFood, &hud.food);
     }
 
-    if (is_hero) {
+    if (is_hero && !G_BrowserMapUsesSimpleHud()) {
         SetHeroPrimaryAttributeIcon(ent->data.UnitBalance->primaryAttribute);
         UI_SetText(hud.simple.InfoPanelIconHeroStrengthValue, "%lu", (unsigned long)ent->hero.str);
         UI_SetText(hud.simple.InfoPanelIconHeroAgilityValue, "%lu", (unsigned long)ent->hero.agi);

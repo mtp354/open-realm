@@ -131,6 +131,25 @@ TEST(wc3_canvas, console_load_defers_widescreen_tiles_and_collects_their_frames)
     canvas_teardown();
 }
 
+TEST(wc3_canvas, peach_console_keeps_gold_and_hides_unused_resources_per_map) {
+    PATHSTR saved_map;
+    strlcpy(saved_map, level.map_path, sizeof(saved_map));
+    canvas_setup();
+    strlcpy(level.map_path, "Maps/Download/peach.w3x", sizeof(level.map_path));
+    write_console(&g_edicts[0]);
+    T_ASSERT(!hud.res.ResourceBarGoldText->hidden);
+    T_ASSERT(hud.res.ResourceBarLumberText->hidden);
+    T_ASSERT(hud.res.ResourceBarSupplyText->hidden);
+    T_ASSERT(hud.res.ResourceBarUpkeepText->hidden);
+    strlcpy(level.map_path, "Maps/Download/apricot.w3x", sizeof(level.map_path));
+    write_console(&g_edicts[0]);
+    T_ASSERT(!hud.res.ResourceBarLumberText->hidden);
+    T_ASSERT(!hud.res.ResourceBarSupplyText->hidden);
+    T_ASSERT(!hud.res.ResourceBarUpkeepText->hidden);
+    canvas_teardown();
+    strlcpy(level.map_path, saved_map, sizeof(level.map_path));
+}
+
 TEST(wc3_canvas, esc_menu_art_resolves_for_each_race_and_fits_deferred_table) {
     gameClient_t client = { 0 };
     gameClient_t *saved_client = ui_current_client;

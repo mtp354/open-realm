@@ -418,6 +418,9 @@ void UI_WriteConsoleBackdrop(gameClient_t *client, int32_t food_used, int32_t fo
 
     /* Class-gated chrome: a standard client never receives the extension tiles, so their configstrings are
      * only ever registered by a wide client's write (docs/architecture/ui-canvas.md). */
+    UI_SetHidden(hud.res.ResourceBarLumberText, G_BrowserMapUsesSimpleHud());
+    UI_SetHidden(hud.res.ResourceBarSupplyText, G_BrowserMapUsesSimpleHud());
+    UI_SetHidden(hud.res.ResourceBarUpkeepText, G_BrowserMapUsesSimpleHud());
     FOR_LOOP(i, hud.console_wide_count) UI_SetHidden(hud.console_wide[i], client->canvas != UI_CANVAS_WIDE);
     UI_WriteFrameWithChildren(hud.console.ConsoleUI, NULL);
     UI_WriteTimeOfDayIndicator(client);

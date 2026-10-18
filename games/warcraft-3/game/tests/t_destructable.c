@@ -457,6 +457,22 @@ TEST(wc3_destructable, tree_requires_explicit_attack) {
     T_ASSERT(attacker->goalentity == dest);
 }
 
+TEST(wc3_destructable, peach_right_click_cuts_tree_and_releases_collision) {
+    edict_t *attacker = make_destructable_test_attacker(0.0f, 0.0f);
+    edict_t *tree = make_test_destructable(50.0f, 32.0f, 0.0f);
+    PATHSTR saved_map;
+    strlcpy(saved_map, level.map_path, sizeof(saved_map));
+    strlcpy(level.map_path, "Maps\\Download\\PEACH.w3x", sizeof(level.map_path));
+    tree->targtype = TARG_TREE;
+    T_ASSERT(unit_issuetargetorder(attacker, "smart", tree));
+    T_EQ(attacker->goalentity, tree);
+    T_Damage(tree, attacker, 50);
+    T_ASSERT(tree->health.value <= 0);
+    T_FEQ(tree->collision, 0, 0.001f);
+    T_ASSERT(!G_DestructableAcceptsSmartAttack(attacker, tree));
+    strlcpy(level.map_path, saved_map, sizeof(level.map_path));
+}
+
 TEST(wc3_destructable, explicit_attack_rejects_disallowed_destructable_class) {
     edict_t *attacker = make_destructable_test_attacker(0.0f, 0.0f);
     edict_t *dest = make_test_destructable(50.0f, 32.0f, 0.0f);

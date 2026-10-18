@@ -38,6 +38,9 @@ int main(int argc, char **argv) {
         UI_ParseFDF_Buffer(argv[i], buffer); free(buffer);
     }
     frameDef_t *root = UI_FindFrame("ConsoleUI"); check(root != NULL, "ConsoleUI");
+    frameDef_t *value = UI_FindFrame("ResourceBarLumberText");
+    frameDef_t *heading = UI_FindFrame("BasicResourceLumberLabel");
+    check(value && heading && heading->Parent == value, "resource heading follows value visibility");
     const char *buttons[] = { "UpperButtonBarMenuButton", "GameResultContinueButton", "ScriptDialogButton", "ReturnButton", "ConfirmQuitQuitButton", NULL };
     for (int i = 0; buttons[i]; ++i) {
         frameDef_t *b = UI_FindFrame(buttons[i]); check(b != NULL, buttons[i]);
@@ -56,8 +59,13 @@ int main(int argc, char **argv) {
 
 MODEL_PARSER = r'''
 #include "games/warcraft-3/renderer/mdx/r_mdx_load.c"
+#include "games/warcraft-3/renderer/mdx/r_mdx_interpolation.c"
+#include "games/warcraft-3/renderer/mdx/r_mdx_anim.c"
+#include "shared/source/vector3.c"
+#include "shared/source/quaternion.c"
 refImport_t ri;
-uint32_t GetModelKeyFrameSize(MODELKEYTRACKDATATYPE dataType, MODELKEYTRACKTYPE keyTrackType) { return 0; }
+struct render_globals tr;
+uint32_t SDL_GetTicks(void) { return 0; }
 static handle_t allocate(long size) { return calloc(1, size); }
 int main(int argc, char **argv) {
     ri.MemAlloc = allocate; ri.MemFree = free;
@@ -75,10 +83,19 @@ int main(int argc, char **argv) {
         if (tag == ID_BONE) MDLX_ReadBONE(&body, &model);
         input.readcount += length;
     }
-    if (!model.geosets || model.geosets->num_vertices != 5 || model.geosets->num_triangles != 18 ||
-        model.geosets->num_texcoord != 5 || model.geosets->default_bounds.box.max.z <= 0 ||
+    bool flag = argc > 2 && !strcmp(argv[2], "flag");
+    if (!model.geosets || model.geosets->num_vertices != (flag ? 12 : 5) || model.geosets->num_triangles != (flag ? 42 : 18) ||
+        model.geosets->num_texcoord != (flag ? 12 : 5) || model.geosets->default_bounds.box.max.z <= 0 ||
         !model.materials || model.materials->num_layers != 1 || model.materials->layers[0].staticAlpha != 1 ||
         model.num_sequences != 7 || !model.bones) return 3;
+    if (argc > 2 && !strcmp(argv[2], "tree")) {
+        vec3_t alive = {0}, dead = {0}, regrown = {0};
+        if (!model.bones->node.scale) return 4;
+        MDLX_GetModelKeytrackValue(&model, model.bones->node.scale, 0, &alive);
+        MDLX_GetModelKeytrackValue(&model, model.bones->node.scale, 4998, &dead);
+        MDLX_GetModelKeytrackValue(&model, model.bones->node.scale, 3000, &regrown);
+        if (alive.z < 0.99f || dead.z > 0.05f || regrown.z < 0.99f) return 5;
+    }
     return 0;
 }
 '''
@@ -105,6 +122,11 @@ int main(int argc, char **argv) {
 
 
 class BasicBrowserAssets(unittest.TestCase):
+    def test_map_flag_model_is_generated(self):
+        with tempfile.TemporaryDirectory() as directory:
+            generated = assets.generate(Path(directory))
+            self.assertIn('Objects/InventoryItems/OrcCaptureFlag/OrcCaptureFlag.mdx', sorted(generated))
+
     def test_peach_hero_skill_icons_include_disabled_paths(self):
         with tempfile.TemporaryDirectory() as directory:
             generated = assets.generate(Path(directory))
@@ -188,10 +210,10 @@ class BasicBrowserAssets(unittest.TestCase):
                        "-Wl,--gc-sections", "-x", "c", "-", "-lm", "-o", str(binary)]
             build = subprocess.run(command, input=MODEL_PARSER, text=True, capture_output=True)
             self.assertEqual(build.returncode, 0, build.stderr)
-            for kind in ("unit", "building", "tree", "shrub", "lily"):
+            for kind in ("unit", "building", "tree", "shrub", "lily", "flag"):
                 model = output / "proxy.mdx"
                 model.write_bytes(assets.primitive_model(kind=kind))
-                result = subprocess.run([str(binary), str(model)], capture_output=True, text=True, timeout=5)
+                result = subprocess.run([str(binary), str(model), kind], capture_output=True, text=True, timeout=5)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stderr, "")
 

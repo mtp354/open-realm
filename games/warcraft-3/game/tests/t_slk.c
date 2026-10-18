@@ -1173,6 +1173,45 @@ TEST(wc3_slk, map_unit_balance_overrides_stock_fields_and_custom_inheritance) {
     T_EQ(G_UnitBalance(base_id)->goldCost, saved_gold);
 }
 
+TEST(wc3_slk, integer_map_health_and_weapon_edits_survive_hero_recomputation) {
+    uint32_t const base_id = MAKEFOURCC('H','p','a','l'), custom_id = MAKEFOURCC('H','0','0','0');
+    int32_t hp = 1, damage = 1000, strength = 1, range = 96;
+    float cooldown = 1.25f;
+    unitModification_t original_mod = { .modID = MAKEFOURCC('u','a','1','b'), .type = mod_int, .data = &damage };
+    unitModification_t mods[] = {
+        { .modID = MAKEFOURCC('u','h','p','m'), .type = mod_int, .data = &hp },
+        { .modID = MAKEFOURCC('u','s','t','r'), .type = mod_int, .data = &strength },
+        { .modID = MAKEFOURCC('u','a','1','c'), .type = mod_real, .data = &cooldown },
+        { .modID = MAKEFOURCC('u','a','1','r'), .type = mod_int, .data = &range },
+        { .modID = MAKEFOURCC('u','a','1','g'), .type = mod_string, .data = "ground,tree,item,structure,debris" },
+    };
+    unitData_t original = { .originalUnitID = base_id, .numbeOfModifications = 1, .modifications = &original_mod };
+    unitData_t custom = { .originalUnitID = base_id, .newUnitID = custom_id, .numbeOfModifications = 5, .modifications = mods };
+    mapInfo_t map = { .num_originalUnits = 1, .originalUnits = &original, .num_userCreatedUnits = 1, .userCreatedUnits = &custom };
+    mapInfo_t const *saved_map;
+    UnitWeapons_t stock;
+    edict_t hero = { .class_id = custom_id, .health = { .value = 1, .max_value = 1 }, .hero.str = 1 };
+    setup_test_world();
+    stock = *G_UnitWeapons(base_id);
+    saved_map = level.mapinfo;
+    level.mapinfo = &map;
+    G_SetMapUnitOverrides(&map);
+    G_BindEntityData(&hero);
+    T_FEQ(hero.data.UnitBalance->maxHealth, 1, 0.001f);
+    T_EQ(hero.data.UnitWeapons->id, custom_id);
+    T_EQ(hero.data.UnitWeapons->attack1.damageBase, 1000);
+    T_FEQ(hero.data.UnitWeapons->attack1.cooldown, 1.25f, 0.001f);
+    T_FEQ(hero.data.UnitWeapons->attack1.range, 96, 0.001f);
+    T_EQ(hero.data.UnitWeapons->attack1.targetsAllowed, 2u | 8u | 32u | 64u | 256u);
+    G_RecomputeHeroStats(&hero);
+    T_FEQ(hero.health.max_value, 1, 0.001f);
+    T_ASSERT(hero.attack1.damageBase >= 1000);
+    T_EQ(G_UnitWeapons(base_id)->attack1.damageBase, 1000);
+    G_SetMapUnitOverrides(NULL);
+    level.mapinfo = saved_map;
+    T_EQ(G_UnitWeapons(base_id)->attack1.damageBase, stock.attack1.damageBase);
+}
+
 TEST(wc3_slk, map_item_data_overrides_stock_fields_and_custom_inheritance) {
     uint32_t const base_id = MAKEFOURCC('s','p','r','o');
     uint32_t const custom_id = MAKEFOURCC('x','p','r','o');

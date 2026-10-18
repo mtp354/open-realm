@@ -6,7 +6,7 @@ The WC3 game module owns save/load. `GetGameAPI()` exposes `SaveGame` and `LoadG
 
 `WriteGame()` writes the current game state to a versioned binary file. The file contains:
 
-- `W3SV` magic, format version 90, canonical map path, the current `sizeof(edict_t)`, entity count, client count, script identity, and native-handle registry counts;
+- `W3SV` magic, format version 91, canonical map path, the current `sizeof(edict_t)`, entity count, client count, script identity, and native-handle registry counts;
 - level frame/time, authoritative Warcraft time-of-day state, map-global camera bounds, and started/script-started flags;
 - each client `GAMECLIENT` state, including its `PLAYER` state, JASS settings and dynamically sized `SetPlayerAbilityAvailable` rawcode list, runtime removed/result-presentation state, researched tech, text storage, camera values, messages, and HUD caches;
 - each camera target as an entity index;
@@ -27,6 +27,15 @@ The versioned layout retains the authoritative `level.timeofday` record and game
 ### Save compatibility policy
 
 Save compatibility is deliberately unsupported. Load only the current format version and serialized layout, and reject older or otherwise mismatched saves with a diagnostic. Bump the format version when the serialized layout, callback identity, or meaning changes, including changes that leave `sizeof(edict_t)` unchanged. Do not retain legacy layouts, migration defaults, compatibility aliases, or optional extension records.
+
+Version 91 rejects snapshots containing the former inherited combat values for
+map-edited units. Integer W3U health/range fields now convert into float runtime
+storage, and UnitWeapons rows merge original edits before custom inheritance.
+Hero recomputation therefore retains the map's attack damage. Derived row
+pointers still rebuild through `G_BindEntityData`; no entity or wire fields were
+added. `wc3_save.rejects_prior_save_versions` includes version 90 rejection, and
+the existing current-format round trips run in ROC and TFT. Peach's revised
+sidecar globals also require the current JASS program identity.
 
 Version 90 expands the event registration table from 1,024 to 2,048 slots for
 custom maps such as Peach, whose initialization requests 1,059 supported event

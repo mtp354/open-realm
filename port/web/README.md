@@ -34,9 +34,10 @@ The pack contains:
   (book, ring, orb, shield, helmet, tower, ankh and wand), with muted colors for
   unavailable/disabled commands. Only paths reported missing are supplied.
 - Static team-colored pyramids for missing stock units/buildings, and green
-  pyramids for ten tree variants, a shrub, rushes and lily pads. These are
-  visible proxies, with named static animation sequences; they do not reproduce
-  the original models or animated poses. Map imports retain renderer precedence.
+  pyramids for ten tree variants, a shrub, rushes and lily pads. Trees flatten
+  to stumps during Death and restore full size in Birth/Stand. A two-sided
+  team-colored banner and pole supply Peach's missing OrcCaptureFlag model.
+  These are simple proxies; map imports retain renderer precedence.
 - Rectangular pathing TGAs for `2x2Default`, `4x4Default`, `12x12Simple` and
   `12x12TreeOfLife`. Dimensions are pixels, each spanning 32 world units. All
   block walking/construction; the Tree of Life also blocks flying. These simple
@@ -64,6 +65,11 @@ clone JASS dialogs, decode each primitive shape through the native MDX readers,
 decode the footprints through `LoadTGA`, verify atlas masks and repeatability,
 and confirm imported archives and edited loose files survive regeneration.
 Native SDL/OpenGL development headers are required by the MDX-reader check.
+
+Resource headings are children of their value frames so the map profile can
+hide a resource and its label together. Peach shows Gold and omits the ordinary
+hero attribute panel; Apricot retains its resource display. This changes
+presentation only; the original map still owns resource and hero rules.
 
 The broader browser setup and limitations are documented in
 [Browser platform](../../docs/platform/browser.md).

@@ -86,7 +86,14 @@ Runtime ordinary-ability membership from `UnitAddAbility` / `UnitRemoveAbility` 
 
 ## Known Boundaries
 
-Map/campaign object modifications are only partially merged into typed runtime rows. `war3map.w3u` applies registered `UnitBalance`/`UnitProfile`/`UnitUI`/`UnitAbilities` fields such as `usst`, `uani`, `umdl`, `uabi`, `uhab`, and `udaa`, but Data/Weapons fields and `war3map.w3a`/campaign overrides for `levels`, `reqLevel`, `levelSkip`, or Research UI fields still require the broader object-data merge layer.
+Map object edits merge registered `UnitBalance`, `UnitProfile`, `UnitUI`,
+`UnitAbilities`, `UnitData` and `UnitWeapons` fields into stable map-owned rows.
+Original-unit edits become the inheritance source for custom units. Integer
+editor fields such as health and attack range convert into float runtime
+storage, and string attack-target lists become weapon masks. Hero stat
+recomputation reads the merged weapon row, preserving map-authored base damage.
+Campaign object-data precedence remains broader work; see
+[ability implementation](ability-implementation.md) for W3A coverage.
 
 `SetPlayerAbilityAvailable` has player-wide rawcode state plus shared runtime activation, learned-command-card, and Hero skill-learning gates. Disabling a learned Hero spell hides its command and rejects direct activation; disabling an unlearned skill omits it from Select Skill and rejects `SelectHeroSkill`. Passive/on-tick lifecycle removal remains ability-specific work.
 

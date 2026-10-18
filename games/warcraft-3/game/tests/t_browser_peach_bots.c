@@ -34,13 +34,21 @@ static bool peach_bots_fixture(void) {
         "  unit udg_flag_2 = null\n"
         "  integer udg_Number_Jailed_Team_1 = 0\n"
         "  integer udg_Number_Jailed_Team_2 = 0\n"
+        "  integer peachPointOrders = 0\n"
         "  rect gg_rct_Team_1_side = null\n"
         "  rect gg_rct_Team_2_side = null\n"
         "  rect gg_rct_Team_1_Jail = null\n"
         "  rect gg_rct_Team_2_Jail = null\n"
         "endglobals\n"
+        "function countPeachPointOrder takes nothing returns nothing\n"
+        "  set peachPointOrders = peachPointOrders + 1\n"
+        "endfunction\n"
         "function main takes nothing returns nothing\n"
         "  local integer i = 0\n"
+        "  local integer ally = 0\n"
+        "  local trigger orders = CreateTrigger()\n"
+        "  call TriggerRegisterPlayerUnitEvent(orders, Player(1), EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, null)\n"
+        "  call TriggerAddAction(orders, function countPeachPointOrder)\n"
         "  set udg_Main_Player_Units = CreateGroup()\n"
         "  set gg_rct_Team_1_side = Rect(-200.0, 20.0, 200.0, 200.0)\n"
         "  set gg_rct_Team_2_side = Rect(-200.0, -200.0, 200.0, -20.0)\n"
@@ -52,7 +60,12 @@ static bool peach_bots_fixture(void) {
         "    exitwhen i >= 7\n"
         "    set udg_Unit_identifier_for_player_X[i + 1] = CreateUnit(Player(i), 'Hpal', I2R(i) * 40.0 - 120.0, 80.0, 0.0)\n"
         "    call GroupAddUnit(udg_Main_Player_Units, udg_Unit_identifier_for_player_X[i + 1])\n"
-        "    call SetPlayerAlliance(Player(1), Player(i), ALLIANCE_PASSIVE, true)\n"
+        "    set ally = 0\n"
+        "    loop\n"
+        "      exitwhen i >= 6 or ally >= 6\n"
+        "      call SetPlayerAlliance(Player(i), Player(ally), ALLIANCE_PASSIVE, true)\n"
+        "      set ally = ally + 1\n"
+        "    endloop\n"
         "    set i = i + 1\n"
         "  endloop\n"
         "  call SetPlayerAlliance(Player(6), Player(0), ALLIANCE_PASSIVE, false)\n"
@@ -82,7 +95,55 @@ static bool peach_bots_fixture(void) {
 
 static void peach_tick(void) {
     jass_callbyname(level.vm, "BrowserPeachTick", false);
+    G_RunEvents();
+    jass_runevents(level.vm);
     T_ASSERT(!jass_rterror_pending(level.vm));
+}
+
+TEST(wc3_browser_peach, progressing_moves_persist_and_stalled_moves_retry_after_delay) {
+    cstring_t (*old_cvar)(cstring_t, cstring_t) = gi.CvarString;
+    bool ready = peach_bots_fixture();
+    T_ASSERT(ready);
+    if (ready) {
+        char check[] = "function checkPeachOrders takes nothing returns nothing\n"
+                       "  call BJassAssert(peachPointOrders == 1, \"moving runner was repeatedly reordered\")\n"
+                       "endfunction\n"
+                       "function checkPeachRetry takes nothing returns nothing\n"
+                       "  call BJassAssert(peachPointOrders == 2, \"stalled runner was never retried\")\n"
+                       "endfunction\n";
+        jass_dobuffer(level.vm, check);
+        peach_tick(); jass_runevents(level.vm);
+        peach_test_runner(1)->s.origin2.x += 12;
+        peach_tick(); jass_runevents(level.vm);
+        jass_callbyname(level.vm, "checkPeachOrders", false);
+        T_ASSERT(!jass_rterror_pending(level.vm));
+        FOR_LOOP(i, 4) { peach_tick(); jass_runevents(level.vm); }
+        jass_callbyname(level.vm, "checkPeachRetry", false);
+        T_ASSERT(!jass_rterror_pending(level.vm));
+    }
+    gi.CvarString = old_cvar;
+}
+
+TEST(wc3_browser_peach, one_rescuer_and_separate_raiding_lanes) {
+    cstring_t (*old_cvar)(cstring_t, cstring_t) = gi.CvarString;
+    bool ready = peach_bots_fixture();
+    vec2_t rescue = {0}, raid_a = {0}, raid_b = {0};
+    T_ASSERT(ready);
+    if (ready) {
+        game.clients[2].connected = false;
+        peach_test_runner(3)->paused = false;
+        game.clients[5].jass.removed = false;
+        jass_callbyname(level.vm, "jailTeamOne", false);
+        peach_tick();
+        T_ASSERT(G_GetIssuedOrderPoint(peach_test_runner(1), &rescue));
+        T_ASSERT(G_GetIssuedOrderPoint(peach_test_runner(3), &raid_a));
+        T_ASSERT(G_GetIssuedOrderPoint(peach_test_runner(5), &raid_b));
+        T_FEQ(rescue.x, 120, .001f); T_FEQ(rescue.y, -120, .001f);
+        T_ASSERT(raid_a.x != rescue.x || raid_a.y != rescue.y);
+        T_FEQ(raid_a.y, raid_b.y, .001f);
+        T_ASSERT(raid_a.x != raid_b.x);
+    }
+    gi.CvarString = old_cvar;
 }
 
 static void peach_goal(edict_t *runner, float x, float y) {
@@ -160,6 +221,7 @@ TEST(wc3_browser_peach, defending_runner_tags_nearby_enemy_with_ordinary_attack_
     /* The order ID can remain attack after its old victim dies; issue a fresh target. */
     G_SetHealth(enemy, 0);
     replacement = peach_test_runner(3);
+    game.clients[3].connected = true;
     replacement->paused = false;
     replacement->s.origin2 = (vec2_t){ 80.0f, 80.0f };
     gi.LinkEntity(replacement);

@@ -24,16 +24,25 @@ seconds. Construction is limited by the map's starting resources and the
 engine's supported order APIs; this is a basic survival opponent, not a complete
 economy or skill strategy.
 
-Peach's `BrowserPeach.j` timer wakes every 0.75 seconds. Its runners return a
-carried enemy flag to their own half, defend against nearby visible invaders,
-rescue jailed teammates or approach the enemy flag. They observe the map's
-runner group, player array, jail flags and rectangles. Paused tutorial units and
-jailed runners receive no orders. The original tutorial and red player's round
-selection remain in control; bots do not skip them or choose a match length.
+Peach's `BrowserPeach.j` timer wakes every 0.75 seconds. A carrier returns to its
+home half first. Each team's live roster elects one rescuer when teammates are
+jailed and one defender when at least three bots are available. Other runners
+approach through three lanes derived from the authored side rectangles, then
+head for the flag. They escort a friendly carrier while the flag is hidden.
+Raiders interrupt only for a visible invader within 160 units; the defender
+covers 512 units. Jobs are reelected when the available roster changes.
+
+Movement remembers the runner, requested destination and previous position.
+Progressing moves keep their existing path rather than being reissued on each
+decision. Four checks without eight units of progress retry a distant goal;
+arrival within 64 units suppresses retries. Changed goals, a new runner or a
+different current order produce a fresh command. Paused tutorial units and
+jailed runners receive no orders and discard their remembered path. The
+original tutorial and red player's round selection remain in control.
 
 ## Runtime and persistence
 
-`g_browser_bots.c` is a WC3-only adapter. It accepts only the normalized paths
+`g_browser_maps.c` is a WC3-only map-profile adapter. It accepts only the normalized paths
 `Maps/Download/apricot.w3x` and `Maps/Download/peach.w3x`, loads the matching
 sidecar into the map VM after the map declarations, and starts its entry after
 `main`. Sidecar declarations load even when bots are disabled so native save
@@ -42,6 +51,11 @@ groups, timer callbacks and suspended coroutines use the existing native save
 machinery. Native restores require the same sidecar program identity; keep the
 bot launch setting when restoring a bot session. Browser save/load remains
 unsupported.
+
+The same profile scopes Peach's simplified HUD and non-worker tree right-click
+attacks to its exact map path, independently of the bot setting. Apricot keeps
+its resource HUD and ordinary harvesting controls. See [two-map compatibility](two-map-compatibility.md)
+for the asset and authored-stat fixes that accompany the policy.
 
 The custom `BrowserBotPlayerEligible(player)` native exposes the ownership gate.
 Bots consume their own normal fog grids without becoming connected clients or

@@ -94,6 +94,14 @@ visible, targetable destructable. Neutral ownership does not turn a crate click
 into a move order. Units approach and execute their existing melee or ranged
 attack; the resulting damage is then routed through the destructable lifecycle.
 
+Ordinary trees require explicit Attack for non-workers. Peach's standalone map
+profile also accepts tree Smart/right-click attacks; worker Harvest keeps its
+earlier precedence, and other maps retain the standard control. The basic
+browser tree mesh now scales down to a stump during Death and restores full
+height in Birth/Stand. Collision and static pathing still use the ordinary
+destructable death/restore lifecycle. Native attack tests and MDX keyframe
+sampling cover both the control and generated-model changes.
+
 Lethal damage performs one built-in transition:
 
 1. Mark the destructable dead and clamp life to zero.

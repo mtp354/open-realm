@@ -379,7 +379,7 @@ Setup:
   data package is about 130 MiB with the basic assets. Emscripten SDK 6.0.9 is
   installed locally at `~/.local/src/emsdk`; activate `emsdk_env.sh` before building.
 - The build automatically runs `port/web/generate-basic-assets.py`. At the
-  owner's request this supplies 227 original basic assets (terrain, UI, font,
+  owner's request this supplies 228 original basic assets (terrain, UI, font,
   icons, primitive models and rectangular pathing masks). It preserves maps,
   archives, and edited/non-generated loose files. See [basic asset pack](../../port/web/README.md).
 - Serve locally with `python3 port/web/serve.py`, then open
@@ -424,10 +424,10 @@ the map remains black until explored. Its zombie hero spawns after 90 seconds.
 Known limitations:
 
 - The original install is partial; generated art makes it inspectable and
-  usable as a basic demo, not a faithful retail presentation. Models are static
-  proxies, some cliffs/water/effects remain absent, and audio is incomplete.
+  usable as a basic demo, not a faithful retail presentation. Models are mostly static
+  proxies (trees flatten on death), some cliffs/water/effects remain absent, and audio is incomplete.
 - Save/load remains unsupported on wasm32. Native save format is now version
-  90, covering event-capacity/token and camera-rotation state changes; older
+  91, retaining authored map combat values as well as the earlier event/camera changes; older
   native saves are explicitly rejected. Network formats are unchanged.
 - Native objective checks reached Apricot victory through ordinary commands
   and a five-round Peach bot match through its original scoring rules. Browser

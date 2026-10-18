@@ -902,6 +902,11 @@ typedef struct {
 
 typedef struct {
     uint32_t id;
+    UnitWeapons_t row;
+} mapUnitWeaponsOverride_t;
+
+typedef struct {
+    uint32_t id;
     ItemData_t row;
 } mapItemDataOverride_t;
 
@@ -932,6 +937,8 @@ static mapUnitAbilitiesOverride_t *map_unit_abilities_overrides;
 static uint32_t map_unit_abilities_override_count;
 static mapUnitDataOverride_t *map_unit_data_overrides;
 static uint32_t map_unit_data_override_count;
+static mapUnitWeaponsOverride_t *map_unit_weapons_overrides;
+static uint32_t map_unit_weapons_override_count;
 static mapItemDataOverride_t *map_item_data_overrides;
 static uint32_t map_item_data_override_count;
 static mapDestructableDataOverride_t *map_destructable_data_overrides;
@@ -1349,7 +1356,7 @@ unitMeta_t const UnitsMetaData[] = {
  * war3map.w3u/w3t records are owned by CM/mapInfo for the lifetime of a map.
  * A spawned edict keeps immutable typed-row pointers, so overrides must live
  * in stable per-map rows rather than a shared scratch object. UnitBalance,
- * UnitProfile, UnitUI, UnitAbilities, and ItemData have per-map merges; other
+ * UnitProfile, UnitUI, UnitAbilities, UnitData, UnitWeapons and ItemData have per-map merges; other
  * typed unit tables still resolve custom IDs to their base row.
  * =========================================================================*/
 static UnitBalance_t const *FindMapUnitBalanceOverride(uint32_t id) {
@@ -1388,6 +1395,14 @@ static UnitData_t const *FindMapUnitDataOverride(uint32_t id) {
     FOR_LOOP(i, map_unit_data_override_count) {
         if (map_unit_data_overrides[i].id == id)
             return &map_unit_data_overrides[i].row;
+    }
+    return NULL;
+}
+
+static UnitWeapons_t const *FindMapUnitWeaponsOverride(uint32_t id) {
+    FOR_LOOP(i, map_unit_weapons_override_count) {
+        if (map_unit_weapons_overrides[i].id == id)
+            return &map_unit_weapons_overrides[i].row;
     }
     return NULL;
 }
@@ -1455,6 +1470,8 @@ static void ApplyMapObjectTypedField(void *row, size_t row_offset, unitModificat
     case BZ_FIELD_FLOAT:
         if (mod->type == mod_real || mod->type == mod_unreal)
             *(float *)dest = *(float const *)mod->data;
+        else if (mod->type == mod_int)
+            *(float *)dest = (float)*(int32_t const *)mod->data;
         break;
     case BZ_FIELD_BOOL:
         if (mod->type == mod_int)
@@ -1463,7 +1480,10 @@ static void ApplyMapObjectTypedField(void *row, size_t row_offset, unitModificat
             *(bool *)dest = *(uint8_t const *)mod->data != 0;
         break;
     case BZ_FIELD_U32:
-        if (mod->type == mod_int)
+        /* W3U stores attack target sets as comma-separated editor tokens. */
+        if ((mod->modID == MAKEFOURCC('u','a','1','g') || mod->modID == MAKEFOURCC('u','a','2','g')) && UnitModificationString(mod))
+            *(uint32_t *)dest = ParseWeaponTargetMask((cstring_t)mod->data);
+        else if (mod->type == mod_int)
             *(uint32_t *)dest = *(uint32_t const *)mod->data;
         else if (mod->type == mod_bool || mod->type == mod_char)
             *(uint32_t *)dest = *(uint8_t const *)mod->data;
@@ -1551,6 +1571,21 @@ static void AddMapUnitDataOverride(unitData_t const *unit, uint32_t target_id, u
         ApplyMapObjectTypedField(&override->row, offsetof(edict_t, data.UnitData), unit->modifications + i);
 }
 
+static void AddMapUnitWeaponsOverride(unitData_t const *unit, uint32_t target_id, uint32_t base_id) {
+    UnitWeapons_t const *base = FindMapUnitWeaponsOverride(base_id);
+    mapUnitWeaponsOverride_t *override;
+
+    if (!base) base = FS_SLKLookup(&weapons_idx, base_id);
+    override = map_unit_weapons_overrides + map_unit_weapons_override_count++;
+    memset(&override->row, 0, sizeof(override->row));
+    if (base) override->row = *base;
+    override->id = target_id;
+    override->row.id = target_id;
+
+    FOR_LOOP(i, unit->numbeOfModifications)
+        ApplyMapObjectTypedField(&override->row, offsetof(edict_t, data.UnitWeapons), unit->modifications + i);
+}
+
 static void AddMapItemDataOverride(unitData_t const *item, uint32_t target_id, uint32_t base_id) {
     ItemData_t const *base = FindMapItemDataOverride(base_id);
     mapItemDataOverride_t *override;
@@ -1630,6 +1665,9 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
     free(map_unit_data_overrides);
     map_unit_data_overrides = NULL;
     map_unit_data_override_count = 0;
+    free(map_unit_weapons_overrides);
+    map_unit_weapons_overrides = NULL;
+    map_unit_weapons_override_count = 0;
     free(map_item_data_overrides);
     map_item_data_overrides = NULL;
     map_item_data_override_count = 0;
@@ -1652,6 +1690,7 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
         map_unit_ui_overrides = calloc(unit_capacity, sizeof(*map_unit_ui_overrides));
         map_unit_abilities_overrides = calloc(unit_capacity, sizeof(*map_unit_abilities_overrides));
         map_unit_data_overrides = calloc(unit_capacity, sizeof(*map_unit_data_overrides));
+        map_unit_weapons_overrides = calloc(unit_capacity, sizeof(*map_unit_weapons_overrides));
     }
     if (item_capacity)
         map_item_data_overrides = calloc(item_capacity, sizeof(*map_item_data_overrides));
@@ -1660,7 +1699,7 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
     if (doodad_capacity)
         map_doodad_overrides = calloc(doodad_capacity, sizeof(*map_doodad_overrides));
     if ((unit_capacity && (!map_unit_balance_overrides || !map_unit_profile_overrides ||
-                           !map_unit_ui_overrides || !map_unit_abilities_overrides || !map_unit_data_overrides)) ||
+                           !map_unit_ui_overrides || !map_unit_abilities_overrides || !map_unit_data_overrides || !map_unit_weapons_overrides)) ||
         (item_capacity && !map_item_data_overrides) ||
         (destructable_capacity && !map_destructable_data_overrides) ||
         (doodad_capacity && !map_doodad_overrides)) {
@@ -1669,6 +1708,7 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
         free(map_unit_ui_overrides); map_unit_ui_overrides = NULL;
         free(map_unit_abilities_overrides); map_unit_abilities_overrides = NULL;
         free(map_unit_data_overrides); map_unit_data_overrides = NULL;
+        free(map_unit_weapons_overrides); map_unit_weapons_overrides = NULL;
         free(map_item_data_overrides); map_item_data_overrides = NULL;
         free(map_destructable_data_overrides); map_destructable_data_overrides = NULL;
         free(map_doodad_overrides); map_doodad_overrides = NULL;
@@ -1683,6 +1723,7 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
         AddMapUnitUIOverride(unit, unit->originalUnitID, unit->originalUnitID);
         AddMapUnitAbilitiesOverride(unit, unit->originalUnitID, unit->originalUnitID);
         AddMapUnitDataOverride(unit, unit->originalUnitID, unit->originalUnitID);
+        AddMapUnitWeaponsOverride(unit, unit->originalUnitID, unit->originalUnitID);
     }
     FOR_LOOP(i, mapinfo->num_userCreatedUnits) {
         unitData_t const *unit = mapinfo->userCreatedUnits + i;
@@ -1691,6 +1732,7 @@ void G_SetMapUnitOverrides(mapInfo_t const *mapinfo) {
         AddMapUnitUIOverride(unit, unit->newUnitID, unit->originalUnitID);
         AddMapUnitAbilitiesOverride(unit, unit->newUnitID, unit->originalUnitID);
         AddMapUnitDataOverride(unit, unit->newUnitID, unit->originalUnitID);
+        AddMapUnitWeaponsOverride(unit, unit->newUnitID, unit->originalUnitID);
     }
     FOR_LOOP(i, mapinfo->num_originalItems) {
         unitData_t const *item = mapinfo->originalItems + i;
@@ -2008,8 +2050,8 @@ void G_SetMapAbilityOverrides(mapInfo_t const *mapinfo) {
 /* =========================================================================
  * Public lookup functions.
  * Map-created units remap their ID to the base unit ID for typed tables that
- * do not yet have a per-map merge. UnitBalance, UnitProfile, and UnitUI check
- * stable map rows first.
+ * do not yet have a per-map merge. UnitBalance, UnitProfile, UnitUI,
+ * UnitAbilities, UnitData and UnitWeapons check stable map rows first.
  * =========================================================================*/
 static uint32_t ResolveUnitID(uint32_t id) {
     if (!level.mapinfo) return id;
@@ -2116,7 +2158,14 @@ UnitUI_t const *G_UnitUI(uint32_t id) {
     row = FS_SLKLookup(&ui_idx, ResolveUnitID(id));
     return row ? row : &zero;
 }
-UnitWeapons_t const *G_UnitWeapons(uint32_t id) { static UnitWeapons_t zero; UnitWeapons_t *row = FS_SLKLookup(&weapons_idx, ResolveUnitID(id)); return row ? row : &zero; }
+UnitWeapons_t const *G_UnitWeapons(uint32_t id) {
+    static UnitWeapons_t zero;
+    UnitWeapons_t const *override = FindMapUnitWeaponsOverride(id);
+    UnitWeapons_t *row;
+    if (override) return override;
+    row = FS_SLKLookup(&weapons_idx, ResolveUnitID(id));
+    return row ? row : &zero;
+}
 UnitAbilities_t const *G_UnitAbil(uint32_t id) {
     static UnitAbilities_t zero;
     UnitAbilities_t const *override = FindMapUnitAbilitiesOverride(id);

@@ -32,6 +32,7 @@ COMMAND_PROFILES = {
 # Runtime reports from both original maps confirmed these stock assets absent.
 # Map imports keep precedence over these loose replacements in R_AssetCandidates.
 MODELS = {
+    "Objects/InventoryItems/OrcCaptureFlag/OrcCaptureFlag.mdx": "flag",
     "buildings/undead/Graveyard/Graveyard.mdx": "building",
     "buildings/undead/TombOfRelics/TombOfRelics.mdx": "building",
     "units/human/Militia/Militia.mdx": "unit",
@@ -115,31 +116,46 @@ def terrain_pixels(color, cell=16):
 
 
 def primitive_model(building=False, kind=None):
-    """Original team-colored pyramid, using the native MDLX v800 contract."""
+    """Original simple meshes, using the native MDLX v800 contract."""
     pack = lambda fmt, *values: struct.pack("<" + fmt, *values)
     fixed = lambda value, count: value.encode().ljust(count, b"\0")
     chunk = lambda tag, data: tag.encode() + pack("I", len(data)) + data
     record = lambda data: pack("I", len(data) + 4) + data
     kind = kind or ("building" if building else "unit")
     radius, height = {"building": (64., 100.), "unit": (18., 48.), "tree": (36., 160.),
-                      "shrub": (24., 36.), "lily": (24., 6.)}[kind]
+                      "shrub": (24., 36.), "lily": (24., 6.), "flag": (40., 110.)}[kind]
     bounds = pack("7f", max(radius * 2, height), -radius, -radius, 0, radius, radius, height)
     vertices = [(-radius, -radius, 0.), (radius, -radius, 0.), (radius, radius, 0.),
                 (-radius, radius, 0.), (0., 0., height)]
     indices = (0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4, 0, 3, 2, 0, 2, 1)
+    if kind == "flag":
+        # A solid pole and two-sided banner remain legible at the map's scale 3.
+        vertices = [(-2., -2., 0.), (2., -2., 0.), (2., 2., 0.), (-2., 2., 0.),
+                    (-2., -2., height), (2., -2., height), (2., 2., height), (-2., 2., height),
+                    (0., 0., height), (radius, 0., height-6), (radius, 0., height-40), (0., 0., height-34)]
+        indices = (0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6,
+                   3, 0, 4, 3, 4, 7, 0, 3, 2, 0, 2, 1, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11)
+    count = len(vertices)
     sequences = b""
     for i, name in enumerate(("Stand", "Walk", "Attack", "Birth", "Death", "Portrait", "Stand Work")):
         sequences += fixed(name, 80) + pack("2IfIfI", i*1000, i*1000+999, 0., int(name in ("Birth", "Death")), 0., 0) + bounds
     layer = record(pack("5If", 0, 0x11, 0, 0xffffffff, 0, 1.))  # opaque, two-sided, unshaded
     material = record(pack("2I", 0, 0) + b"LAYS" + pack("I", 1) + layer)
-    arrays = (b"VRTX" + pack("I15f", 5, *(v for xyz in vertices for v in xyz)) +
-              b"NRMS" + pack("I15f", 5, *([0., 0., 1.] * 5)) +
+    arrays = (b"VRTX" + pack(f"I{count*3}f", count, *(v for xyz in vertices for v in xyz)) +
+              b"NRMS" + pack(f"I{count*3}f", count, *([0., 0., 1.] * count)) +
               b"PTYP" + pack("2I", 1, 4) + b"PCNT" + pack("2I", 1, len(indices)) +
-              b"PVTX" + pack("I18H", len(indices), *indices) +
-              b"GNDX" + pack("I", 5) + bytes(5) + b"MTGC" + pack("2I", 1, 1) +
+              b"PVTX" + pack(f"I{len(indices)}H", len(indices), *indices) +
+              b"GNDX" + pack("I", count) + bytes(count) + b"MTGC" + pack("2I", 1, 1) +
               b"MATS" + pack("5I", 1, 0, 0, 0, 0) + bounds + pack("I", 0) +
-              b"UVAS" + pack("I", 1) + b"UVBS" + pack("I10f", 5, 0, 0, 1, 0, 1, 1, 0, 1, .5, .5))
-    bone = pack("I", 96) + fixed("BasicRoot", 80) + pack("5I", 0, 0xffffffff, 256, 0, 0xffffffff)
+              b"UVAS" + pack("I", 1) + b"UVBS" + pack(f"I{count*2}f", count, *(v for x, y, z in vertices for v in ((x/radius+1)/2, z/height))))
+    scale = b""
+    if kind == "tree":
+        # Hold a flattened stump at Death's end; Birth restores the full tree.
+        keys = [(i*1000+offset, (1., 1., .02 if i == 4 and offset else 1.))
+                for i in range(7) for offset in (0, 999)]
+        scale = b"KGSC" + pack("3I", len(keys), 1, 0xffffffff)
+        scale += b"".join(pack("I3f", time, *value) for time, value in keys)
+    bone = pack("I", 96+len(scale)) + fixed("BasicRoot", 80) + pack("3I", 0, 0xffffffff, 256) + scale + pack("2I", 0, 0xffffffff)
     texture = pack("I", 0) + fixed(ART + "tree.blp", 260) + pack("I", 0) if kind in ("tree", "shrub", "lily") else pack("I", 1) + bytes(260) + pack("I", 0)
     return (b"MDLX" + chunk("VERS", pack("I", 800)) +
             chunk("MODL", fixed("Original basic browser pyramid", 80) + bytes(260) + bounds + pack("I", 150)) +
@@ -281,11 +297,11 @@ def backdrop(name, art="panel", props="SetAllPoints,"):
                  f' BackdropBackground "{ART}{art}.blp", BackdropBlendAll,')
 
 
-def text(name, parent, value="", x=0, y=0, w=.28, h=.02, center=False):
+def text(name, parent, value="", x=0, y=0, w=.28, h=.02, center=False, children=""):
     return frame(name, "TEXT", size(w, h) + " " + point(parent, x, y) +
                  f' FrameFont "MasterFont", 0.011, "", Text "{value}", ' +
                  'FontColor 0.94 0.96 0.98 1, FontJustificationV JUSTIFYMIDDLE, ' +
-                 f'FontJustificationH {"JUSTIFYCENTER" if center else "JUSTIFYLEFT"},')
+                 f'FontJustificationH {"JUSTIFYCENTER" if center else "JUSTIFYLEFT"},', children)
 
 
 def button(name, parent=None, label=None, text_name=None, x=.025, y=.06, w=.24, h=.029):
@@ -425,8 +441,9 @@ def hud():
         backdrop("BasicHudBottom", props=size(.8, .14) + " " + point("ConsoleUI", corner="BOTTOMLEFT")))
     resource = backdrop("BasicResourcesBackground")
     for i, (name, label) in enumerate((("Gold", "Gold"), ("Lumber", "Wood"), ("Supply", "Food"), ("Upkeep", "Upkeep"))):
-        resource += text("BasicResource" + name + "Label", "ResourceBarFrame", label, x=.005 + i*.078, y=.001, w=.07, h=.013)
-        resource += text("ResourceBar" + name + "Text", "ResourceBarFrame", "0", x=.005 + i*.078, y=.014, w=.07, h=.013)
+        value_name = "ResourceBar" + name + "Text"
+        heading = text("BasicResource" + name + "Label", value_name, label, y=-.013, w=.07, h=.013)
+        resource += text(value_name, "ResourceBarFrame", "0", x=.005 + i*.078, y=.014, w=.07, h=.013, children=heading)
     upper = "".join(button("UpperButtonBar" + name + "Button", "UpperButtonBarFrame", label,
                             x=.002 + i*.08, y=.003, w=.078, h=.026)
                     for i, (name, label) in enumerate((("Quests", "Quests F9"), ("Menu", "Menu F10"), ("Allies", "Allies F11"), ("Chat", "Log F12"))))

@@ -160,7 +160,8 @@ bool G_DestructableAcceptsSmartAttack(edict_t const *attacker, edict_t const *ta
     /* Retail Smart/right-click treats attackable walls like gates as attack
      * targets. Bridges retain walk-to behavior unless explicitly attackable. */
     return G_DestructableCanBeAttackedBy(attacker, target) &&
-        (target->targtype == TARG_DEBRIS || target->targtype == TARG_WALL);
+        (target->targtype == TARG_DEBRIS || target->targtype == TARG_WALL ||
+         (target->targtype == TARG_TREE && G_BrowserMapAllowsTreeSmartAttack()));
 }
 
 /* Resolve one 0..99 roll against cumulative percentages. Any unused remainder

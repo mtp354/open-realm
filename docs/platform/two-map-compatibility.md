@@ -138,19 +138,57 @@ Apricot bot checks reached the authored corner regions, issued normal combat
 orders and constructed starter buildings. This exposed the missing
 `PathTextures/4x4SimpleSolid.tga` used by the Woodsman Home. The basic generator
 now supplies this footprint as well; native construction then proceeds through
-normal placement and costs. The complete basic pack contains 227 assets.
+normal placement and costs. The complete basic pack contains 228 assets.
+
+## Peach refinement (2026-10-17)
+
+The missing flag was an unresolved model at
+`Objects/InventoryItems/OrcCaptureFlag/OrcCaptureFlag.mdx`. The generated pack now
+provides a simple team-colored pole/banner at that exact path. The two e000
+flag buildings belong to players 0 and 1 at (704,2432) and (704,-3136).
+
+Trees already had a working death/pathing lifecycle, but ordinary Smart did not
+attack them and the basic mesh looked identical in Stand and Death. Peach's
+map profile now permits non-worker tree right-click attacks, and generated
+Death keyframes flatten the tree into a stump. Birth restores its height.
+
+Peach's H000 authors `uhpm=1` and `ua1b=1000`. Integer health was ignored by the
+float typed-row writer, and the weapon table lacked map-local merges, so hero
+recomputation used inherited health/damage. The typed loader now converts
+integer numeric fields, merges weapon rows and parses W3U target-token lists.
+Original edits inherit into custom rows without mutating the base tables.
+This is an engine data fix; no stats are granted by the bot script.
+
+The map-profile adapter also omits lumber, food, upkeep and the hero attribute
+panel for Peach, retaining gold and the existing game controls. Generated
+resource headings follow their value's visibility. [Bot policy](browser-bots.md)
+now separates rescue/defence/raiding and preserves progressing movement orders.
+The native real-map run reached 5–0 and player 0's authored result by 600
+simulated seconds, with no scores, positions, resources or results injected.
+This verifies a full match via tagging; it does not prove a browser flag-capture
+playthrough. Browser inspection confirms the reduced HUD, a visible red flag
+during the authored flag-camera shot, and ordinary startup without JS exceptions
+or WASM traps. Apricot also passed a separate browser startup check after
+the shared object-data changes.
+
+Regressions reproduce the missing model, unchanged tree death geometry, rejected
+right-click, discarded health/weapon edits, HUD clutter, repeated bot move
+orders and shared rescue destinations. The full suite covers the native data,
+orders and persistence paths; the asset suite samples generated MDX tracks
+through the production loader/interpolator.
 
 ## Review and validation
 
 The change makes the two bundled maps load with original basic assets, repairs
 map-reached native contracts, and adds optional unattended-player policies.
-Network layouts are unchanged. Native save version 90 rejects older saves;
+Network layouts are unchanged. Native save version 91 rejects older saves;
 browser save/load remains unsupported.
 
 The final full suite passed (32 suite summaries), all three native game targets
 built, the WebAssembly build linked, and both boundary audits were clean.
 Browser startup/result checks were cross-origin isolated and recorded no
-JavaScript exceptions or WASM traps.
+JavaScript exceptions or WASM traps. Apricot also passed a separate browser startup check after
+the shared object-data changes.
 
 Validation commands (activate the local SDL environment and Emscripten SDK as
 needed):
@@ -169,3 +207,7 @@ Suggested review split, in dependency order: (1) client pointer lifecycle;
 (3) explicit basic asset generation, packaging, launcher and server;
 (4) map bot sidecars, ownership/visibility adapter and policy tests. This is a
 review proposal, not a rewritten or split history.
+
+For the Peach refinement, proposed review order is (1) typed map data and exact
+save-version rejection, (2) generated flag/tree art, (3) map-profile HUD/controls,
+(4) bot decisions and VM regressions. Network structures are unchanged.
