@@ -255,6 +255,44 @@ cannot be looked up in a different debug binary.
 Keep pthread checks enabled. Do not mask WebAssembly traps by relaxing
 alignment, disabling mutex assertions or suppressing errors in proxy queues.
 
+### Embedded-browser startup checks
+
+A reported VS Code browser failure surfaced as
+`emscripten_thread_mailbox_unref: new_count >= 0`. This assertion checks the
+runtime mailbox reference count; the message alone does not identify the
+original cause. Keep the SDK assertion enabled. The exact reported assertion
+has not been reproduced in the automated browser; do not label it a proven
+WebGL or OPFS defect without the first failing stack.
+
+A separate unsupported-graphics reproduction with Chrome flags
+`--disable-gpu --disable-software-rasterizer` confirmed the launcher previously
+loaded the engine despite unavailable worker WebGL. The renderer logged context
+creation failure and continued into a JavaScript `createTexture` error. Checking
+only the presence of OffscreenCanvas and cross-origin isolation was insufficient.
+
+`port/web/site/browser-check.js` now starts a short-lived probe worker using a
+separate transferred HTML canvas. `browser-check-worker.js` checks shared Wasm
+memory, creates/clears a WebGL 2 context and requests the OPFS root in that worker.
+The probe terminates on success, failure or a 20-second timeout. It never takes
+the engine canvas or enumerates/changes browser files. Failure prevents loading
+`index.js` and shows a reason plus the current game address for a desktop browser.
+The two scripts are copied alongside the build. Engine startup is single-use.
+
+`tests/test_web_engine_build.py` covers the asynchronous startup gate, failed
+worker/context/storage cases, timeout cleanup and transferable-canvas ownership.
+The previous shell fails the gate regression by loading `index.js` before the
+probe resolves. Browser verification must check both the unavailable-graphics
+case (explanation, no engine request/exception) and successful map rendering; a
+mocked feature-presence test alone does not prove graphics support. Network and
+native/browser save contracts are unchanged by this launcher-only guard.
+
+Validation: the final full `make -j8 test` passed and the optimized browser build
+linked. Chrome with unavailable WebGL showed the explanation without requesting
+`index.js`; capable Chrome started both maps with an 800x600 game canvas and no
+JavaScript exceptions. The VS Code-specific mailbox assertion still requires
+confirmation from that browser. Suggested review order: capability worker and
+startup gate with regressions, followed by packaging, picker guidance and docs.
+
 ### Procedural textures and the browser thread stack
 
 The symbolized startup trace identified a stack overflow in
@@ -356,8 +394,11 @@ Setup:
   and StandardTemplates FDFs live there, so the engine cannot reach the map
   without TFT mode.
 
-Browser requirement: WebGL 2. The VS Code integrated browser has no WebGL and
-cannot run the engine. Use a current desktop Chrome or Firefox.
+Browser requirements: worker WebGL 2 on a transferred canvas, shared WebAssembly
+memory, OPFS access and cross-origin isolation. Use a current desktop Chrome or
+Firefox. VS Code browser embeddings can expose the JavaScript interfaces while
+still denying worker graphics or storage; the picker itself does not test these
+capabilities. The launcher now probes them before loading the engine.
 
 Current verification (2026-10-17): both maps render terrain and a basic HUD
 in headless Chrome/WebGL 2, with no JavaScript exceptions or WASM traps in

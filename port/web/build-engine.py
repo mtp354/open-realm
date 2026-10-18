@@ -165,7 +165,8 @@ def main():
          "--preload-file", str(wc3_share) + "@/share/warcraft-3",
          *data_args,
          "-o", out / "index.html"])
-    for name in ("filesystem-bridge.js", "audio-worklet.js", "maps.html"):
+    for name in ("filesystem-bridge.js", "audio-worklet.js", "maps.html",
+                 "browser-check.js", "browser-check-worker.js"):
         shutil.copy2(ROOT / "port/web/site" / name, out / name)
     print("Experimental static engine build emitted to", out)
     print("Bundled apricot/peach data preloaded; engine runtime remains experimental.")

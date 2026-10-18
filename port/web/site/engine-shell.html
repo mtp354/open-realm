@@ -25,12 +25,18 @@ canvas { display: block; width: 100%; height: auto; background: #000; }
 #game-container:fullscreen #game-controls { top: max(.65rem, env(safe-area-inset-top));
   right: max(.65rem, env(safe-area-inset-right)); }
 #status { margin: 1rem 0; }
+#external-game-url { box-sizing: border-box; width: 100%; margin: .5rem 0; }
 </style>
 </head>
 <body>
 <main>
 <h1>OpenRealm — Apricot and Peach</h1>
 <p id="status" role="status">Loading bundled Warcraft III data…</p>
+<section id="browser-help" hidden>
+  <p>Open this address in desktop Chrome or Firefox with WebGL enabled.
+  VS Code's embedded browser may not provide the graphics and storage the game needs.</p>
+  <label>Game address <input id="external-game-url" type="url" readonly></label>
+</section>
 <div id="game-container">
   <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
   <div id="game-controls" aria-label="Game controls">
@@ -41,6 +47,7 @@ canvas { display: block; width: 100%; height: auto; background: #000; }
 </div>
 <p>OpenRealm browser build. Plays apricot and peach from the bundled Warcraft III data. Engine compatibility is experimental.</p>
 </main>
+<script src="browser-check.js"></script>
 <script>
 var Module = {
   canvas: document.getElementById('canvas'),
@@ -135,18 +142,32 @@ window.openrealmAudioDetach = function () {
     openrealmAudio.node = null;
   }
 };
-window.openrealmStartEngine = function (arguments_) {
+var engineStarting = false;
+function browserStartFailure(message) {
+  document.getElementById('status').textContent = message;
+  document.getElementById('game-container').hidden = true;
+  document.getElementById('browser-help').hidden = false;
+  document.getElementById('external-game-url').value = location.href;
+}
+window.openrealmStartEngine = async function (arguments_) {
+  if (engineStarting) return;
+  engineStarting = true;
   if (typeof OffscreenCanvas === 'undefined' ||
       !HTMLCanvasElement.prototype.transferControlToOffscreen) {
-    document.getElementById('status').textContent =
-      'WebGL requires OffscreenCanvas support for the game worker.';
+    browserStartFailure('WebGL requires OffscreenCanvas support for the game worker.');
     return;
   }
   if (!window.crossOriginIsolated) {
-    document.getElementById('status').textContent =
-      'The engine requires COOP/COEP cross-origin isolation.';
+    browserStartFailure('The game requires cross-origin isolation. Open it through the supplied local server.');
     return;
   }
+  document.getElementById('status').textContent = 'Checking browser graphics…';
+  var capabilities = await window.openrealmCheckBrowser();
+  if (!capabilities.ok) {
+    browserStartFailure(capabilities.message);
+    return;
+  }
+  document.getElementById('status').textContent = 'Loading game…';
   Module.arguments = arguments_;
   var script = document.createElement('script');
   script.src = 'index.js';
