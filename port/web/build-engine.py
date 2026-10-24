@@ -65,8 +65,10 @@ def main():
     data_args = []
     if not args.check:
         data_args = bundled_data_args()
-        # Original basic art is generated as loose, inspectable assets for this standalone edition.
-        run([sys.executable, ROOT / "port/web/generate-basic-assets.py"])
+        # The explicit licensed pack replaces only missing basic art. The
+        # generator validates every hash before modifying its owned outputs.
+        run([sys.executable, ROOT / "port/web/generate-basic-assets.py",
+             "--art", ROOT / "port/web/art-input/catalog.json"])
 
     wc3 = "games/warcraft-3"
     # Engine defaults are open-source assets, separate from user-imported MPQs.
@@ -168,6 +170,10 @@ def main():
     for name in ("filesystem-bridge.js", "audio-worklet.js", "maps.html",
                  "browser-check.js", "browser-check-worker.js"):
         shutil.copy2(ROOT / "port/web/site" / name, out / name)
+    art = ROOT / "port/web/art-input"
+    shutil.copytree(art / "web", out / "art", dirs_exist_ok=True)
+    shutil.copytree(art / "licenses", out / "art/licenses", dirs_exist_ok=True)
+    shutil.copy2(art / "CREDITS.txt", out / "art/CREDITS.txt")
     print("Experimental static engine build emitted to", out)
     print("Bundled apricot/peach data preloaded; engine runtime remains experimental.")
 

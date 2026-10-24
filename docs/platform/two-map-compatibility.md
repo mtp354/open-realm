@@ -211,3 +211,13 @@ review proposal, not a rewritten or split history.
 For the Peach refinement, proposed review order is (1) typed map data and exact
 save-version rejection, (2) generated flag/tree art, (3) map-profile HUD/controls,
 (4) bot decisions and VM regressions. Network structures are unchanged.
+
+## Licensed artwork pack (2026-10-24)
+
+Both maps now use the explicit [OpenGameArt pack](opengameart.md) for missing
+terrain, tree/plant, camp-building, character and UI resources, plus browser
+picker/loading art. Original map imports keep precedence, and map archives,
+JASS and gameplay data remain unchanged. The new pack retains its licenses and
+source provenance in the handoff. The basic generator still supplies FDF, fonts,
+footprints, team markers and the team-colored flag. See the pack guide for the
+static-character and zombie-animation limits and verification coverage.

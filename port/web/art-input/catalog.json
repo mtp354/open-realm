@@ -1,0 +1,817 @@
+{
+  "version": 1,
+  "files": {
+    "TerrainArt/DalaranRuins/DRuins_Dirt.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_Dirt.blp",
+      "sha256": "8384272b88f443a1dcee0e72ef45e34f441725c706dcc14917f72e45bd655045"
+    },
+    "TerrainArt/DalaranRuins/DRuins_DirtRough.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_DirtRough.blp",
+      "sha256": "2c6573082a71a7aca3c56853eb267e9bd15cdeb9233db9c8399f96e5b93fac0b"
+    },
+    "TerrainArt/DalaranRuins/DRuins_BlackMarble.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_BlackMarble.blp",
+      "sha256": "90a78d03b95213c54e5d0a0f5ca6a5a7c93175fc56a6aa54af37287854648f6c"
+    },
+    "TerrainArt/DalaranRuins/DRuins_BrickTiles.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_BrickTiles.blp",
+      "sha256": "7833cee372444107bba8d80e74964ff83442b0d684817dd0b086d5de7f969891"
+    },
+    "TerrainArt/DalaranRuins/DRuins_SquareTiles.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_SquareTiles.blp",
+      "sha256": "7ad818bc1e76cfbd46ef19874c45c6605dd661d9525454c472444be47daa4858"
+    },
+    "TerrainArt/DalaranRuins/DRuins_RoundTiles.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_BrickTiles.blp",
+      "sha256": "7833cee372444107bba8d80e74964ff83442b0d684817dd0b086d5de7f969891"
+    },
+    "TerrainArt/DalaranRuins/DRuins_Grass.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_Grass.blp",
+      "sha256": "ba5a1ecf139ff8e572c84083d702cf6c8dbd162036c70ebca91bfccb775814b9"
+    },
+    "TerrainArt/DalaranRuins/DRuins_GrassTrim.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_GrassTrim.blp",
+      "sha256": "c996206948dfd2c09f32931d775c5bfbbe10f4b8b37721d36a311d8843236682"
+    },
+    "TerrainArt/DalaranRuins/DRuins_WhiteMarble.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_SquareTiles.blp",
+      "sha256": "7ad818bc1e76cfbd46ef19874c45c6605dd661d9525454c472444be47daa4858"
+    },
+    "TerrainArt/LordaeronSummer/Lords_Dirt.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_Dirt.blp",
+      "sha256": "8384272b88f443a1dcee0e72ef45e34f441725c706dcc14917f72e45bd655045"
+    },
+    "TerrainArt/LordaeronSummer/Lords_DirtRough.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_DirtRough.blp",
+      "sha256": "2c6573082a71a7aca3c56853eb267e9bd15cdeb9233db9c8399f96e5b93fac0b"
+    },
+    "TerrainArt/LordaeronSummer/Lords_DirtGrass.blp": {
+      "source": "native/TerrainArt/LordaeronSummer/Lords_DirtGrass.blp",
+      "sha256": "e7e27a9df38c4fe679a9bfeff289502d39780f864c06488856aa73d9d88dd32c"
+    },
+    "TerrainArt/LordaeronSummer/Lords_Rock.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_BlackMarble.blp",
+      "sha256": "90a78d03b95213c54e5d0a0f5ca6a5a7c93175fc56a6aa54af37287854648f6c"
+    },
+    "TerrainArt/LordaeronSummer/Lords_Grass.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_Grass.blp",
+      "sha256": "ba5a1ecf139ff8e572c84083d702cf6c8dbd162036c70ebca91bfccb775814b9"
+    },
+    "TerrainArt/LordaeronSummer/Lords_GrassDark.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_GrassTrim.blp",
+      "sha256": "c996206948dfd2c09f32931d775c5bfbbe10f4b8b37721d36a311d8843236682"
+    },
+    "TerrainArt/Cityscape/City_WhiteMarble.blp": {
+      "source": "native/TerrainArt/DalaranRuins/DRuins_SquareTiles.blp",
+      "sha256": "7ad818bc1e76cfbd46ef19874c45c6605dd661d9525454c472444be47daa4858"
+    },
+    "TerrainArt/Blight/DRuins_Blight.blp": {
+      "source": "native/TerrainArt/Blight/DRuins_Blight.blp",
+      "sha256": "41cd3cbb85aaf6a3095a5a90db2a09f2924ba1c89a427f58ed5801b779fd0d11"
+    },
+    "TerrainArt/Blight/Lords_Blight.blp": {
+      "source": "native/TerrainArt/Blight/DRuins_Blight.blp",
+      "sha256": "41cd3cbb85aaf6a3095a5a90db2a09f2924ba1c89a427f58ed5801b779fd0d11"
+    },
+    "UI/BrowserBasic/panel.blp": {
+      "source": "native/OpenArt/Interface/panel.blp",
+      "sha256": "46c18c28f749513d2af3b73a3b32aa41b842c5c0b828a547ca174533e44aaaf9"
+    },
+    "UI/BrowserBasic/button.blp": {
+      "source": "native/OpenArt/Interface/button.blp",
+      "sha256": "2fc5cae69a269f9c8ee71eb1e08e1cb11346a2e1576b2cea96d2e904cbc1105c"
+    },
+    "UI/BrowserBasic/pressed.blp": {
+      "source": "native/OpenArt/Interface/pressed.blp",
+      "sha256": "2cd385f0344db630fe3afbb917ffbc7b735effcdbca69bcafaf451deec194377"
+    },
+    "UI/BrowserBasic/bar.blp": {
+      "source": "native/UI/BrowserBasic/bar.blp",
+      "sha256": "510d5bfa7427794d6b42f012abe62f76304f539d6f93ccc43b61463997313c3c"
+    },
+    "UI/BrowserBasic/command-move.blp": {
+      "source": "native/UI/BrowserBasic/command-move.blp",
+      "sha256": "973b33631fae82eca6bab552826a7d0ccb71f5e8dc7bb289f7b257be17f9ad4c"
+    },
+    "UI/BrowserBasic/command-stop.blp": {
+      "source": "native/UI/BrowserBasic/command-stop.blp",
+      "sha256": "4217e90e2fef36cc289229ea9d8f66788b94343b5b6c58274f158636c629722e"
+    },
+    "UI/BrowserBasic/command-hold.blp": {
+      "source": "native/UI/BrowserBasic/command-hold.blp",
+      "sha256": "555acec3209c2548dcfa209246e2dd10cc12d389c08a888799b7e6ca1466950f"
+    },
+    "UI/BrowserBasic/command-attack.blp": {
+      "source": "native/UI/BrowserBasic/command-attack.blp",
+      "sha256": "707434800c66870b0503f29da3d2a6899e35b4c71f81acfbada79da85619dfaf"
+    },
+    "UI/BrowserBasic/command-patrol.blp": {
+      "source": "native/UI/BrowserBasic/command-patrol.blp",
+      "sha256": "83e4ebbfc1f7f346b164aef59d4276433d4edd9cd2bb79f0e76384b4832e3a13"
+    },
+    "UI/BrowserBasic/command-ground.blp": {
+      "source": "native/UI/BrowserBasic/command-ground.blp",
+      "sha256": "c7a2ec1a69f0f107346e1d8e645be1f1c719716ebdb0bc8c976a247533d6e309"
+    },
+    "UI/BrowserBasic/command-skill.blp": {
+      "source": "native/UI/BrowserBasic/command-skill.blp",
+      "sha256": "864886f3b70cc3e9505b4f0403b272a5abcff6bd3d38764e07ba66b3409ebb56"
+    },
+    "UI/BrowserBasic/command-rally.blp": {
+      "source": "native/UI/BrowserBasic/command-rally.blp",
+      "sha256": "825e7bf3e65e432be26dbd839be9f0220a163f2498085fee60ed361029433e93"
+    },
+    "UI/BrowserBasic/command-cancel.blp": {
+      "source": "native/UI/BrowserBasic/command-cancel.blp",
+      "sha256": "4fbc4063a40fa891952a156fc40dca82f2d133f3a10c86ab26418be0a0233460"
+    },
+    "UI/BrowserBasic/command-build.blp": {
+      "source": "native/UI/BrowserBasic/command-build.blp",
+      "sha256": "cc765891723f4c75e29f4dc076c9cc7b0fea8294824b3f3f3d14e5e2d15d9eb5"
+    },
+    "UI/BrowserBasic/command-purchase.blp": {
+      "source": "native/UI/BrowserBasic/command-purchase.blp",
+      "sha256": "bb9ada7e436e3e17e6bc7b3bce35d825ab622e0b6b47ab5b3f3593827099bc76"
+    },
+    "ReplaceableTextures/CommandButtons/BTNFootman.blp": {
+      "source": "native/ReplaceableTextures/CommandButtons/BTNFootman.blp",
+      "sha256": "7f8016157922aab5703375c5a7c040485d2560f790270458c9f30e3e15af6af7"
+    },
+    "ReplaceableTextures/CommandButtons/BTNEntanglingRoots.blp": {
+      "source": "native/UI/BrowserBasic/command-attack.blp",
+      "sha256": "707434800c66870b0503f29da3d2a6899e35b4c71f81acfbada79da85619dfaf"
+    },
+    "ReplaceableTextures/CommandButtons/BTNWindWalkOn.blp": {
+      "source": "native/UI/BrowserBasic/command-move.blp",
+      "sha256": "973b33631fae82eca6bab552826a7d0ccb71f5e8dc7bb289f7b257be17f9ad4c"
+    },
+    "ReplaceableTextures/CommandButtons/BTNStaffOfSanctuary.blp": {
+      "source": "native/UI/BrowserBasic/command-build.blp",
+      "sha256": "cc765891723f4c75e29f4dc076c9cc7b0fea8294824b3f3f3d14e5e2d15d9eb5"
+    },
+    "ReplaceableTextures/CommandButtons/BTNEvasion.blp": {
+      "source": "native/UI/BrowserBasic/command-skill.blp",
+      "sha256": "864886f3b70cc3e9505b4f0403b272a5abcff6bd3d38764e07ba66b3409ebb56"
+    },
+    "ReplaceableTextures/CommandButtons/BTNBlink.blp": {
+      "source": "native/UI/BrowserBasic/command-move.blp",
+      "sha256": "973b33631fae82eca6bab552826a7d0ccb71f5e8dc7bb289f7b257be17f9ad4c"
+    },
+    "ReplaceableTextures/PassiveButtons/PASBTNEvasion.blp": {
+      "source": "native/UI/BrowserBasic/command-skill.blp",
+      "sha256": "864886f3b70cc3e9505b4f0403b272a5abcff6bd3d38764e07ba66b3409ebb56"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNEntanglingRoots.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNEntanglingRoots.blp",
+      "sha256": "56ae1721c39c6fe72775437f17d926db4ee46a7892aa2f3407fe4fcf864b2438"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNWindWalkOn.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNWindWalkOn.blp",
+      "sha256": "af11293064acb77dad66777bd6b269a683c189baf14501585ada2e93681b61df"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNStaffOfSanctuary.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNStaffOfSanctuary.blp",
+      "sha256": "1f87a2bc43fdc2f48cfa2d110ba471da1823da68655f42ce3d47081e97b4051d"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNEvasion.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNEvasion.blp",
+      "sha256": "b8a6ae346d3e3e940037145ef6d493ffc66452d320611388db7e5999a5ea85bd"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNBlink.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNWindWalkOn.blp",
+      "sha256": "af11293064acb77dad66777bd6b269a683c189baf14501585ada2e93681b61df"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISPASBTNEvasion.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNEvasion.blp",
+      "sha256": "b8a6ae346d3e3e940037145ef6d493ffc66452d320611388db7e5999a5ea85bd"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNAnkh.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNAnkh.blp",
+      "sha256": "0966881fc472d90abfb72ffefd7e22abb832c9a2c830a779fbbea6ab26a4d2f9"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNArcaniteArmor.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNArcaniteArmor.blp",
+      "sha256": "74e0e2c0e78fcef3c10ce3dae02f95f28907ee9b6521aec2952e91f1b421d314"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNHelmOfValor.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNArcaniteArmor.blp",
+      "sha256": "74e0e2c0e78fcef3c10ce3dae02f95f28907ee9b6521aec2952e91f1b421d314"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNHumanWatchTower.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNHumanWatchTower.blp",
+      "sha256": "67da270e67d1514820e2d80cd667e7d982b8a6091a8041fa939977c7ac540509"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNOrbOfVenom.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNOrbOfVenom.blp",
+      "sha256": "3e9d406472cba3ad17d7df92347ed63ecd30ade5435f0ab3381e4b0d3598640c"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNRingGreen.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNRingGreen.blp",
+      "sha256": "a090120311fed73b89c25486a927b2187d80570adba55306ae44e4e7c819e031"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNTomeBrown.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNTomeBrown.blp",
+      "sha256": "c28850dff17178999d03b93619818d1e7b09a9be6220f9c3d29dcb91235bb4cf"
+    },
+    "ReplaceableTextures/CommandButtonsDisabled/DISBTNWandOfManaSteal.blp": {
+      "source": "native/ReplaceableTextures/CommandButtonsDisabled/DISBTNStaffOfSanctuary.blp",
+      "sha256": "1f87a2bc43fdc2f48cfa2d110ba471da1823da68655f42ce3d47081e97b4051d"
+    },
+    "UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Feedback/BuildProgressBar/human-buildprogressbar-fill.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-fill.blp",
+      "sha256": "5df1f0729b21a4c0f7175a92dddb696aee53cae3e7663ad4e68e6848dc29b68e"
+    },
+    "UI/Feedback/HpBarConsole/human-healthbar-fill.blp": {
+      "source": "native/UI/Feedback/HpBarConsole/human-healthbar-fill.blp",
+      "sha256": "dc5e43dac56e5c5bb49cc5062c98e68819b7c6a47e563d493f19ac528f2b55c8"
+    },
+    "UI/Feedback/Resources/ResourceGold.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceGold.blp",
+      "sha256": "58eaec84b0c53cd9a8d36b43e4fd6c4a81b99854b76b6b3c27cb7701a4271eac"
+    },
+    "UI/Feedback/Resources/ResourceLumber.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceLumber.blp",
+      "sha256": "1cf48c691a34bc541edb35ada99d35eecb504feb68cd664e55cfc1d61d5b214c"
+    },
+    "UI/Feedback/Resources/ResourceSupply.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceSupply.blp",
+      "sha256": "ba53345a54e9f9d5ce4e3bd91c69b89e87849cfc6c098569c6c823337e234a1b"
+    },
+    "UI/Feedback/XPBar/human-bigbar-fill.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-fill.blp",
+      "sha256": "5df1f0729b21a4c0f7175a92dddb696aee53cae3e7663ad4e68e6848dc29b68e"
+    },
+    "UI/Feedback/XPBar/human-xpbar-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Minimap/minimap-gold.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceGold.blp",
+      "sha256": "58eaec84b0c53cd9a8d36b43e4fd6c4a81b99854b76b6b3c27cb7701a4271eac"
+    },
+    "UI/Minimap/minimap-hero.blp": {
+      "source": "native/UI/Minimap/minimap-hero.blp",
+      "sha256": "83e0f63126e9d3dc77d66d6296d153125d8cf1e43d9cc79baff0a1d7e77bd45f"
+    },
+    "UI/Minimap/minimap-neutralbuilding.blp": {
+      "source": "native/UI/Minimap/minimap-neutralbuilding.blp",
+      "sha256": "0b5e3ded4eb8da34db8e02c862785a76991d1729b2fee91dec1946447c22a0be"
+    },
+    "UI/Minimap/MinimapIconCircleOfPower.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceLumber.blp",
+      "sha256": "1cf48c691a34bc541edb35ada99d35eecb504feb68cd664e55cfc1d61d5b214c"
+    },
+    "UI/Widgets/BattleNet/bnet-button01-highlight-mouse.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/BattleNet/bnet-inputbox-back.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/BattleNet/bnet-inputbox-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/ButtonBackGround.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/ButtonCorners.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Console/Human/human-unitqueue-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Console/Human/infocard-gold.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceGold.blp",
+      "sha256": "58eaec84b0c53cd9a8d36b43e4fd6c4a81b99854b76b6b3c27cb7701a4271eac"
+    },
+    "UI/Widgets/Console/Human/infocard-heroattributes-str.blp": {
+      "source": "native/UI/Minimap/minimap-hero.blp",
+      "sha256": "83e0f63126e9d3dc77d66d6296d153125d8cf1e43d9cc79baff0a1d7e77bd45f"
+    },
+    "UI/Widgets/Console/Human/infocard-supply.blp": {
+      "source": "native/UI/Feedback/Resources/ResourceSupply.blp",
+      "sha256": "ba53345a54e9f9d5ce4e3bd91c69b89e87849cfc6c098569c6c823337e234a1b"
+    },
+    "UI/Widgets/EscMenu/Human/editbox-background.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/EscMenu/Human/editbox-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/EscMenu/Human/human-options-menu-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button-KeyboardHighlight.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp",
+      "sha256": "b050d2498aa91fdfd3920d49684f1567e34518e1c3908911626cc8eb668291c4"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-Disabled.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-DisabledDown.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-Down.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-Border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-Disabled.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-DisabledDown.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-Down.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-BorderSingle.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-LargeBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-LargeBorderSingle.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-SmallBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-SmallBorderSingle.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Button1-TinyBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground-Disabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp",
+      "sha256": "b050d2498aa91fdfd3920d49684f1567e34518e1c3908911626cc8eb668291c4"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground-Down.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow-Disabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp",
+      "sha256": "b050d2498aa91fdfd3920d49684f1567e34518e1c3908911626cc8eb668291c4"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow-Down.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera-Disabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp",
+      "sha256": "b050d2498aa91fdfd3920d49684f1567e34518e1c3908911626cc8eb668291c4"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera-Down.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-Disabled.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-DisabledDown.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-Down.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-CampaignButton-KeyboardHighlight.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Checkbox-Background.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-Checkbox-BackgroundDisabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp",
+      "sha256": "b050d2498aa91fdfd3920d49684f1567e34518e1c3908911626cc8eb668291c4"
+    },
+    "UI/Widgets/Glues/GlueScreen-Checkbox-BackgroundPressed.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp",
+      "sha256": "a4855a9aef211528162a7b5aebc673d21e3684571a0fe68697ab58a3af45f5ea"
+    },
+    "UI/Widgets/Glues/GlueScreen-Checkbox-CheckDisabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-CheckDisabled.blp",
+      "sha256": "69b319380da3e182bb283fb712b30a0f99b2ae3d81639b6a77c573ee8220de28"
+    },
+    "UI/Widgets/Glues/GlueScreen-PlayerButton-BorderRight.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Pulldown-Arrow.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp",
+      "sha256": "a4855a9aef211528162a7b5aebc673d21e3684571a0fe68697ab58a3af45f5ea"
+    },
+    "UI/Widgets/Glues/GlueScreen-Scrollbar-BackdropBackground.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-Scrollbar-BackdropBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/GlueScreen-Scrollbar-DownArrow.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp",
+      "sha256": "a4855a9aef211528162a7b5aebc673d21e3684571a0fe68697ab58a3af45f5ea"
+    },
+    "UI/Widgets/Glues/GlueScreen-Scrollbar-UpArrow.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp",
+      "sha256": "a4855a9aef211528162a7b5aebc673d21e3684571a0fe68697ab58a3af45f5ea"
+    },
+    "UI/Widgets/Glues/GlueScreen-Slider-BackdropBackground.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/GlueScreen-Slider-BackdropBorder.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/Glues/Loading-NameBackground.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/Glues/SinglePlayerSkirmish-ScrollBarKnob.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp",
+      "sha256": "a4855a9aef211528162a7b5aebc673d21e3684571a0fe68697ab58a3af45f5ea"
+    },
+    "UI/Widgets/Glues/SinglePlayerSkirmish-ScrollBarKnobDisabled.blp": {
+      "source": "native/UI/Widgets/Glues/GlueScreen-Checkbox-CheckDisabled.blp",
+      "sha256": "69b319380da3e182bb283fb712b30a0f99b2ae3d81639b6a77c573ee8220de28"
+    },
+    "UI/Widgets/HeavyBorderBackGround.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/HeavyBorderCorners.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/LightBorderBackGround.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/LightBorderCorners.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/ToolTips/Human/human-tooltip-background.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/ToolTips/Human/human-tooltip-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "UI/Widgets/EscMenu/Human/human-options-menu-background.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/EscMenu/Undead/undead-options-menu-background.blp": {
+      "source": "native/UI/Widgets/BattleNet/bnet-inputbox-back.blp",
+      "sha256": "295ab4cd54c0f906e135fbd31408747dd5eb4725d4717cbe50c1a3318ac1f650"
+    },
+    "UI/Widgets/EscMenu/Undead/undead-options-menu-border.blp": {
+      "source": "native/UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp",
+      "sha256": "bf57508e107bba2fe9f979d287b06356ad74d11362d7236f4cb45c035d826d92"
+    },
+    "units/human/Footman/Footman.mdx": {
+      "source": "native/OpenArt/Models/rpg-warrior.mdx",
+      "sha256": "fc455efe63c06d5543c676eeca91750ad4ed0863cf3fab66eb0664b776f399ac"
+    },
+    "OpenArt/Models/rpg-warrior-material0.blp": {
+      "source": "native/OpenArt/Models/rpg-warrior-material0.blp",
+      "sha256": "9d37bc6d6f2a4afa8976984304ec030bec02beec08f1c81fc215920fbe153905"
+    },
+    "OpenArt/Models/rpg-warrior-material1.blp": {
+      "source": "native/OpenArt/Models/rpg-warrior-material1.blp",
+      "sha256": "da5b12d2456196648808d8be178d7cd4c69161c900bbf3f1819688c5658b676c"
+    },
+    "units/human/Militia/Militia.mdx": {
+      "source": "native/OpenArt/Models/scifi-soldier.mdx",
+      "sha256": "622c018054baa0d77f14de4c8b94c2cb0095bca923951909ac969b7ed83ba66d"
+    },
+    "OpenArt/Models/scifi-soldier.blp": {
+      "source": "native/OpenArt/Models/scifi-soldier.blp",
+      "sha256": "31f62647facc3e61009e4ecb1c0a4f1fcb3733f1de320acf0299a7d1c78bb5f6"
+    },
+    "units/undead/Ghoul/Ghoul.mdx": {
+      "source": "native/OpenArt/Models/kenney-zombieMaleA.mdx",
+      "sha256": "0d706a3b78df70a59a9fe34dc058032926bc985b8beb691a9b0e1a67861d16e6"
+    },
+    "OpenArt/Models/kenney-zombieMaleA.blp": {
+      "source": "native/OpenArt/Models/kenney-zombieMaleA.blp",
+      "sha256": "92f859799ae82441a74c58c8170e41aa3d83c57905865f11db003219e83a2494"
+    },
+    "buildings/undead/Graveyard/Graveyard.mdx": {
+      "source": "native/OpenArt/Models/tent_smallOpen.mdx",
+      "sha256": "5da17a1585fcd11faa5f2a1f21ab34e19ff4cbf6d9dd0a107858fb7b50a06d28"
+    },
+    "OpenArt/Models/tent_smallOpen-material0.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material0.blp",
+      "sha256": "f52276fe3469b28cec8817776b1285e68eaaa59fed2841ee3f5cc11b948c106d"
+    },
+    "OpenArt/Models/tent_smallOpen-material1.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material1.blp",
+      "sha256": "84a9a9adec1268b085a07a4c1ffe697b7254bee8745a8f23d8120f0e5104e91d"
+    },
+    "OpenArt/Models/tent_smallOpen-material2.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material2.blp",
+      "sha256": "3d843a800d39770cdd99bfecdcf6a07441875b17441daedcaa369f5c33cf6a53"
+    },
+    "buildings/undead/TombOfRelics/TombOfRelics.mdx": {
+      "source": "native/OpenArt/Models/tent_detailedClosed.mdx",
+      "sha256": "b012a03aab33e70e72e8899ab21bcf529018c4f59e1432c460edf34c313cb419"
+    },
+    "OpenArt/Models/tent_detailedClosed-material0.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material0.blp",
+      "sha256": "f52276fe3469b28cec8817776b1285e68eaaa59fed2841ee3f5cc11b948c106d"
+    },
+    "OpenArt/Models/tent_detailedClosed-material1.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material2.blp",
+      "sha256": "3d843a800d39770cdd99bfecdcf6a07441875b17441daedcaa369f5c33cf6a53"
+    },
+    "OpenArt/Models/tent_detailedClosed-material2.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material1.blp",
+      "sha256": "84a9a9adec1268b085a07a4c1ffe697b7254bee8745a8f23d8120f0e5104e91d"
+    },
+    "buildings/orc/SpiritLodge/SpiritLodge.mdx": {
+      "source": "native/OpenArt/Models/tent_smallOpen.mdx",
+      "sha256": "5da17a1585fcd11faa5f2a1f21ab34e19ff4cbf6d9dd0a107858fb7b50a06d28"
+    },
+    "buildings/other/Marketplace/Marketplace.mdx": {
+      "source": "native/OpenArt/Models/tent_detailedClosed.mdx",
+      "sha256": "b012a03aab33e70e72e8899ab21bcf529018c4f59e1432c460edf34c313cb419"
+    },
+    "Doodads/Ruins/Plants/Ruins_Shrub/Ruins_Shrub.mdx": {
+      "source": "native/OpenArt/Models/plant_bush.mdx",
+      "sha256": "2ede6baf7e1a474cf57bced5d26f4d825f18a11293238ea3eb9f21350992a5e3"
+    },
+    "OpenArt/Models/plant_bush-material0.blp": {
+      "source": "native/OpenArt/Models/plant_bush-material0.blp",
+      "sha256": "5ab453e22a4eeb33734bf2e578a1c86cef8a246f9e9e81860aae31f288ecb21b"
+    },
+    "Doodads/LordaeronSummer/Plants/LillyPad/LillyPad.mdx": {
+      "source": "native/OpenArt/Models/lily_large.mdx",
+      "sha256": "1131f91a2bae334b11c2f81a21471a35461dde2a19c3232cfa22bafa2de1d90d"
+    },
+    "OpenArt/Models/lily_large-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material0.blp",
+      "sha256": "37aadef865da8c7e4179e5286ca7ea6132188e449584a81f3da67cf554ea3920"
+    },
+    "OpenArt/Models/lily_large-material1.blp": {
+      "source": "native/OpenArt/Models/tent_smallOpen-material0.blp",
+      "sha256": "f52276fe3469b28cec8817776b1285e68eaaa59fed2841ee3f5cc11b948c106d"
+    },
+    "OpenArt/Models/lily_large-material2.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "Doodads/LordaeronSummer/Plants/RiverRushes/RiverRushes.mdx": {
+      "source": "native/OpenArt/Models/plant_flatTall.mdx",
+      "sha256": "373d264d7565ffbd913cad4b40149347dfb2a289aceb9984f713429aa317a814"
+    },
+    "OpenArt/Models/plant_flatTall-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material0.blp",
+      "sha256": "37aadef865da8c7e4179e5286ca7ea6132188e449584a81f3da67cf554ea3920"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree0.mdx": {
+      "source": "native/OpenArt/Models/tree_oak.mdx",
+      "sha256": "9cd1cc1c4ef1b78c6f7f1a672b0bc18a9977c0097ff92fa555120e6875dfa488"
+    },
+    "OpenArt/Models/tree_oak-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material0.blp",
+      "sha256": "37aadef865da8c7e4179e5286ca7ea6132188e449584a81f3da67cf554ea3920"
+    },
+    "OpenArt/Models/tree_oak-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak-material1.blp",
+      "sha256": "1ea6e146bcc8d5e3ccbe6f4659b3db1d1716ae18a04c423f372d77a6ad2fe546"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree1.mdx": {
+      "source": "native/OpenArt/Models/tree_oak_dark.mdx",
+      "sha256": "9850e4b5709b611bdc3e74926852a3ac6bbac43322f401d20f83231fff9ee373"
+    },
+    "OpenArt/Models/tree_oak_dark-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_oak_dark-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree2.mdx": {
+      "source": "native/OpenArt/Models/tree_oak_fall.mdx",
+      "sha256": "470d2573cddaac15b6340530a901e76d1a0ae8f941e6cc6eb7719794bb4935fa"
+    },
+    "OpenArt/Models/tree_oak_fall-material0.blp": {
+      "source": "native/OpenArt/Models/tree_oak_fall-material0.blp",
+      "sha256": "46cb8addfcd9e7c1aee799df6b249df7946f946ade93efb2670cee94ccab6aed"
+    },
+    "OpenArt/Models/tree_oak_fall-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_fall-material1.blp",
+      "sha256": "5d375af6ab45fd5cced73e71f630d829efbee955b41efb4d037e369a81dfb277"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree3.mdx": {
+      "source": "native/OpenArt/Models/tree_pineRoundA.mdx",
+      "sha256": "16f3bd11d2a871bba29aa058ff5d8980cae1e3f125d8cb22574d5b222898963e"
+    },
+    "OpenArt/Models/tree_pineRoundA-material0.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "OpenArt/Models/tree_pineRoundA-material1.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree4.mdx": {
+      "source": "native/OpenArt/Models/tree_pineRoundB.mdx",
+      "sha256": "66615947203c4d075d796ed23bd1b1ee891fd2c2c8a7cc7027c5ff70b3761439"
+    },
+    "OpenArt/Models/tree_pineRoundB-material0.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "OpenArt/Models/tree_pineRoundB-material1.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_pineRoundB-material2.blp": {
+      "source": "native/OpenArt/Models/tree_pineRoundB-material2.blp",
+      "sha256": "76b1dfa7dcd80b1d20acd3e3a7fca9649a9717dcbaefd25f19b9086d9eab78b0"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree5.mdx": {
+      "source": "native/OpenArt/Models/tree_pineRoundC.mdx",
+      "sha256": "5d092308319b35ef23ef1264701baca162f3b940c9594b52157e61e73392f558"
+    },
+    "OpenArt/Models/tree_pineRoundC-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_pineRoundC-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree6.mdx": {
+      "source": "native/OpenArt/Models/tree_pineRoundD.mdx",
+      "sha256": "744c88d2352f412b3adebdc08ed2476400b3068247afe21b89b4e515afc0af2d"
+    },
+    "OpenArt/Models/tree_pineRoundD-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_pineRoundD-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree7.mdx": {
+      "source": "native/OpenArt/Models/tree_pineRoundE.mdx",
+      "sha256": "482b35e0288454527502495c3438313614c2d3cf275fd13fddee037fb4dd6473"
+    },
+    "OpenArt/Models/tree_pineRoundE-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_pineRoundE-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree8.mdx": {
+      "source": "native/OpenArt/Models/tree_pineTallA.mdx",
+      "sha256": "0d02ddd2a783cb634aacf31311eb54a2014cf65757e5a0dc1351f2cda5fc41ec"
+    },
+    "OpenArt/Models/tree_pineTallA-material0.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "OpenArt/Models/tree_pineTallA-material1.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "Doodads/Terrain/LordaeronTree/LordaeronTree9.mdx": {
+      "source": "native/OpenArt/Models/tree_pineTallB.mdx",
+      "sha256": "122ef4ac3faaa05b4fd49a113d90d64f372392e7e17be6fc94445c7d8c2aeebc"
+    },
+    "OpenArt/Models/tree_pineTallB-material0.blp": {
+      "source": "native/OpenArt/Models/lily_large-material2.blp",
+      "sha256": "5c40f15cd4f458483e5ff2ff6e02e5d5f0cd29d9d916ec13442fed2153a62745"
+    },
+    "OpenArt/Models/tree_pineTallB-material1.blp": {
+      "source": "native/OpenArt/Models/tree_oak_dark-material1.blp",
+      "sha256": "07f815fcbff217ee2a81bc2ddd79cfc9fb724274d5450bb737aba76bbef9cbf7"
+    },
+    "OpenArt/CREDITS.txt": {
+      "source": "CREDITS.txt",
+      "sha256": "df8e01361372222236eca26fbcdf6cc7c8e6ee0d71236b0e12f8dcfdaf09693d"
+    },
+    "OpenArt/Licenses/rpg-characters.txt": {
+      "source": "licenses/rpg-characters.txt",
+      "sha256": "20b983ae0e2e555817495a65c37519bfcb2231825269db6a57d72c51ed6006e3"
+    },
+    "OpenArt/Licenses/ui-scifi.txt": {
+      "source": "licenses/ui-scifi.txt",
+      "sha256": "80e091ef18f6b88becb3b7c2306c159d16217ca620bfa21b7177582c72924221"
+    },
+    "OpenArt/Licenses/nature.txt": {
+      "source": "licenses/nature.txt",
+      "sha256": "cb96b75e3560ac78d7a53ce6f083f4cdb5c53faea6141b62d63458dcfe1e4b9d"
+    },
+    "OpenArt/Licenses/game-icons.txt": {
+      "source": "licenses/game-icons.txt",
+      "sha256": "68a86b3a620be3366d6dc28a4a8ffb8d5de12e0b86b5199c86e51fc617e29a49"
+    },
+    "OpenArt/Licenses/terrain-rocks.txt": {
+      "source": "licenses/terrain-rocks.txt",
+      "sha256": "9fcca85ab33ef06a5dc971d2ce6e8cd7e1eebd1987aa9f0aac1b0904cc8aa572"
+    },
+    "OpenArt/Licenses/ui-adventure.txt": {
+      "source": "licenses/ui-adventure.txt",
+      "sha256": "593b79956190ca70b37ce5d0d1c71dd4b5fb4027d4d1d29a91814e950a36e6bd"
+    },
+    "OpenArt/Licenses/scifi-soldier.txt": {
+      "source": "licenses/scifi-soldier.txt",
+      "sha256": "205857055cc863055ab27391fb127d9e9c802446a5476c42fb329bb53a95e458"
+    },
+    "OpenArt/Licenses/animated-zombie.txt": {
+      "source": "licenses/animated-zombie.txt",
+      "sha256": "b9390bddfb9740d5fe219c06090f8f2430c6684074ca854d54d7b417853a7617"
+    },
+    "OpenArt/Licenses/terrain-plants.txt": {
+      "source": "licenses/terrain-rocks.txt",
+      "sha256": "9fcca85ab33ef06a5dc971d2ce6e8cd7e1eebd1987aa9f0aac1b0904cc8aa572"
+    },
+    "ReplaceableTextures/Splats/HumanUberSplat.blp": {
+      "source": "native/OpenArt/Interface/HumanUberSplat.blp",
+      "sha256": "820ef777ec908ec153ef6bd930a518d934815b6001f4ba81c8b14de38eb77739"
+    },
+    "ReplaceableTextures/Splats/AncientUberSplat.blp": {
+      "source": "native/OpenArt/Interface/AncientUberSplat.blp",
+      "sha256": "d91675301be928c165e0b60840ad10e9bdbf6f67289d5f9e32d49d5f75243496"
+    }
+  }
+}

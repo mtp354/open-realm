@@ -1,0 +1,899 @@
+{
+  "scope": "Converted CC0 model subset used by the browser art pack. The original map scripts, collision, and stats are unchanged.",
+  "aliases": {
+    "units/human/Footman/Footman.mdx": "rpg-warrior",
+    "units/human/Militia/Militia.mdx": "scifi-soldier",
+    "units/undead/Ghoul/Ghoul.mdx": "kenney-zombieMaleA",
+    "buildings/undead/Graveyard/Graveyard.mdx": "tent_smallOpen",
+    "buildings/undead/TombOfRelics/TombOfRelics.mdx": "tent_detailedClosed",
+    "buildings/orc/SpiritLodge/SpiritLodge.mdx": "tent_smallOpen",
+    "buildings/other/Marketplace/Marketplace.mdx": "tent_detailedClosed",
+    "Doodads/Ruins/Plants/Ruins_Shrub/Ruins_Shrub.mdx": "plant_bush",
+    "Doodads/LordaeronSummer/Plants/LillyPad/LillyPad.mdx": "lily_large",
+    "Doodads/LordaeronSummer/Plants/RiverRushes/RiverRushes.mdx": "plant_flatTall",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree0.mdx": "tree_oak",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree1.mdx": "tree_oak_dark",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree2.mdx": "tree_oak_fall",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree3.mdx": "tree_pineRoundA",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree4.mdx": "tree_pineRoundB",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree5.mdx": "tree_pineRoundC",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree6.mdx": "tree_pineRoundD",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree7.mdx": "tree_pineRoundE",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree8.mdx": "tree_pineTallA",
+    "Doodads/Terrain/LordaeronTree/LordaeronTree9.mdx": "tree_pineTallB"
+  },
+  "models": [
+    {
+      "min": [
+        -6.681951999664307,
+        -23.068588256835938,
+        0.0
+      ],
+      "max": [
+        6.681951522827148,
+        23.068586349487305,
+        48.0
+      ],
+      "radius": 48.001559019256,
+      "vertices": 1029,
+      "triangles": 1604,
+      "geosets": 1,
+      "bones": 58,
+      "matrix_groups_per_geoset": [
+        73
+      ],
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": true,
+      "source_animation_mapping": {
+        "Stand": "Idle",
+        "Walk": "Run",
+        "Attack": "Idle alias (no attack motion)",
+        "Birth": "Idle alias",
+        "Death": "adapter-authored root shrink",
+        "Portrait": "Idle alias",
+        "Stand Work": "Idle alias"
+      },
+      "animation_limitations": [
+        "MDX800 equal weights approximate original skin weights to quarter increments.",
+        "Per-bone global deformation samples flattened to independent roots at 30Hz.",
+        "Only Idle/Run are supplied source motions; no source attack/death motion is claimed."
+      ],
+      "name": "kenney-zombieMaleA",
+      "relative_path": "OpenArt/Models/kenney-zombieMaleA.mdx",
+      "model_sha256": "0d706a3b78df70a59a9fe34dc058032926bc985b8beb691a9b0e1a67861d16e6",
+      "texture_paths": [
+        "OpenArt\\Models\\kenney-zombieMaleA.blp"
+      ],
+      "source_pack": "animated-zombie",
+      "source_member": "Model/characterMedium.fbx",
+      "source_texture": "Skins/zombieMaleA.png",
+      "source_animation_members": [
+        "Animations/idle.fbx",
+        "Animations/run.fbx"
+      ],
+      "axis_transform": "FBX imported Blender +Zup, -Yforward -> native +Zup,+Xforward (Z+90deg)"
+    },
+    {
+      "min": [
+        -9.609795918367347,
+        -8.322324489795918,
+        0.0
+      ],
+      "max": [
+        9.609795918367347,
+        8.322324489795918,
+        6.0
+      ],
+      "radius": 9.916938975001436,
+      "vertices": 146,
+      "triangles": 86,
+      "geosets": 3,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "lily_large",
+      "relative_path": "OpenArt/Models/lily_large.mdx",
+      "source_member": "Models/OBJ format/lily_large.obj",
+      "source_member_sha256": "1b563ce3cdbb40b33003bf258cdf9dbf10488d59facb9408035a2d32d04b5ebb",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 61.224489795918366,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\lily_large-material0.blp",
+        "OpenArt\\Models\\lily_large-material1.blp",
+        "OpenArt\\Models\\lily_large-material2.blp"
+      ],
+      "model_sha256": "1131f91a2bae334b11c2f81a21471a35461dde2a19c3232cfa22bafa2de1d90d",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -25.999999999999996,
+        -25.999999999999996,
+        0.0
+      ],
+      "max": [
+        25.999999999999996,
+        25.999999999999996,
+        32.09865454545454
+      ],
+      "radius": 40.08118371099851,
+      "vertices": 80,
+      "triangles": 32,
+      "geosets": 1,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "plant_bush",
+      "relative_path": "OpenArt/Models/plant_bush.mdx",
+      "source_member": "Models/OBJ format/plant_bush.obj",
+      "source_member_sha256": "23e2015330dc397c4ebf799902560e7bb10016482f0d73cbd29d9d4d4b160f1b",
+      "source_textures": [
+        "Side/grass.png"
+      ],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 131.3131313131313,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\plant_bush-material0.blp"
+      ],
+      "model_sha256": "2ede6baf7e1a474cf57bced5d26f4d825f18a11293238ea3eb9f21350992a5e3",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -17.19887137041547,
+        -17.19887137041547,
+        0.0
+      ],
+      "max": [
+        17.19887137041547,
+        17.19887137041547,
+        36.0
+      ],
+      "radius": 38.198584861499,
+      "vertices": 50,
+      "triangles": 32,
+      "geosets": 1,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "plant_flatTall",
+      "relative_path": "OpenArt/Models/plant_flatTall.mdx",
+      "source_member": "Models/OBJ format/plant_flatTall.obj",
+      "source_member_sha256": "ce83161136481e5bfa190ee0f8e78e24062cdcf3aa9fa35308329b7142ae76ae",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 126.62261606545546,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\plant_flatTall-material0.blp"
+      ],
+      "model_sha256": "373d264d7565ffbd913cad4b40149347dfb2a289aceb9984f713429aa317a814",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -20.473308212567023,
+        -11.523193657750742,
+        0.0
+      ],
+      "max": [
+        20.473308212567023,
+        11.523193657750742,
+        48.0
+      ],
+      "radius": 50.362245693120194,
+      "vertices": 5845,
+      "triangles": 5402,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "rpg-warrior",
+      "relative_path": "OpenArt/Models/rpg-warrior.mdx",
+      "source_member": "RPG Characters - Nov 2020/OBJ/Warrior.obj",
+      "source_member_sha256": "22765b69f0ebd38497e0152ec35ffa75208a444ed4ffd5fec6965bb9ff49214d",
+      "source_textures": [
+        "RPG Characters - Nov 2020/Textures/Warrior_Sword_Texture.png",
+        "RPG Characters - Nov 2020/Textures/Warrior_Texture.png"
+      ],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 16.487649719881702,
+      "ground_center": [
+        -0.595766,
+        0.01350450000000003,
+        -0.004641
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\rpg-warrior-material0.blp",
+        "OpenArt\\Models\\rpg-warrior-material1.blp"
+      ],
+      "model_sha256": "fc455efe63c06d5543c676eeca91750ad4ed0863cf3fab66eb0664b776f399ac",
+      "source_pack": "rpg-characters"
+    },
+    {
+      "min": [
+        -5.216696739196777,
+        -16.67449951171875,
+        0.0
+      ],
+      "max": [
+        5.2166972160339355,
+        16.67449951171875,
+        48.000003814697266
+      ],
+      "radius": 48.02405292450223,
+      "vertices": 2226,
+      "triangles": 3447,
+      "geosets": 3,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "scifi-soldier",
+      "relative_path": "OpenArt/Models/scifi-soldier.mdx",
+      "model_sha256": "622c018054baa0d77f14de4c8b94c2cb0095bca923951909ac969b7ed83ba66d",
+      "texture_paths": [
+        "OpenArt\\Models\\scifi-soldier.blp"
+      ],
+      "source_pack": "scifi-soldier",
+      "source_member": "Sci-fi Soldiers 2/Mesh.blend",
+      "source_mesh_selection": [
+        "Body",
+        "Head3",
+        "Cannon"
+      ],
+      "source_texture": "Sci-fi Soldiers 2/MilitarySkin_Albedo.tga",
+      "axis_transform": "FBX imported Blender +Zup, -Yforward -> native +Zup,+Xforward (Z+90deg)",
+      "animation_limitations": [
+        "Static FBX bind geometry; sequence names are aliases and not authored skeletal motion."
+      ]
+    },
+    {
+      "min": [
+        -46.5519448457473,
+        -64.0,
+        0.0
+      ],
+      "max": [
+        46.5519448457473,
+        64.0,
+        82.09217489896311
+      ],
+      "radius": 92.41623451343231,
+      "vertices": 320,
+      "triangles": 228,
+      "geosets": 3,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "tent_detailedClosed",
+      "relative_path": "OpenArt/Models/tent_detailedClosed.mdx",
+      "source_member": "Models/OBJ format/tent_detailedClosed.obj",
+      "source_member_sha256": "28e7ddf35352e6ef72bae2c418fe9c5e23c92eae2092451f48930d7163ae893f",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 146.2977525007772,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tent_detailedClosed-material0.blp",
+        "OpenArt\\Models\\tent_detailedClosed-material1.blp",
+        "OpenArt\\Models\\tent_detailedClosed-material2.blp"
+      ],
+      "model_sha256": "b012a03aab33e70e72e8899ab21bcf529018c4f59e1432c460edf34c313cb419",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -59.380094623214404,
+        -48.79432745449011,
+        0.0
+      ],
+      "max": [
+        59.380094623214404,
+        48.79432745449011,
+        100.0
+      ],
+      "radius": 113.82724981521086,
+      "vertices": 268,
+      "triangles": 224,
+      "geosets": 3,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": false,
+      "name": "tent_smallOpen",
+      "relative_path": "OpenArt/Models/tent_smallOpen.mdx",
+      "source_member": "Models/OBJ format/tent_smallOpen.obj",
+      "source_member_sha256": "a6e4219773a8fa4d70200585bd83b3374ac3044d65b7f3d6c2ffdf9f3e5b7c79",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 178.21156849704204,
+      "ground_center": [
+        -0.015000000000000013,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tent_smallOpen-material0.blp",
+        "OpenArt\\Models\\tent_smallOpen-material1.blp",
+        "OpenArt\\Models\\tent_smallOpen-material2.blp"
+      ],
+      "model_sha256": "5da17a1585fcd11faa5f2a1f21ab34e19ff4cbf6d9dd0a107858fb7b50a06d28",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -48.25469728601253,
+        -41.789796450939455,
+        0.0
+      ],
+      "max": [
+        48.25469728601253,
+        41.789796450939455,
+        160.0
+      ],
+      "radius": 161.30898473838522,
+      "vertices": 324,
+      "triangles": 196,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_oak",
+      "relative_path": "OpenArt/Models/tree_oak.mdx",
+      "source_member": "Models/OBJ format/tree_oak.obj",
+      "source_member_sha256": "1a1dba69f49a454492db2413110e0867dc6dc3d5fe412d2499047625c93a3c06",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 130.48016701461378,
+      "ground_center": [
+        0.0,
+        -1.0000000000287557e-07,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_oak-material0.blp",
+        "OpenArt\\Models\\tree_oak-material1.blp"
+      ],
+      "model_sha256": "9cd1cc1c4ef1b78c6f7f1a672b0bc18a9977c0097ff92fa555120e6875dfa488",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -48.25469728601253,
+        -41.789796450939455,
+        0.0
+      ],
+      "max": [
+        48.25469728601253,
+        41.789796450939455,
+        160.0
+      ],
+      "radius": 161.30898473838522,
+      "vertices": 324,
+      "triangles": 196,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_oak_dark",
+      "relative_path": "OpenArt/Models/tree_oak_dark.mdx",
+      "source_member": "Models/OBJ format/tree_oak_dark.obj",
+      "source_member_sha256": "35d49ae064002b513efe3884b452737b19a61000e463c64668f4a2dbec43eef8",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 130.48016701461378,
+      "ground_center": [
+        0.0,
+        -1.0000000000287557e-07,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_oak_dark-material0.blp",
+        "OpenArt\\Models\\tree_oak_dark-material1.blp"
+      ],
+      "model_sha256": "9850e4b5709b611bdc3e74926852a3ac6bbac43322f401d20f83231fff9ee373",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -48.25469728601253,
+        -41.789796450939455,
+        0.0
+      ],
+      "max": [
+        48.25469728601253,
+        41.789796450939455,
+        160.0
+      ],
+      "radius": 161.30898473838522,
+      "vertices": 324,
+      "triangles": 196,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_oak_fall",
+      "relative_path": "OpenArt/Models/tree_oak_fall.mdx",
+      "source_member": "Models/OBJ format/tree_oak_fall.obj",
+      "source_member_sha256": "66f384c6e705c8fb01d820d5f42db5f7195ea366ade8d528a0544604251b7868",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 130.48016701461378,
+      "ground_center": [
+        0.0,
+        -1.0000000000287557e-07,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_oak_fall-material0.blp",
+        "OpenArt\\Models\\tree_oak_fall-material1.blp"
+      ],
+      "model_sha256": "470d2573cddaac15b6340530a901e76d1a0ae8f941e6cc6eb7719794bb4935fa",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -41.71268781509868,
+        -36.12424429373619,
+        0.0
+      ],
+      "max": [
+        41.71268781509868,
+        36.12424429373619,
+        160.0
+      ],
+      "radius": 160.04883993080995,
+      "vertices": 316,
+      "triangles": 204,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineRoundA",
+      "relative_path": "OpenArt/Models/tree_pineRoundA.mdx",
+      "source_member": "Models/OBJ format/tree_pineRoundA.obj",
+      "source_member_sha256": "00b0a07da08894872f18530086ad582cd9cf93a3da88d9f112e1b022f3ea082a",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 117.09284804202463,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineRoundA-material0.blp",
+        "OpenArt\\Models\\tree_pineRoundA-material1.blp"
+      ],
+      "model_sha256": "16f3bd11d2a871bba29aa058ff5d8980cae1e3f125d8cb22574d5b222898963e",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -41.019669425219305,
+        -35.60184193384658,
+        0.0
+      ],
+      "max": [
+        41.019669425219305,
+        35.60184193384658,
+        160.0
+      ],
+      "radius": 160.116920415853,
+      "vertices": 406,
+      "triangles": 262,
+      "geosets": 3,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineRoundB",
+      "relative_path": "OpenArt/Models/tree_pineRoundB.mdx",
+      "source_member": "Models/OBJ format/tree_pineRoundB.obj",
+      "source_member_sha256": "3199c0773fd8e4fe47573c424acf02a42aab9fc2b192e6e56fc9424118da2b50",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 133.78854887086646,
+      "ground_center": [
+        0.0010160500000000183,
+        -0.010397400000000001,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineRoundB-material0.blp",
+        "OpenArt\\Models\\tree_pineRoundB-material1.blp",
+        "OpenArt\\Models\\tree_pineRoundB-material2.blp"
+      ],
+      "model_sha256": "66615947203c4d075d796ed23bd1b1ee891fd2c2c8a7cc7027c5ff70b3761439",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -35.41995748902704,
+        -30.67457714512397,
+        0.0
+      ],
+      "max": [
+        35.41995748902704,
+        30.67457714512397,
+        160.0
+      ],
+      "radius": 160.0131451055075,
+      "vertices": 342,
+      "triangles": 206,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineRoundC",
+      "relative_path": "OpenArt/Models/tree_pineRoundC.mdx",
+      "source_member": "Models/OBJ format/tree_pineRoundC.obj",
+      "source_member_sha256": "b88eeab1d9fe9a53c5bf948f607dd4f1f56312eb1927427e22b325ba86440f76",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 127.708518078338,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineRoundC-material0.blp",
+        "OpenArt\\Models\\tree_pineRoundC-material1.blp"
+      ],
+      "model_sha256": "5d092308319b35ef23ef1264701baca162f3b940c9594b52157e61e73392f558",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -41.0236688523893,
+        -35.52753261712629,
+        0.0
+      ],
+      "max": [
+        41.0236688523893,
+        35.52753261712629,
+        160.0
+      ],
+      "radius": 160.13462440309246,
+      "vertices": 306,
+      "triangles": 170,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineRoundD",
+      "relative_path": "OpenArt/Models/tree_pineRoundD.mdx",
+      "source_member": "Models/OBJ format/tree_pineRoundD.obj",
+      "source_member_sha256": "b331dbbc362cd89de36f65580abea838bc58441a39b8453cc2fff80345d8267a",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 147.91299387917542,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineRoundD-material0.blp",
+        "OpenArt\\Models\\tree_pineRoundD-material1.blp"
+      ],
+      "model_sha256": "744c88d2352f412b3adebdc08ed2476400b3068247afe21b89b4e515afc0af2d",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -33.919638843457385,
+        -33.919638843457385,
+        0.0
+      ],
+      "max": [
+        33.919638843457385,
+        33.919638843457385,
+        160.0
+      ],
+      "radius": 160.0,
+      "vertices": 344,
+      "triangles": 198,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineRoundE",
+      "relative_path": "OpenArt/Models/tree_pineRoundE.mdx",
+      "source_member": "Models/OBJ format/tree_pineRoundE.obj",
+      "source_member_sha256": "a03adaf991253f8d409582cfd0326fe6727f45f96a27ee516368984f52fb6e66",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 127.52702775944576,
+      "ground_center": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineRoundE-material0.blp",
+        "OpenArt\\Models\\tree_pineRoundE-material1.blp"
+      ],
+      "model_sha256": "482b35e0288454527502495c3438313614c2d3cf275fd13fddee037fb4dd6473",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -20.499396576634766,
+        -20.202478285257772,
+        0.0
+      ],
+      "max": [
+        20.499396576634766,
+        20.202478285257772,
+        160.0
+      ],
+      "radius": 160.0713062574815,
+      "vertices": 136,
+      "triangles": 78,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineTallA",
+      "relative_path": "OpenArt/Models/tree_pineTallA.mdx",
+      "source_member": "Models/OBJ format/tree_pineTallA.obj",
+      "source_member_sha256": "ed5ea05290032e9afa355203b4ebe44bf81a85fa5aedbb42c2d26a970a7af001",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 104.60210014866573,
+      "ground_center": [
+        0.0020615000000000078,
+        0.013957050000000013,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineTallA-material0.blp",
+        "OpenArt\\Models\\tree_pineTallA-material1.blp"
+      ],
+      "model_sha256": "0d02ddd2a783cb634aacf31311eb54a2014cf65757e5a0dc1351f2cda5fc41ec",
+      "source_pack": "nature"
+    },
+    {
+      "min": [
+        -16.207951386483863,
+        -15.973191440531046,
+        0.0
+      ],
+      "max": [
+        16.207951386483863,
+        15.973191440531046,
+        160.0
+      ],
+      "radius": 160.04457978864082,
+      "vertices": 136,
+      "triangles": 78,
+      "geosets": 2,
+      "sequences": [
+        "Stand",
+        "Walk",
+        "Attack",
+        "Birth",
+        "Death",
+        "Portrait",
+        "Stand Work"
+      ],
+      "skeletal_animation": false,
+      "tree_root_collapse": true,
+      "name": "tree_pineTallB",
+      "relative_path": "OpenArt/Models/tree_pineTallB.mdx",
+      "source_member": "Models/OBJ format/tree_pineTallB.obj",
+      "source_member_sha256": "bbfc2be7555d196174ef2c7fa0494f2ab8ba5741d99c0a3677a7a575fba47954",
+      "source_textures": [],
+      "axis_transform": "OBJ (x,y,z) -> MDX (-z,-x,y); original +Y up/-Z forward to +Z up/+X forward",
+      "scale": 82.70417852523977,
+      "ground_center": [
+        0.0020615000000000078,
+        0.013957050000000013,
+        0.0
+      ],
+      "texture_paths": [
+        "OpenArt\\Models\\tree_pineTallB-material0.blp",
+        "OpenArt\\Models\\tree_pineTallB-material1.blp"
+      ],
+      "model_sha256": "122ef4ac3faaa05b4fd49a113d90d64f372392e7e17be6fc94445c7d8c2aeebc",
+      "source_pack": "nature"
+    }
+  ],
+  "sources": [
+    {
+      "id": "nature",
+      "title": "Nature Kit",
+      "author": "Kenney",
+      "source_page": "https://opengameart.org/content/nature-kit",
+      "download_url": "https://opengameart.org/sites/default/files/Nature%20Kit%20%282.1%29.zip",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archive_sha256": "fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d"
+    },
+    {
+      "id": "rpg-characters",
+      "title": "LowPoly RPG Characters",
+      "author": "quaternius",
+      "source_page": "https://opengameart.org/content/lowpoly-rpg-characters",
+      "download_url": "https://opengameart.org/sites/default/files/rpg_characters_-_nov_2020.zip",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archive_sha256": "5399e0cfaf313ff362455de4086488d093465434b1b93b0ced649f3773a15fd7"
+    },
+    {
+      "id": "animated-zombie",
+      "title": "Animated Characters 3",
+      "author": "Kenney",
+      "source_page": "https://opengameart.org/content/animated-characters-3",
+      "download_url": "https://opengameart.org/sites/default/files/kenney_animated-characters-3.zip",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archive_sha256": "6c197462dc9976b522a07d11e0fb42b9caa7cf71d39abbc3ca708b69f13a40dd"
+    },
+    {
+      "id": "scifi-soldier",
+      "title": "Sci-fi soldier",
+      "author": "Irondust",
+      "source_page": "https://opengameart.org/content/sci-fi-soldier",
+      "download_url": "https://opengameart.org/sites/default/files/Sci-fi%20Soldiers.zip",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "archive_sha256": "4a91f4ae01117656c9a5a8fc71930f852b2c4d3e94f3f9a2c88109ad931e0db4"
+    }
+  ]
+}

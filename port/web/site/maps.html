@@ -4,23 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OpenRealm: choose a map</title>
+<style>
+:root { color-scheme: dark; font: 16px system-ui, sans-serif; background: #111c26; color: #ecf3ef; }
+body { margin: 0; background: radial-gradient(ellipse at top, #28443f, #111c26 65%); min-height: 100vh; }
+main { max-width: 1100px; margin: auto; padding: 3rem 1.5rem; }
+h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin: .2rem 0; letter-spacing: -.04em; }
+.eyebrow { color: #a8c6b7; letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; }
+.intro { color: #b7c9c8; max-width: 44rem; line-height: 1.6; }
+.options { margin: 1.7rem 0; display: flex; align-items: center; gap: .8rem; }
+select { font: inherit; border: 1px solid #547369; border-radius: .4rem; padding: .6rem; background: #1e332f; color: inherit; }
+.maps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.card { background: #1c2d35; border: 1px solid #3e5759; border-radius: .8rem; overflow: hidden; }
+.card img { width: 100%; height: auto; display: block; background: #202d37; }
+.details { padding: 1.4rem; }
+h2 { margin: .4rem 0; font-size: 1.5rem; }
+.details p { color: #b7c9c8; line-height: 1.6; min-height: 3.2rem; }
+.tag { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: #c2d9b2; }
+button { width: 100%; padding: .9rem 1rem; background: #badc9d; color: #182a23; border: 0; border-radius: .4rem; font: 700 1rem system-ui; cursor: pointer; }
+button:hover { background: #d7efc5; }
+button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #f4d694; outline-offset: 4px; }
+footer { margin-top: 2rem; color: #91a8aa; font-size: .85rem; line-height: 1.7; }
+a { color: #bddacb; }
+@media (max-width: 650px) { .maps { grid-template-columns: 1fr; } main { padding: 2rem 1rem; } }
+</style>
 </head>
 <body>
 <main>
-<h1>Choose a map</h1>
-<p>Use desktop Chrome or Firefox with WebGL enabled. VS Code's embedded browser may not support the game.</p>
-<p>Basic terrain and models. Simple bots fill the other player slots.</p>
+<div class="eyebrow">OpenRealm</div>
+<h1>Choose your battlefield</h1>
+<p class="intro">Two maps, one realm. Capture the enemy flag or survive the zombie outbreak. Choose a map to begin.</p>
 <form action="index.html" method="get">
-<label>Other players
-<select name="bots">
+<div class="options"><label for="bots">Other players</label>
+<select id="bots" name="bots">
 <option value="1">Simple bots</option>
 <option value="0">Leave empty</option>
-</select>
-</label>
-<p><button type="submit" name="map" value="apricot">Apricot — Troopers vs Zombies</button></p>
-<p><button type="submit" name="map" value="peach">Peach — Capture the Flag</button></p>
+</select></div>
+<div class="maps">
+<article class="card">
+<img src="art/peach.jpg" alt="Low-poly forest artwork from Kenney’s Nature Kit" width="918" height="515">
+<div class="details"><span class="tag">Peach · Team arena</span>
+<h2>Capture the Flag</h2>
+<p>Raid the enemy base and bring their flag home. An opening tutorial introduces the arena.</p>
+<button type="submit" name="map" value="peach">Play Capture the Flag</button></div>
+</article>
+<article class="card">
+<img src="art/apricot.jpg" alt="Human and zombie character artwork by Kenney" width="918" height="515">
+<div class="details"><span class="tag">Apricot · Survival</span>
+<h2>Troopers vs Zombies</h2>
+<p>Build, defend, and survive. The zombie heroes enter the battlefield after 90 seconds.</p>
+<button type="submit" name="map" value="apricot">Play Troopers vs Zombies</button></div>
+</article>
+</div>
 </form>
-<p>Apricot's zombie heroes arrive after 90 seconds. Peach begins with a tutorial.</p>
+<footer>Use desktop Chrome or Firefox with WebGL enabled. Engine compatibility is experimental.<br>
+Artwork previews by Kenney; previews show the source art packs. <a href="art/CREDITS.txt">Artwork credits and licenses</a>.</footer>
 </main>
 </body>
 </html>

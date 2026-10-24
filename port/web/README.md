@@ -1,13 +1,20 @@
 # Two-map browser assets
 
+The browser build now includes the explicit [OpenGameArt pack](../../docs/platform/opengameart.md):
+licensed terrain, trees/plants, camp buildings, characters, command icons,
+UI sprites, and map-picker/loading artwork. Sources, hashes and CC0 license
+records live in `art-input/`. The basic pack below still supplies missing
+FDF, fonts, footprints, selection rings and the capture-flag proxy.
+
+
 The local archives omit terrain art, HUD definitions, fonts, pathing textures,
 and some stock models. The user explicitly requested simple generated assets.
 `generate-basic-assets.py` supplies that optional pack as loose game data; it
 does not modify either map, their scripts, or any MPQ archive. The browser build
-runs it before packaging `data-input/`.
+runs it with the licensed art catalog before packaging `data-input/`.
 
 ```sh
-python3 port/web/generate-basic-assets.py
+python3 port/web/generate-basic-assets.py --art port/web/art-input/catalog.json
 make web-warcraft3-engine
 python3 port/web/serve.py
 ```
@@ -73,3 +80,13 @@ presentation only; the original map still owns resource and hero rules.
 
 The broader browser setup and limitations are documented in
 [Browser platform](../../docs/platform/browser.md).
+
+`--art CATALOG` reads converted native art before the ownership preflight. Every
+entry must match its SHA-256 and target either a basic generated path or the
+`OpenArt/` namespace. Catalog sources stay inside the pack directory. A corrupt
+pack fails before any data output is written. No image library or Blender is
+needed to regenerate the installed pack or serve the browser build.
+
+Run `python3 tests/test_web_opengameart.py` to check the installed art hashes,
+complete model-texture dependencies, BLP transition masks, production MDX
+readers/interpolator, and repeat generation with edited-file protection.

@@ -1,0 +1,44 @@
+OpenRealm browser artwork
+
+Downloaded from OpenGameArt.org. All selected art is CC0 1.0.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+Textures/models adapted to native BLP2/MDX800; previews resized without cropping.
+These credits apply to the added artwork, not the bundled Warcraft III game data.
+
+Animated Characters 3 — Kenney
+https://opengameart.org/content/animated-characters-3
+License: CC0 1.0
+
+Game icons — Kenney
+https://opengameart.org/content/game-icons
+License: CC0 1.0
+
+Nature Kit — Kenney
+https://opengameart.org/content/nature-kit
+License: CC0 1.0
+
+LowPoly RPG Characters — quaternius
+https://opengameart.org/content/lowpoly-rpg-characters
+License: CC0 1.0
+
+Sci-fi soldier — Irondust
+https://opengameart.org/content/sci-fi-soldier
+License: CC0 1.0
+
+Ancient Civ. in the Jungle - plants-grass-wood — DevEarley
+https://opengameart.org/content/ancient-civ-in-the-jungle-200-seamless-textures
+License: CC0 1.0
+
+Ancient Civ. in the Jungle - rocks-bricks-dirt-concrete-plaster-tiles — DevEarley
+https://opengameart.org/content/ancient-civ-in-the-jungle-200-seamless-textures
+License: CC0 1.0
+
+UI Pack - Adventure — Kenney
+https://opengameart.org/content/ui-pack-adventure
+License: CC0 1.0
+
+UI Pack - Sci-Fi — Kenney
+https://opengameart.org/node/25124
+License: CC0 1.0
+

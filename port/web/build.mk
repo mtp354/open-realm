@@ -41,6 +41,7 @@ test: test-web
 test-web:
 	python3 tests/test_web_engine_build.py
 	python3 tests/test_web_basic_assets.py
+	python3 tests/test_web_opengameart.py
 
 web-warcraft3-serve:
 	python3 port/web/serve.py --directory $(WEB_BUILD_DIR)/engine

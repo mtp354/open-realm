@@ -25,6 +25,9 @@ canvas { display: block; width: 100%; height: auto; background: #000; }
 #game-container:fullscreen #game-controls { top: max(.65rem, env(safe-area-inset-top));
   right: max(.65rem, env(safe-area-inset-right)); }
 #status { margin: 1rem 0; }
+#loading-art { margin: 1rem 0; max-width: 600px; }
+#loading-art img { width: 100%; height: auto; border-radius: .5rem; }
+#loading-art figcaption { font-size: .8rem; color: #9bb1bb; }
 #external-game-url { box-sizing: border-box; width: 100%; margin: .5rem 0; }
 </style>
 </head>
@@ -32,6 +35,7 @@ canvas { display: block; width: 100%; height: auto; background: #000; }
 <main>
 <h1>OpenRealm — Apricot and Peach</h1>
 <p id="status" role="status">Loading bundled Warcraft III data…</p>
+<figure id="loading-art"><img id="loading-image" src="art/peach.jpg" alt="Kenney CC0 artwork preview" width="918" height="515"><figcaption>Preparing your battlefield · Artwork by Kenney</figcaption></figure>
 <section id="browser-help" hidden>
   <p>Open this address in desktop Chrome or Firefox with WebGL enabled.
   VS Code's embedded browser may not provide the graphics and storage the game needs.</p>
@@ -53,6 +57,7 @@ var Module = {
   canvas: document.getElementById('canvas'),
   setStatus: function (message) {
     document.getElementById('status').textContent = message || '';
+    document.getElementById('loading-art').hidden = !message;
   },
   onAbort: function (reason) {
     document.getElementById('status').textContent = 'WebAssembly aborted: ' + reason;
@@ -152,6 +157,9 @@ function browserStartFailure(message) {
 window.openrealmStartEngine = async function (arguments_) {
   if (engineStarting) return;
   engineStarting = true;
+  document.getElementById('loading-image').src = arguments_.some(function (value) {
+    return value === 'Maps/Download/apricot.w3x';
+  }) ? 'art/apricot.jpg' : 'art/peach.jpg';
   if (typeof OffscreenCanvas === 'undefined' ||
       !HTMLCanvasElement.prototype.transferControlToOffscreen) {
     browserStartFailure('WebGL requires OffscreenCanvas support for the game worker.');

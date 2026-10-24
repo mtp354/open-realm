@@ -1,0 +1,550 @@
+{
+  "TerrainArt/DalaranRuins/DRuins_Dirt.blp": {
+    "source": "terrain/dirt.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_DirtRough.blp": {
+    "source": "terrain/dirt.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_BlackMarble.blp": {
+    "source": "terrain/rock.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_BrickTiles.blp": {
+    "source": "terrain/cobblestone.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_SquareTiles.blp": {
+    "source": "terrain/concrete.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_RoundTiles.blp": {
+    "source": "terrain/cobblestone.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_Grass.blp": {
+    "source": "terrain/grass.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_GrassTrim.blp": {
+    "source": "terrain/grass-tile-2.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/DalaranRuins/DRuins_WhiteMarble.blp": {
+    "source": "terrain/concrete.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_Dirt.blp": {
+    "source": "terrain/dirt.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_DirtRough.blp": {
+    "source": "terrain/dirt.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_DirtGrass.blp": {
+    "source": "terrain/grass-with-mud.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_Rock.blp": {
+    "source": "terrain/rock.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_Grass.blp": {
+    "source": "terrain/grass.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/LordaeronSummer/Lords_GrassDark.blp": {
+    "source": "terrain/grass-tile-2.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/Cityscape/City_WhiteMarble.blp": {
+    "source": "terrain/concrete.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/Blight/DRuins_Blight.blp": {
+    "source": "terrain/jungle-stone.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "TerrainArt/Blight/Lords_Blight.blp": {
+    "source": "terrain/jungle-stone.png",
+    "conversion": "64px source tile repeated over 4x4 corner-mask atlas; original alpha topology; BLP2"
+  },
+  "UI/BrowserBasic/panel.blp": {
+    "source": "ui/adventure/panel.png",
+    "conversion": "Resized and darkened to preserve light FDF label contrast; native BLP2"
+  },
+  "UI/BrowserBasic/button.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "Resized and darkened to preserve light FDF label contrast; native BLP2"
+  },
+  "UI/BrowserBasic/pressed.blp": {
+    "source": "ui/scifi/button-pressed.png",
+    "conversion": "Resized and darkened to preserve light FDF label contrast; native BLP2"
+  },
+  "UI/BrowserBasic/bar.blp": {
+    "source": "ui/adventure/progress-blue.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/BrowserBasic/command-move.blp": {
+    "source": "icons/arrowRight.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-stop.blp": {
+    "source": "icons/stop.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-hold.blp": {
+    "source": "icons/pause.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-attack.blp": {
+    "source": "icons/target.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-patrol.blp": {
+    "source": "icons/return.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-ground.blp": {
+    "source": "icons/arrowDown.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-skill.blp": {
+    "source": "icons/star.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-rally.blp": {
+    "source": "icons/trophy.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-cancel.blp": {
+    "source": "icons/cross.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-build.blp": {
+    "source": "icons/wrench.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/BrowserBasic/command-purchase.blp": {
+    "source": "icons/shoppingCart.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNFootman.blp": {
+    "source": "icons/locked.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNEntanglingRoots.blp": {
+    "source": "icons/target.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNWindWalkOn.blp": {
+    "source": "icons/arrowRight.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNStaffOfSanctuary.blp": {
+    "source": "icons/wrench.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNEvasion.blp": {
+    "source": "icons/star.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtons/BTNBlink.blp": {
+    "source": "icons/arrowRight.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/PassiveButtons/PASBTNEvasion.blp": {
+    "source": "icons/star.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNEntanglingRoots.blp": {
+    "source": "icons/target.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNWindWalkOn.blp": {
+    "source": "icons/arrowRight.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNStaffOfSanctuary.blp": {
+    "source": "icons/wrench.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNEvasion.blp": {
+    "source": "icons/star.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNBlink.blp": {
+    "source": "icons/arrowRight.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISPASBTNEvasion.blp": {
+    "source": "icons/star.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNAnkh.blp": {
+    "source": "icons/cross.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNArcaniteArmor.blp": {
+    "source": "icons/locked.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNHelmOfValor.blp": {
+    "source": "icons/locked.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNHumanWatchTower.blp": {
+    "source": "icons/home.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNOrbOfVenom.blp": {
+    "source": "icons/plus.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNRingGreen.blp": {
+    "source": "icons/gear.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNTomeBrown.blp": {
+    "source": "icons/information.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "ReplaceableTextures/CommandButtonsDisabled/DISBTNWandOfManaSteal.blp": {
+    "source": "icons/wrench.png",
+    "conversion": "Kenney glyph composited on CC0 sci-fi button; disabled desaturated/darkened; BLP2"
+  },
+  "UI/Feedback/BuildProgressBar/human-buildprogressbar-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Feedback/BuildProgressBar/human-buildprogressbar-fill.blp": {
+    "source": "ui/scifi/progress-blue.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Feedback/HpBarConsole/human-healthbar-fill.blp": {
+    "source": "ui/adventure/progress-green.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Feedback/Resources/ResourceGold.blp": {
+    "source": "icons/trophy.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Feedback/Resources/ResourceLumber.blp": {
+    "source": "icons/plus.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Feedback/Resources/ResourceSupply.blp": {
+    "source": "icons/multiplayer.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Feedback/XPBar/human-bigbar-fill.blp": {
+    "source": "ui/scifi/progress-blue.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Feedback/XPBar/human-xpbar-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Minimap/minimap-gold.blp": {
+    "source": "icons/trophy.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Minimap/minimap-hero.blp": {
+    "source": "icons/star.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Minimap/minimap-neutralbuilding.blp": {
+    "source": "icons/home.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Minimap/MinimapIconCircleOfPower.blp": {
+    "source": "icons/plus.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Widgets/BattleNet/bnet-button01-highlight-mouse.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/BattleNet/bnet-inputbox-back.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/BattleNet/bnet-inputbox-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/ButtonBackGround.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/ButtonCorners.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Console/Human/human-unitqueue-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Console/Human/infocard-gold.blp": {
+    "source": "icons/trophy.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Widgets/Console/Human/infocard-heroattributes-str.blp": {
+    "source": "icons/star.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Widgets/Console/Human/infocard-supply.blp": {
+    "source": "icons/multiplayer.png",
+    "conversion": "transparent Kenney glyph; BLP2"
+  },
+  "UI/Widgets/EscMenu/Human/editbox-background.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/EscMenu/Human/editbox-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/EscMenu/Human/human-options-menu-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button-KeyboardHighlight.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground-Disabled.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBackground.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-Disabled.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-DisabledDown.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder-Down.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BackdropBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-Border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-Disabled.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-DisabledDown.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder-Down.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BorderedBackdropBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-BorderSingle.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-LargeBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-LargeBorderSingle.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-SmallBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-SmallBorderSingle.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Button1-TinyBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground-Disabled.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground-Down.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackground.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow-Disabled.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow-Down.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundArrow.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera-Disabled.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera-Down.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBackgroundCamera.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-Disabled.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-DisabledDown.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder-Down.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-BackdropBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-CampaignButton-KeyboardHighlight.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Checkbox-Background.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Checkbox-BackgroundDisabled.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-Checkbox-BackgroundPressed.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Checkbox-Check.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Checkbox-CheckDisabled.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/Glues/GlueScreen-PlayerButton-BorderRight.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Pulldown-Arrow.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Scrollbar-BackdropBackground.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Scrollbar-BackdropBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/GlueScreen-Scrollbar-DownArrow.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Scrollbar-UpArrow.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Slider-BackdropBackground.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/GlueScreen-Slider-BackdropBorder.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/Glues/Loading-NameBackground.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/SinglePlayerSkirmish-ScrollBarKnob.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/Glues/SinglePlayerSkirmish-ScrollBarKnobDisabled.blp": {
+    "source": "ui/scifi/button.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA darkened"
+  },
+  "UI/Widgets/HeavyBorderBackGround.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/HeavyBorderCorners.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/LightBorderBackGround.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/LightBorderCorners.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/ToolTips/Human/human-tooltip-background.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/ToolTips/Human/human-tooltip-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "UI/Widgets/EscMenu/Human/human-options-menu-background.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/EscMenu/Undead/undead-options-menu-background.blp": {
+    "source": "ui/adventure/panel-dark.png",
+    "conversion": "RGBA resized with Lanczos; native BLP2 BGRA"
+  },
+  "UI/Widgets/EscMenu/Undead/undead-options-menu-border.blp": {
+    "source": "ui/adventure/panel-border.png",
+    "conversion": "resized border with transparent interior; BLP2"
+  },
+  "ReplaceableTextures/Splats/HumanUberSplat.blp": {
+    "source": "terrain/dirt.png",
+    "conversion": "128px circular dirt/stone decal with soft radial alpha; native BLP2"
+  },
+  "ReplaceableTextures/Splats/AncientUberSplat.blp": {
+    "source": "terrain/jungle-stone.png",
+    "conversion": "128px circular dirt/stone decal with soft radial alpha; native BLP2"
+  }
+}

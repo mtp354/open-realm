@@ -506,7 +506,28 @@ def cinematic_panel():
                  backdrop("CinematicTopBorder", props=size(.8, .05) + " " + point("CinematicPanel")))
 
 
-def generate(output, font=None):
+def licensed_art(catalog, generated_paths):
+    """Read a hash-checked native pack; only explicit missing art can be replaced."""
+    catalog = catalog.resolve()
+    pack = json.loads(catalog.read_text())
+    if pack.get("version") != 1 or not isinstance(pack.get("files"), dict):
+        raise ValueError("Unsupported art catalog: " + str(catalog))
+    files = {}
+    for name, entry in pack["files"].items():
+        if ("\\" in name or any(part in ("", ".", "..") for part in name.split("/")) or
+                not (name in generated_paths or name.startswith("OpenArt/"))):
+            raise ValueError("Invalid art target: " + name)
+        source = (catalog.parent / entry["source"]).resolve()
+        if not source.is_relative_to(catalog.parent):
+            raise ValueError("Invalid art source: " + entry["source"])
+        data = source.read_bytes()
+        if hashlib.sha256(data).hexdigest() != entry["sha256"]:
+            raise ValueError("Art hash mismatch: " + str(source))
+        files[name] = data
+    return files
+
+
+def generate(output, font=None, art=None):
     files = {}
     profile = "// Original basic command art; localized command strings remain in imported data.\n"
     for command, (symbol, x, y) in COMMAND_PROFILES.items():
@@ -519,6 +540,10 @@ def generate(output, font=None):
         files["TerrainArt/" + name + ".blp"] = blp(64, 64, terrain_pixels(color))
     for name in ("DRuins", "Lords"):
         files[f"TerrainArt/Blight/{name}_Blight.blp"] = blp(64, 64, terrain_pixels((82, 70, 91)))
+    # Missing ground decals observed at both flag bases; art overlays can use
+    # the same explicit owned paths without changing map building definitions.
+    for name in ("Human", "Ancient"):
+        files[f"ReplaceableTextures/Splats/{name}UberSplat.blp"] = blp(64, 64, marker_pixels((105, 95, 75), True))
     for dimension, suffix in ((2, "Default"), (4, "Default"), (4, "SimpleSolid"), (12, "Simple"), (12, "TreeOfLife")):
         files[f"PathTextures/{dimension}x{dimension}{suffix}.tga"] = pathing_texture(dimension, dimension, suffix == "TreeOfLife")
     for name, color in {"panel": (22, 30, 39, 245), "button": (51, 72, 86, 255),
@@ -560,6 +585,8 @@ def generate(output, font=None):
         license_path = Path("/usr/share/doc/fonts-dejavu-core/copyright")
         if font is None and license_path.is_file():
             files["Fonts/DejaVu-LICENSE.txt"] = license_path.read_bytes()
+    if art is not None:
+        files.update(licensed_art(art, files))
     # Preflight every path before writing anything, including modified generated
     # assets. This makes repeated generation safe for imported/local game data.
     for name, data in files.items():
@@ -573,7 +600,7 @@ def generate(output, font=None):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(data)
         hashes[name] = hashlib.sha256(data).hexdigest()
-    manifest = {"generator": "port/web/generate-basic-assets.py", "description": "Original simple terrain and UI; no maps or archives modified", "files": hashes}
+    manifest = {"generator": "port/web/generate-basic-assets.py", "description": "Explicit basic and licensed art; no maps or archives modified", "files": hashes}
     (output / MANIFEST).write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     return files
 
@@ -582,9 +609,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data-input")
     parser.add_argument("--font", type=Path, help="use a locally supplied TrueType font for the basic HUD")
+    parser.add_argument("--art", type=Path, help="overlay a hash-checked native art catalog before ownership checks")
     args = parser.parse_args()
     try:
-        files = generate(args.output, args.font)
+        files = generate(args.output, args.font, args.art)
     except (ValueError, OSError) as exc:
         parser.exit(1, str(exc) + "\n")
-    print(f"Prepared {len(files)} basic assets (terrain, UI, font, pathing and primitive models) in {args.output}")
+    print(f"Prepared {len(files)} assets (terrain, UI, font, pathing and models) in {args.output}")

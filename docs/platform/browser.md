@@ -368,20 +368,19 @@ the engine through `filesystem-bridge.js`, which only accepts map names on its
 
 Setup:
 
-- Stage the retail archives and the two maps in `port/web/data-input/`
-  (gitignored). The current staged files are `war3.mpq` (a copy of
-  `persimmon.mpq`), `War3x.mpq` (a copy of `tangerine.mpq`), `War3Patch.mpq`,
-  `War3xLocal.mpq`, and `Maps/Download/{apricot,peach}.w3x`. SHA-256 checks
-  match all four staged archives to their source files in the workspace.
-  These copies do not establish that the original base archives are present;
-  see the data audit below.
-- The data is preloaded into `/data/warcraft-3` with `--preload-file`. The
-  data package is about 130 MiB with the basic assets. Emscripten SDK 6.0.9 is
-  installed locally at `~/.local/src/emsdk`; activate `emsdk_env.sh` before building.
-- The build automatically runs `port/web/generate-basic-assets.py`. At the
-  owner's request this supplies 228 original basic assets (terrain, UI, font,
-  icons, primitive models and rectangular pathing masks). It preserves maps,
-  archives, and edited/non-generated loose files. See [basic asset pack](../../port/web/README.md).
+- Canonical runtime archives and maps live in `port/web/data-input/`
+  (gitignored): `war3.mpq`, `War3x.mpq`, `War3Patch.mpq`, `War3xLocal.mpq`,
+  and `Maps/Download/{apricot,peach}.w3x`. The obsolete Windows runtime and its
+  duplicate data copies have been removed from the parent workspace. Retained
+  partial archives do not establish a complete original retail installation.
+- The data is preloaded into `/data/warcraft-3` with `--preload-file`.
+  Emscripten SDK 6.0.9 is installed locally at `~/.local/src/emsdk`; activate
+  `emsdk_env.sh` in a supported shell, or pass `EMCC=/absolute/path/to/emcc`.
+- The build runs `generate-basic-assets.py --art port/web/art-input/catalog.json`.
+  The explicit [OpenGameArt pack](opengameart.md) replaces missing basic art with
+  CC0 terrain, models and UI; basic FDF/fonts/footprints/team markers remain.
+  Generation preserves maps, archives and edited/non-generated loose files.
+  See the [asset generator](../../port/web/README.md) for ownership checks.
 - Serve locally with `python3 port/web/serve.py`, then open
   `http://127.0.0.1:8000/maps.html`. The server sends required COOP/COEP headers.
   The launcher disables the desktop automatic-fullscreen default; the page
@@ -400,7 +399,7 @@ Firefox. VS Code browser embeddings can expose the JavaScript interfaces while
 still denying worker graphics or storage; the picker itself does not test these
 capabilities. The launcher now probes them before loading the engine.
 
-Current verification (2026-10-17): both maps render terrain and a basic HUD
+Earlier gameplay verification (2026-10-17): both maps render terrain and a basic HUD
 in headless Chrome/WebGL 2, with no JavaScript exceptions or WASM traps in
 startup/selection checks. Apricot vendor selection shows unit details and
 command buttons. Peach reaches its scoreboard and both authored browser result
@@ -424,8 +423,9 @@ the map remains black until explored. Its zombie hero spawns after 90 seconds.
 Known limitations:
 
 - The original install is partial; generated art makes it inspectable and
-  usable as a basic demo, not a faithful retail presentation. Models are mostly static
-  proxies (trees flatten on death), some cliffs/water/effects remain absent, and audio is incomplete.
+  usable as a demo with licensed replacement artwork. Warrior/soldier meshes are
+  static, the zombie has Idle/Run motion, and trees flatten on death. Some
+  cliffs/water/effects remain absent, and audio is incomplete.
 - Save/load remains unsupported on wasm32. Native save format is now version
   91, retaining authored map combat values as well as the earlier event/camera changes; older
   native saves are explicitly rejected. Network formats are unchanged.
@@ -489,3 +489,29 @@ small reads, so a map load took roughly 90 seconds per load, and the
 120-second loading plaque timed out before the first frame. Each file handle
 now caches its last decoded sector (`sector_cache`) and single-unit payload
 (`unit_cache`). Apricot now reaches `G_ClientBegin` normally.
+
+The two-map build includes the explicit [CC0 OpenGameArt pack](opengameart.md).
+Its guide records asset ownership, conversion, source credits and animation limits.
+
+## Canonical archive cleanup (2026-10-24)
+
+The browser-only handoff removed 53 embedded map payloads: 12 unnamed entries
+from `War3Patch.mpq` and 41 listed campaign maps from `War3xLocal.mpq`.
+Payload-prefix scans decoded all 3,370 active blocks across the four staged
+archives, including encrypted entries without filenames. No video/replay
+signatures were found in this bounded scan. Every one of the 3,316 retained
+non-listfile payloads was byte-identical after compaction; the listfile was
+intentionally filtered. Existing native MPQ reads confirmed retained named
+resources and failed all 41 removed campaign paths. The two loose playable
+maps remain unchanged. Source test fixtures are retained for rebuilding/tests.
+
+| Cleaned canonical archive | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `War3Patch.mpq` | 23,953,711 | `75c2da612aa587b915b0160d6839ffff84fe0d03f49953c4f33d4aea7a0134cb` |
+| `War3xLocal.mpq` | 34,321,565 | `b5f164846f1968f918ee34a9941f572035127f8b71b966a1e8f2e4a015c08cd3` |
+
+The other two canonical archives were unchanged. Regenerating the browser data
+package included these cleaned bytes. This saved 14,035,388 bytes in canonical
+archives, in addition to removing obsolete Windows files and generated build
+outputs. The licensed artwork and browser checks are recorded in the
+[OpenGameArt pack guide](opengameart.md).

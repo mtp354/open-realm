@@ -101,21 +101,30 @@ context.window = context;
 context.document.getElementById('status');
 vm.runInNewContext(process.argv[1], context);
 (async () => {
-  const start = context.openrealmStartEngine(['+map','peach']);
+  const start = context.openrealmStartEngine(['+map','Maps/Download/' + process.argv[3] + '.w3x']);
   const before = scripts.length;
   const ok = process.argv[2] === 'true';
   resolveCheck({ok, message:'Worker WebGL 2 unavailable'});
   await start;
+  const startupStatus = elements.get('status').textContent;
+  context.Module.setStatus('Downloading');
+  const loadingVisible = !elements.get('loading-art').hidden;
+  context.Module.setStatus('');
+  const loadingDone = elements.get('loading-art').hidden;
   process.stdout.write(JSON.stringify({checks, before, after:scripts.length,
-    status:elements.get('status').textContent,
+    image:elements.get('loading-image').src, loadingVisible, loadingDone,
+    status:startupStatus,
     help:elements.get('browser-help')?.hidden,
     url:elements.get('external-game-url')?.value, gameHidden:elements.get('game-container')?.hidden}));
 })();
 """
-        for supported in (True, False):
-            with self.subTest(supported=supported):
+        for supported, map_id in ((True, 'peach'), (True, 'apricot'), (False, 'peach')):
+            with self.subTest(supported=supported, map=map_id):
                 result = json.loads(subprocess.check_output(
-                    ['node', '-e', script, inline, str(supported).lower()]))
+                    ['node', '-e', script, inline, str(supported).lower(), map_id]))
+                self.assertEqual(result['image'], 'art/' + map_id + '.jpg')
+                self.assertTrue(result['loadingVisible'])
+                self.assertTrue(result['loadingDone'])
                 self.assertEqual(result['before'], 0, 'engine started before worker probe finished')
                 self.assertEqual(result['checks'], 1)
                 self.assertEqual(result['after'], int(supported))
